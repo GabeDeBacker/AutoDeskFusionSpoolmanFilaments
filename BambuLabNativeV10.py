@@ -28,12 +28,14 @@ def _load_i18n_symbols():
 
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    return mod._getText, mod._ensure_lang
+    return getattr(mod, '_getText'), getattr(mod, '_ensure_lang')
 
 
 _getText, _ensure_lang = _load_i18n_symbols()
 
-PALETTE_ID='BambuLabNativePaletteV10';CMD_ID='BambuLabNativeV10';handlers=[]
+PALETTE_ID='BambuLabNativePaletteV10'
+CMD_ID='BambuLabNativeV10'
+handlers=[]
 
 def C(h,a=255):
     h=h.lstrip('#')
@@ -431,41 +433,46 @@ def _build_catalog_payload_text():
         return '{"schema_version":1,"catalog_version":"0","generated_epoch":0,"entry_count":0,"entries":[]}'
 
 class PH(adsk.core.HTMLEventHandler):
-    def notify(self,args):
+    def notify(self, eventArgs):
         try:
             app=adsk.core.Application.get()
             ui=app.userInterface
 
-            if args.action=='request_lang':
+            if eventArgs.action=='request_lang':
                 p=ui.palettes.itemById(PALETTE_ID)
                 lang = _ensure_lang()
-                if p:p.sendInfoToHTML('setLang', lang)
+                if p:
+                    p.sendInfoToHTML('setLang', lang)
                 adsk.doEvents()
                 return
 
-            if args.action=='request_catalog':
+            if eventArgs.action=='request_catalog':
                 p=ui.palettes.itemById(PALETTE_ID)
-                if p:p.sendInfoToHTML('catalog',_build_catalog_payload_text())
+                if p:
+                    p.sendInfoToHTML('catalog',_build_catalog_payload_text())
                 adsk.doEvents()
                 return
 
-            if args.action in ('export_parent_f3d','export_parent_3mf','export_parent_bundle'):
-                kind='f3d' if args.action=='export_parent_f3d' else ('3mf' if args.action=='export_parent_3mf' else 'bundle')
-                ok,msg=export_parent(kind)
+            if eventArgs.action in ('export_parent_f3d','export_parent_3mf','export_parent_bundle'):
+                kind='f3d' if eventArgs.action=='export_parent_f3d' else ('3mf' if eventArgs.action=='export_parent_3mf' else 'bundle')
+                _, msg = export_parent(kind)
                 p=ui.palettes.itemById(PALETTE_ID)
-                if p:p.sendInfoToHTML('status',msg)
+                if p:
+                    p.sendInfoToHTML('status',msg)
                 adsk.doEvents()
                 return
 
-            if args.action!='apply':return
+            if eventArgs.action!='apply':return
             # We need to cache the selection here because during the appearance copy process
             # "something" in Fusion will remove the selection, so we cache it here.
             sel = adsk.core.Application.get().userInterface.activeSelections.all
             design=adsk.fusion.Design.cast(app.activeProduct)
-            d=json.loads(args.data);a=get_app(design,d)
+            d=json.loads(eventArgs.data)
+            a=get_app(design,d)
             msg=apply_sel(a, d.get('scope','auto'), sel) if a else _getText('appearance_create_failed')
             p=ui.palettes.itemById(PALETTE_ID)
-            if p:p.sendInfoToHTML('status',f"{_getText('native_tag')} · {d['material']} · {d['color_name']} - {msg}")
+            if p:
+                p.sendInfoToHTML('status',f"{_getText('native_tag')} · {d['material']} · {d['color_name']} - {msg}")
             adsk.doEvents()
             # Restore the cached selection after applying the appearance.
             adsk.core.Application.get().userInterface.activeSelections.all = sel
@@ -473,23 +480,29 @@ class PH(adsk.core.HTMLEventHandler):
             pass
 
 class CH(adsk.core.CommandCreatedEventHandler):
-    def notify(self,args):
-        app=adsk.core.Application.get();ui=app.userInterface;p=ui.palettes.itemById(PALETTE_ID)
+    def notify(self, eventArgs):
+        app=adsk.core.Application.get()
+        ui=app.userInterface
+        p=ui.palettes.itemById(PALETTE_ID)
         if not p:
             path=os.path.join(os.path.dirname(os.path.realpath(__file__)),'palette.html')
             palette_path=make_file_url(path)
             p=ui.palettes.add(PALETTE_ID,_getText('palette_title'),palette_path,True,True,True,520,720,True)
             p.dockingState=adsk.core.PaletteDockingStates.PaletteDockStateRight
-            h=PH();p.incomingFromHTML.add(h);handlers.append(h)
+            h=PH()
+            p.incomingFromHTML.add(h)
+            handlers.append(h)
             p.isVisible=True
             try:
                 p.sendInfoToHTML('setLang', _ensure_lang())
                 adsk.doEvents()
-            except:pass
+            except:
+                pass
             try:
                 p.sendInfoToHTML('catalog',_build_catalog_payload_text())
                 adsk.doEvents()
-            except:pass
+            except:
+                pass
         else:
             # Command works as a toggle: Command+B can open OR close the palette.
             p.isVisible=not p.isVisible
@@ -504,16 +517,22 @@ def run(context):
             _getText('command_name'),
             _getText('command_description')
         )
-    h=CH();d.commandCreated.add(h);handlers.append(h)
+    h=CH()
+    d.commandCreated.add(h)
+    handlers.append(h)
 
     # Add a persistent toolbar button in the Solid > Modify panel when available.
     panel=ui.allToolbarPanels.itemById('SolidModifyPanel')
     if panel and not panel.controls.itemById(CMD_ID):
         c=panel.controls.addCommand(d)
-        try:c.isPromoted=True
-        except:pass
-        try:c.isPromotedByDefault=True
-        except:pass
+        try:
+            c.isPromoted=True
+        except:
+            pass
+        try:
+            c.isPromotedByDefault=True
+        except:
+            pass
 
     # Open palette on first load.
     d.execute()
@@ -522,11 +541,14 @@ def stop(context):
     try:
         ui=adsk.core.Application.get().userInterface
         p=ui.palettes.itemById(PALETTE_ID)
-        if p:p.deleteMe()
+        if p:
+            p.deleteMe()
         panel=ui.allToolbarPanels.itemById('SolidModifyPanel')
         if panel:
             c=panel.controls.itemById(CMD_ID)
-            if c:c.deleteMe()
+            if c:
+                c.deleteMe()
         d=ui.commandDefinitions.itemById(CMD_ID)
-        if d:d.deleteMe()
+        if d:
+            d.deleteMe()
     except:pass
