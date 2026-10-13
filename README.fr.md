@@ -33,7 +33,7 @@ PETG Basic, PETG HF, PETG Translucent, PETG-CF.
 ABS, ABS-GF, ASA, ASA Aero, ASA-CF, PC, PC FR, TPU for AMS, PAHT-CF, PA6-GF, PPA-CF, PPS-CF.
 
 ### Supports
-Support for PLA, Support for PLA/PETG, Support for ABS, Support for PA/PET, PVA.
+Support pour PLA, Support pour PLA/PETG, Support pour ABS, Support pour PA/PET, PVA.
 
 ## Installation
 
@@ -159,7 +159,7 @@ Exemple :
 
 Certaines entrées disposent d'un HEX exact ; d'autres utilisent une approximation visuelle lorsqu'une valeur publique fiable n'était pas disponible.
 
-Les champs utiles a l'UI sont maintenant explicites dans le catalogue (`*_i18n`, `is_multi_color`, `ui_badges`, `search_text`) pour pouvoir generer le panneau depuis le JSON sans duplication HTML.
+Les champs utiles à l'interface utilisateur sont maintenant explicitement définis dans le catalogue (`*_i18n`, `is_multi_color`, `ui_badges`, `search_text`) pour pouvoir générer le panneau depuis le JSON sans duplication HTML.
 
 ## Compatibilité
 

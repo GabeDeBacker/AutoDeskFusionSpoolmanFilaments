@@ -45,35 +45,35 @@ I18N = {
         'command_description': 'Bambu appearances cloned from the native Autodesk library. Suggested shortcut: Cmd+B.'
     },
     'fr': {
-        'apply_all_model_success': 'Applique a {n} corps visibles du modele.',
-        'apply_all_model_none': 'Aucun corps visible trouve.',
-        'select_prompt': 'Selectionne d abord une face, un corps ou un composant.',
+        'apply_all_model_success': 'Appliqué à {n} corps visibles dans le modèle.',
+        'apply_all_model_none': 'Aucun corps visible trouvé.',
+        'select_prompt': 'Sélectionnez d’abord une face, un corps ou un composant.',
         'label_face': 'face(s)',
         'label_body': 'corps/objet(s)',
-        'label_component': 'corps du/des composant(s)',
-        'label_selected_all': 'element(s) selectionne(s)',
-        'label_auto': 'element(s)',
-        'apply_scope_success': 'Applique a {n} {label}.',
-        'selection_mode_mismatch': 'La selection ne correspond pas au mode choisi.',
-        'pick_folder_title': 'Choisir le dossier d export du modele Bambu',
-        'open_design': 'Ouvre un design Fusion.',
-        'export_cancelled': 'Export annule.',
-        'export_done': 'Export reussi : ',
-        'export_failed': 'Echec : ',
+        'label_component': 'corps de composant(s)',
+        'label_selected_all': 'élément(s) sélectionné(s)',
+        'label_auto': 'élément(s)',
+        'apply_scope_success': 'Appliqué à {n} {label}.',
+        'selection_mode_mismatch': 'La sélection ne correspond pas au mode choisi.',
+        'pick_folder_title': 'Choisir le dossier d’export du modèle Bambu',
+        'open_design': 'Ouvrez d’abord un modèle Fusion.',
+        'export_cancelled': 'Export annulé.',
+        'export_done': 'Export réussi : ',
+        'export_failed': 'Échec : ',
         'export_folder': 'Dossier : {folder}',
         'export_readme': (
             "BAMBU LAB / FUSION - EXPORT PARENT\n\n"
             "Projet : {base}\n\n"
             "Le fichier *_PARENT.f3d est le fichier parent Fusion natif.\n"
-            "Le fichier *_PARENT.3mf contient le root component exporte en un seul 3MF.\n\n"
-            "Pour tester les apparences V10, verifie qu elles commencent par :\n"
+            "Le fichier *_PARENT.3mf contient le composant racine exporté dans un seul 3MF.\n\n"
+            "Pour tester les apparences V10, vérifiez qu’elles commencent par :\n"
             "Bambu Native |\n"
         ),
-        'appearance_create_failed': 'Impossible de creer l apparence.',
+        'appearance_create_failed': 'Impossible de créer l’apparence.',
         'native_tag': 'NATIVE',
-        'palette_title': 'Bambu Lab Filaments',
-        'command_name': 'Bambu Lab Filaments NATIVE',
-        'command_description': 'Apparences Bambu clonees depuis la bibliotheque native Autodesk. Raccourci conseille : Cmd+B.'
+        'palette_title': 'Filaments Bambu Lab',
+        'command_name': 'Filaments Bambu Lab NATIVE',
+        'command_description': 'Apparences Bambu clonées depuis la bibliothèque native Autodesk. Raccourci conseillé : Cmd+B.'
     }
 }
 
