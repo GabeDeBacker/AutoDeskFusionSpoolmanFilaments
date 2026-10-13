@@ -1,0 +1,158 @@
+:root {
+  color-scheme: dark;
+  --bg: #202428;
+  --panel: #2a2f34;
+  --border: #41484f;
+  --text: #f3f3f3;
+  --muted: #aab1b7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  padding: 11px;
+  border-bottom: 1px solid var(--border);
+}
+
+h1 {
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+
+.count {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+#status {
+  font-size: 10px;
+  color: var(--muted);
+  min-height: 18px;
+}
+
+.parentbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.parentbar .wide {
+  grid-column: 1 / -1;
+}
+
+.parentbtn {
+  padding: 8px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: #343a40;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.parentbtn:hover {
+  border-color: #8b9298;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  padding: 9px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: #858b90;
+}
+
+.card.active {
+  outline: 2px solid white;
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 7px;
+  border: 1px solid #ffffff45;
+  background-size: 100% 100%;
+}
+
+.txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.txt b {
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txt small {
+  font-size: 8px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.badge {
+  position: absolute;
+  right: 4px;
+  top: 3px;
+  font-size: 6px;
+  border: 1px solid #ffffff33;
+  background: #ffffff15;
+  padding: 1px 3px;
+  border-radius: 3px;
+}

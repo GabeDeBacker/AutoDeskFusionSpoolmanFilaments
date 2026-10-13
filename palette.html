@@ -1,1159 +1,358 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-:root{color-scheme:dark;--bg:#202428;--panel:#2a2f34;--border:#41484f;--text:#f3f3f3;--muted:#aab1b7}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{position:sticky;top:0;z-index:5;background:var(--bg);padding:11px;border-bottom:1px solid var(--border)}
-h1{font-size:16px;margin:0 0 4px} .count{font-size:10px;color:var(--muted);margin-bottom:8px}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
-input,select{width:100%;padding:8px;border:1px solid var(--border);border-radius:7px;background:var(--panel);color:var(--text)}
-#status{font-size:10px;color:var(--muted);min-height:18px}.parentbar{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}.parentbar .wide{grid-column:1/-1}.parentbtn{padding:8px;border-radius:7px;border:1px solid var(--border);background:#343a40;color:var(--text);cursor:pointer}.parentbtn:hover{border-color:#8b9298}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:9px}
-.card{position:relative;display:flex;align-items:center;gap:7px;min-width:0;padding:7px;border:1px solid var(--border);border-radius:9px;background:var(--panel);color:var(--text);text-align:left;cursor:pointer}
-.card:hover{border-color:#858b90}.card.active{outline:2px solid white}
-.swatch{width:40px;height:40px;min-width:40px;border-radius:7px;border:1px solid #ffffff45;background-size:100% 100%}
-.txt{display:flex;flex-direction:column;min-width:0}.txt b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.txt small{font-size:8px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.badge{position:absolute;right:4px;top:3px;font-size:6px;border:1px solid #ffffff33;background:#ffffff15;padding:1px 3px;border-radius:3px}
-</style></head><body>
-<header><h1>Bambu Lab · NATIVE V10</h1><div class="count">276 références · 39 gammes</div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="palette.css"><script src="palette-i18n.js"></script></head><body>
+<header><h1 id="title">Bambu Lab · NATIVE V10</h1><div id="count" class="count"></div>
 <div class="controls">
-<input id="q" placeholder="Rechercher…" oninput="filterCards()">
-<select id="cat" onchange="filterCards()"><option value="">Toutes familles</option><option>PLA</option><option>PETG</option><option>ABS</option><option>ASA</option><option>PC</option><option>TPU</option><option>Engineering</option><option>Support</option></select>
-<select id="mat" onchange="filterCards()"><option value="">Toutes gammes</option><option>ABS</option><option>ABS-GF</option><option>ASA</option><option>ASA Aero</option><option>ASA-CF</option><option>PA6-GF</option><option>PAHT-CF</option><option>PC</option><option>PC FR</option><option>PETG Basic</option><option>PETG HF</option><option>PETG Translucent</option><option>PETG-CF</option><option>PLA Aero</option><option>PLA Basic</option><option>PLA Basic Gradient</option><option>PLA Galaxy</option><option>PLA Glow</option><option>PLA Lite</option><option>PLA Marble</option><option>PLA Matte</option><option>PLA Metal</option><option>PLA Pure</option><option>PLA Silk Multi-Color</option><option>PLA Silk+</option><option>PLA Sparkle</option><option>PLA Tough</option><option>PLA Tough+</option><option>PLA Translucent</option><option>PLA Wood</option><option>PLA-CF</option><option>PPA-CF</option><option>PPS-CF</option><option>PVA</option><option>Support for ABS</option><option>Support for PA/PET</option><option>Support for PLA</option><option>Support for PLA/PETG</option><option>TPU for AMS</option></select>
-<select id="finish" onchange="filterCards()"><option value="">Tous rendus</option><option>Translucent</option><option>Multi</option></select>
-<select id="scope">
-  <option value="body">Appliquer : Corps / objet</option>
-  <option value="face">Appliquer : Face(s)</option>
-  <option value="component">Appliquer : Composant entier</option>
-  <option value="selected_all">Appliquer : Toute la sélection</option>
-  <option value="all_model">Appliquer : Tout le modèle visible</option>
-</select>
+<input id="q" placeholder="Search..." oninput="filterCards()">
+<select id="cat" onchange="filterCards()"></select>
+<select id="mat" onchange="filterCards()"></select>
+<select id="finish" onchange="filterCards()"></select>
+<select id="scope"></select>
 </div>
 <div class="parentbar">
-  <button class="parentbtn" onclick="adsk.fusionSendData('export_parent_f3d','')">Parent Fusion .F3D</button>
-  <button class="parentbtn" onclick="adsk.fusionSendData('export_parent_3mf','')">Modèle complet .3MF</button>
-  <button class="parentbtn wide" onclick="adsk.fusionSendData('export_parent_bundle','')">Exporter F3D + 3MF</button>
+  <button id="exportF3d" class="parentbtn" onclick="adsk.fusionSendData('export_parent_f3d','')"></button>
+  <button id="export3mf" class="parentbtn" onclick="adsk.fusionSendData('export_parent_3mf','')"></button>
+  <button id="exportBoth" class="parentbtn wide" onclick="adsk.fusionSendData('export_parent_bundle','')"></button>
 </div>
-<div id="status">NATIVE V10 : applique les couleurs puis exporte le modèle complet avec son fichier parent.</div></header>
-<div class="grid"><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic orange" onclick='applyColor({"material": "PLA Basic", "color_name": "Orange", "hex": "#FF6A13", "hexes": ["#FF6A13"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FF6A13"></span>
-<span class="txt"><b>Orange</b><small>PLA Basic · #FF6A13</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic pumpkin orange" onclick='applyColor({"material": "PLA Basic", "color_name": "Pumpkin Orange", "hex": "#FF9016", "hexes": ["#FF9016"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FF9016"></span>
-<span class="txt"><b>Pumpkin Orange</b><small>PLA Basic · #FF9016</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic blue gray" onclick='applyColor({"material": "PLA Basic", "color_name": "Blue Gray", "hex": "#5B6579", "hexes": ["#5B6579"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#5B6579"></span>
-<span class="txt"><b>Blue Gray</b><small>PLA Basic · #5B6579</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic cobalt blue" onclick='applyColor({"material": "PLA Basic", "color_name": "Cobalt Blue", "hex": "#0056B8", "hexes": ["#0056B8"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#0056B8"></span>
-<span class="txt"><b>Cobalt Blue</b><small>PLA Basic · #0056B8</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic turquoise" onclick='applyColor({"material": "PLA Basic", "color_name": "Turquoise", "hex": "#00B1B7", "hexes": ["#00B1B7"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#00B1B7"></span>
-<span class="txt"><b>Turquoise</b><small>PLA Basic · #00B1B7</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic cyan" onclick='applyColor({"material": "PLA Basic", "color_name": "Cyan", "hex": "#0086D6", "hexes": ["#0086D6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#0086D6"></span>
-<span class="txt"><b>Cyan</b><small>PLA Basic · #0086D6</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic blue" onclick='applyColor({"material": "PLA Basic", "color_name": "Blue", "hex": "#0A2989", "hexes": ["#0A2989"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#0A2989"></span>
-<span class="txt"><b>Blue</b><small>PLA Basic · #0A2989</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic gray" onclick='applyColor({"material": "PLA Basic", "color_name": "Gray", "hex": "#8E9089", "hexes": ["#8E9089"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9089"></span>
-<span class="txt"><b>Gray</b><small>PLA Basic · #8E9089</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic silver" onclick='applyColor({"material": "PLA Basic", "color_name": "Silver", "hex": "#A6A9AA", "hexes": ["#A6A9AA"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#A6A9AA"></span>
-<span class="txt"><b>Silver</b><small>PLA Basic · #A6A9AA</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic light gray" onclick='applyColor({"material": "PLA Basic", "color_name": "Light Gray", "hex": "#D1D3D5", "hexes": ["#D1D3D5"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D1D3D5"></span>
-<span class="txt"><b>Light Gray</b><small>PLA Basic · #D1D3D5</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic dark gray" onclick='applyColor({"material": "PLA Basic", "color_name": "Dark Gray", "hex": "#545454", "hexes": ["#545454"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#545454"></span>
-<span class="txt"><b>Dark Gray</b><small>PLA Basic · #545454</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic mistletoe green" onclick='applyColor({"material": "PLA Basic", "color_name": "Mistletoe Green", "hex": "#3F8E43", "hexes": ["#3F8E43"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#3F8E43"></span>
-<span class="txt"><b>Mistletoe Green</b><small>PLA Basic · #3F8E43</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic bright green" onclick='applyColor({"material": "PLA Basic", "color_name": "Bright Green", "hex": "#BECF00", "hexes": ["#BECF00"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#BECF00"></span>
-<span class="txt"><b>Bright Green</b><small>PLA Basic · #BECF00</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic bambu green" onclick='applyColor({"material": "PLA Basic", "color_name": "Bambu Green", "hex": "#00AE42", "hexes": ["#00AE42"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#00AE42"></span>
-<span class="txt"><b>Bambu Green</b><small>PLA Basic · #00AE42</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic black" onclick='applyColor({"material": "PLA Basic", "color_name": "Black", "hex": "#000000", "hexes": ["#000000"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#000000"></span>
-<span class="txt"><b>Black</b><small>PLA Basic · #000000</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic brown" onclick='applyColor({"material": "PLA Basic", "color_name": "Brown", "hex": "#9D432C", "hexes": ["#9D432C"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#9D432C"></span>
-<span class="txt"><b>Brown</b><small>PLA Basic · #9D432C</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic cocoa brown" onclick='applyColor({"material": "PLA Basic", "color_name": "Cocoa Brown", "hex": "#6F5034", "hexes": ["#6F5034"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#6F5034"></span>
-<span class="txt"><b>Cocoa Brown</b><small>PLA Basic · #6F5034</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic beige" onclick='applyColor({"material": "PLA Basic", "color_name": "Beige", "hex": "#F7E6DE", "hexes": ["#F7E6DE"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F7E6DE"></span>
-<span class="txt"><b>Beige</b><small>PLA Basic · #F7E6DE</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic pink" onclick='applyColor({"material": "PLA Basic", "color_name": "Pink", "hex": "#F55A74", "hexes": ["#F55A74"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F55A74"></span>
-<span class="txt"><b>Pink</b><small>PLA Basic · #F55A74</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic indigo purple" onclick='applyColor({"material": "PLA Basic", "color_name": "Indigo Purple", "hex": "#482960", "hexes": ["#482960"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#482960"></span>
-<span class="txt"><b>Indigo Purple</b><small>PLA Basic · #482960</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic purple" onclick='applyColor({"material": "PLA Basic", "color_name": "Purple", "hex": "#5E43B7", "hexes": ["#5E43B7"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#5E43B7"></span>
-<span class="txt"><b>Purple</b><small>PLA Basic · #5E43B7</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic magenta" onclick='applyColor({"material": "PLA Basic", "color_name": "Magenta", "hex": "#EC008C", "hexes": ["#EC008C"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#EC008C"></span>
-<span class="txt"><b>Magenta</b><small>PLA Basic · #EC008C</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic red" onclick='applyColor({"material": "PLA Basic", "color_name": "Red", "hex": "#C12E1F", "hexes": ["#C12E1F"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#C12E1F"></span>
-<span class="txt"><b>Red</b><small>PLA Basic · #C12E1F</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic maroon red" onclick='applyColor({"material": "PLA Basic", "color_name": "Maroon Red", "hex": "#9D2235", "hexes": ["#9D2235"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#9D2235"></span>
-<span class="txt"><b>Maroon Red</b><small>PLA Basic · #9D2235</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic hot pink" onclick='applyColor({"material": "PLA Basic", "color_name": "Hot Pink", "hex": "#F5547C", "hexes": ["#F5547C"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F5547C"></span>
-<span class="txt"><b>Hot Pink</b><small>PLA Basic · #F5547C</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic jade white" onclick='applyColor({"material": "PLA Basic", "color_name": "Jade White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>Jade White</b><small>PLA Basic · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic yellow" onclick='applyColor({"material": "PLA Basic", "color_name": "Yellow", "hex": "#F4EE2A", "hexes": ["#F4EE2A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F4EE2A"></span>
-<span class="txt"><b>Yellow</b><small>PLA Basic · #F4EE2A</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic sunflower yellow" onclick='applyColor({"material": "PLA Basic", "color_name": "Sunflower Yellow", "hex": "#FEC600", "hexes": ["#FEC600"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FEC600"></span>
-<span class="txt"><b>Sunflower Yellow</b><small>PLA Basic · #FEC600</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic bronze" onclick='applyColor({"material": "PLA Basic", "color_name": "Bronze", "hex": "#847D48", "hexes": ["#847D48"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#847D48"></span>
-<span class="txt"><b>Bronze</b><small>PLA Basic · #847D48</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic gold" onclick='applyColor({"material": "PLA Basic", "color_name": "Gold", "hex": "#E4BD68", "hexes": ["#E4BD68"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#E4BD68"></span>
-<span class="txt"><b>Gold</b><small>PLA Basic · #E4BD68</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic" data-search="pla basic green" onclick='applyColor({"material": "PLA Basic", "color_name": "Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Green</b><small>PLA Basic · #2E9B58</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite black" onclick='applyColor({"material": "PLA Lite", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PLA Lite · #101010</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite yellow" onclick='applyColor({"material": "PLA Lite", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>PLA Lite · #F2D23D</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite white" onclick='applyColor({"material": "PLA Lite", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PLA Lite · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite cyan" onclick='applyColor({"material": "PLA Lite", "color_name": "Cyan", "hex": "#00A9D6", "hexes": ["#00A9D6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#00A9D6"></span>
-<span class="txt"><b>Cyan</b><small>PLA Lite · #00A9D6</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite red" onclick='applyColor({"material": "PLA Lite", "color_name": "Red", "hex": "#D63A3A", "hexes": ["#D63A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D63A3A"></span>
-<span class="txt"><b>Red</b><small>PLA Lite · #D63A3A</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite gray" onclick='applyColor({"material": "PLA Lite", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>PLA Lite · #8E9396</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite blue" onclick='applyColor({"material": "PLA Lite", "color_name": "Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Blue</b><small>PLA Lite · #2867B2</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite sunflower yellow" onclick='applyColor({"material": "PLA Lite", "color_name": "Sunflower Yellow", "hex": "#F6C52E", "hexes": ["#F6C52E"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F6C52E"></span>
-<span class="txt"><b>Sunflower Yellow</b><small>PLA Lite · #F6C52E</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite green" onclick='applyColor({"material": "PLA Lite", "color_name": "Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Green</b><small>PLA Lite · #2E9B58</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite orange" onclick='applyColor({"material": "PLA Lite", "color_name": "Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Orange</b><small>PLA Lite · #F57C22</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite matte beige" onclick='applyColor({"material": "PLA Lite", "color_name": "Matte Beige", "hex": "#D9C6A6", "hexes": ["#D9C6A6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D9C6A6"></span>
-<span class="txt"><b>Matte Beige</b><small>PLA Lite · #D9C6A6</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite cocoa brown" onclick='applyColor({"material": "PLA Lite", "color_name": "Cocoa Brown", "hex": "#6E4939", "hexes": ["#6E4939"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#6E4939"></span>
-<span class="txt"><b>Cocoa Brown</b><small>PLA Lite · #6E4939</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Lite" data-search="pla lite dark gray" onclick='applyColor({"material": "PLA Lite", "color_name": "Dark Gray", "hex": "#51565A", "hexes": ["#51565A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#51565A"></span>
-<span class="txt"><b>Dark Gray</b><small>PLA Lite · #51565A</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte mandarin orange" onclick='applyColor({"material": "PLA Matte", "color_name": "Mandarin Orange", "hex": "#F99963", "hexes": ["#F99963"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#F99963"></span>
-<span class="txt"><b>Mandarin Orange</b><small>PLA Matte · #F99963</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte sky blue" onclick='applyColor({"material": "PLA Matte", "color_name": "Sky Blue", "hex": "#56B7E6", "hexes": ["#56B7E6"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#56B7E6"></span>
-<span class="txt"><b>Sky Blue</b><small>PLA Matte · #56B7E6</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte marine blue" onclick='applyColor({"material": "PLA Matte", "color_name": "Marine Blue", "hex": "#0078BF", "hexes": ["#0078BF"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#0078BF"></span>
-<span class="txt"><b>Marine Blue</b><small>PLA Matte · #0078BF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte ice blue" onclick='applyColor({"material": "PLA Matte", "color_name": "Ice Blue", "hex": "#A3D8E1", "hexes": ["#A3D8E1"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#A3D8E1"></span>
-<span class="txt"><b>Ice Blue</b><small>PLA Matte · #A3D8E1</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte dark blue" onclick='applyColor({"material": "PLA Matte", "color_name": "Dark Blue", "hex": "#042F56", "hexes": ["#042F56"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#042F56"></span>
-<span class="txt"><b>Dark Blue</b><small>PLA Matte · #042F56</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte nardo gray" onclick='applyColor({"material": "PLA Matte", "color_name": "Nardo Gray", "hex": "#757575", "hexes": ["#757575"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#757575"></span>
-<span class="txt"><b>Nardo Gray</b><small>PLA Matte · #757575</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte ash gray" onclick='applyColor({"material": "PLA Matte", "color_name": "Ash Gray", "hex": "#9B9EA0", "hexes": ["#9B9EA0"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#9B9EA0"></span>
-<span class="txt"><b>Ash Gray</b><small>PLA Matte · #9B9EA0</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte apple green" onclick='applyColor({"material": "PLA Matte", "color_name": "Apple Green", "hex": "#C2E189", "hexes": ["#C2E189"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#C2E189"></span>
-<span class="txt"><b>Apple Green</b><small>PLA Matte · #C2E189</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte grass green" onclick='applyColor({"material": "PLA Matte", "color_name": "Grass Green", "hex": "#61C680", "hexes": ["#61C680"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#61C680"></span>
-<span class="txt"><b>Grass Green</b><small>PLA Matte · #61C680</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte dark green" onclick='applyColor({"material": "PLA Matte", "color_name": "Dark Green", "hex": "#68724D", "hexes": ["#68724D"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#68724D"></span>
-<span class="txt"><b>Dark Green</b><small>PLA Matte · #68724D</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte charcoal" onclick='applyColor({"material": "PLA Matte", "color_name": "Charcoal", "hex": "#000000", "hexes": ["#000000"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#000000"></span>
-<span class="txt"><b>Charcoal</b><small>PLA Matte · #000000</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte dark chocolate" onclick='applyColor({"material": "PLA Matte", "color_name": "Dark Chocolate", "hex": "#4D3324", "hexes": ["#4D3324"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#4D3324"></span>
-<span class="txt"><b>Dark Chocolate</b><small>PLA Matte · #4D3324</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte latte brown" onclick='applyColor({"material": "PLA Matte", "color_name": "Latte Brown", "hex": "#D3B7A7", "hexes": ["#D3B7A7"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#D3B7A7"></span>
-<span class="txt"><b>Latte Brown</b><small>PLA Matte · #D3B7A7</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte dark brown" onclick='applyColor({"material": "PLA Matte", "color_name": "Dark Brown", "hex": "#7D6556", "hexes": ["#7D6556"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#7D6556"></span>
-<span class="txt"><b>Dark Brown</b><small>PLA Matte · #7D6556</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte caramel" onclick='applyColor({"material": "PLA Matte", "color_name": "Caramel", "hex": "#AE835B", "hexes": ["#AE835B"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#AE835B"></span>
-<span class="txt"><b>Caramel</b><small>PLA Matte · #AE835B</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte sakura pink" onclick='applyColor({"material": "PLA Matte", "color_name": "Sakura Pink", "hex": "#E8AFCF", "hexes": ["#E8AFCF"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#E8AFCF"></span>
-<span class="txt"><b>Sakura Pink</b><small>PLA Matte · #E8AFCF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte lilac purple" onclick='applyColor({"material": "PLA Matte", "color_name": "Lilac Purple", "hex": "#AE96D4", "hexes": ["#AE96D4"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#AE96D4"></span>
-<span class="txt"><b>Lilac Purple</b><small>PLA Matte · #AE96D4</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte scarlet red" onclick='applyColor({"material": "PLA Matte", "color_name": "Scarlet Red", "hex": "#DE4343", "hexes": ["#DE4343"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#DE4343"></span>
-<span class="txt"><b>Scarlet Red</b><small>PLA Matte · #DE4343</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte terracotta" onclick='applyColor({"material": "PLA Matte", "color_name": "Terracotta", "hex": "#B15533", "hexes": ["#B15533"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#B15533"></span>
-<span class="txt"><b>Terracotta</b><small>PLA Matte · #B15533</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte plum" onclick='applyColor({"material": "PLA Matte", "color_name": "Plum", "hex": "#950051", "hexes": ["#950051"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#950051"></span>
-<span class="txt"><b>Plum</b><small>PLA Matte · #950051</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte dark red" onclick='applyColor({"material": "PLA Matte", "color_name": "Dark Red", "hex": "#BB3D43", "hexes": ["#BB3D43"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#BB3D43"></span>
-<span class="txt"><b>Dark Red</b><small>PLA Matte · #BB3D43</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte ivory white" onclick='applyColor({"material": "PLA Matte", "color_name": "Ivory White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>Ivory White</b><small>PLA Matte · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte bone white" onclick='applyColor({"material": "PLA Matte", "color_name": "Bone White", "hex": "#CBC6B8", "hexes": ["#CBC6B8"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#CBC6B8"></span>
-<span class="txt"><b>Bone White</b><small>PLA Matte · #CBC6B8</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte lemon yellow" onclick='applyColor({"material": "PLA Matte", "color_name": "Lemon Yellow", "hex": "#F7D959", "hexes": ["#F7D959"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#F7D959"></span>
-<span class="txt"><b>Lemon Yellow</b><small>PLA Matte · #F7D959</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Matte" data-search="pla matte desert tan" onclick='applyColor({"material": "PLA Matte", "color_name": "Desert Tan", "hex": "#E8DBB7", "hexes": ["#E8DBB7"], "translucent": false, "opacity": 1.0, "roughness": 0.72, "finish": "matte"})'>
-<span class="swatch" style="background:#E8DBB7"></span>
-<span class="txt"><b>Desert Tan</b><small>PLA Matte · #E8DBB7</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient arctic whisper" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Arctic Whisper", "hex": "#8E9396", "hexes": ["#D9F0FF", "#E8D6FF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#D9F0FF,#E8D6FF)"></span>
-<span class="txt"><b>Arctic Whisper</b><small>PLA Basic Gradient · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient solar breeze" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Solar Breeze", "hex": "#8E9396", "hexes": ["#FFD9A8", "#8FD3FF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#FFD9A8,#8FD3FF)"></span>
-<span class="txt"><b>Solar Breeze</b><small>PLA Basic Gradient · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient ocean to meadow" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Ocean to Meadow", "hex": "#8E9396", "hexes": ["#2477C8", "#65B85A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#2477C8,#65B85A)"></span>
-<span class="txt"><b>Ocean to Meadow</b><small>PLA Basic Gradient · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient pink citrus" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Pink Citrus", "hex": "#EE9BB5", "hexes": ["#F3A7C6", "#FFB84D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#F3A7C6,#FFB84D)"></span>
-<span class="txt"><b>Pink Citrus</b><small>PLA Basic Gradient · #EE9BB5</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient mint lime" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Mint Lime", "hex": "#7BCB45", "hexes": ["#99E2C1", "#C9E85A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#99E2C1,#C9E85A)"></span>
-<span class="txt"><b>Mint Lime</b><small>PLA Basic Gradient · #7BCB45</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient blueberry bubblegum" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Blueberry Bubblegum", "hex": "#2867B2", "hexes": ["#5C58A8", "#F59BC1"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#5C58A8,#F59BC1)"></span>
-<span class="txt"><b>Blueberry Bubblegum</b><small>PLA Basic Gradient · #2867B2</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient dusk glare" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Dusk Glare", "hex": "#8E9396", "hexes": ["#553E78", "#E8896B"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#553E78,#E8896B)"></span>
-<span class="txt"><b>Dusk Glare</b><small>PLA Basic Gradient · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Basic Gradient" data-search="pla basic gradient cotton candy cloud" onclick='applyColor({"material": "PLA Basic Gradient", "color_name": "Cotton Candy Cloud", "hex": "#8E9396", "hexes": ["#8FC7F2", "#F6B7D2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#8FC7F2,#F6B7D2)"></span>
-<span class="txt"><b>Cotton Candy Cloud</b><small>PLA Basic Gradient · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Glow" data-search="pla glow glow orange" onclick='applyColor({"material": "PLA Glow", "color_name": "Glow Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "glow"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Glow Orange</b><small>PLA Glow · #F57C22</small></span>
-<span class="badge">GLOW</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Glow" data-search="pla glow glow blue" onclick='applyColor({"material": "PLA Glow", "color_name": "Glow Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "glow"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Glow Blue</b><small>PLA Glow · #2867B2</small></span>
-<span class="badge">GLOW</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Glow" data-search="pla glow glow green" onclick='applyColor({"material": "PLA Glow", "color_name": "Glow Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "glow"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Glow Green</b><small>PLA Glow · #2E9B58</small></span>
-<span class="badge">GLOW</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Glow" data-search="pla glow glow pink" onclick='applyColor({"material": "PLA Glow", "color_name": "Glow Pink", "hex": "#EE9BB5", "hexes": ["#EE9BB5"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "glow"})'>
-<span class="swatch" style="background:#EE9BB5"></span>
-<span class="txt"><b>Glow Pink</b><small>PLA Glow · #EE9BB5</small></span>
-<span class="badge">GLOW</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Glow" data-search="pla glow glow yellow" onclick='applyColor({"material": "PLA Glow", "color_name": "Glow Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "glow"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Glow Yellow</b><small>PLA Glow · #F2D23D</small></span>
-<span class="badge">GLOW</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Marble" data-search="pla marble white marble" onclick='applyColor({"material": "PLA Marble", "color_name": "White Marble", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White Marble</b><small>PLA Marble · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Marble" data-search="pla marble red granite" onclick='applyColor({"material": "PLA Marble", "color_name": "Red Granite", "hex": "#D63A3A", "hexes": ["#D63A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D63A3A"></span>
-<span class="txt"><b>Red Granite</b><small>PLA Marble · #D63A3A</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Aero" data-search="pla aero gray" onclick='applyColor({"material": "PLA Aero", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>PLA Aero · #8E9396</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Aero" data-search="pla aero black" onclick='applyColor({"material": "PLA Aero", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PLA Aero · #101010</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Aero" data-search="pla aero white" onclick='applyColor({"material": "PLA Aero", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PLA Aero · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Sparkle" data-search="pla sparkle royal purple sparkle" onclick='applyColor({"material": "PLA Sparkle", "color_name": "Royal Purple Sparkle", "hex": "#7651A8", "hexes": ["#7651A8"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "sparkle"})'>
-<span class="swatch" style="background:radial-gradient(circle at 25% 35%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 70% 65%,#fff 0 1px,transparent 1.5px),#7651A8"></span>
-<span class="txt"><b>Royal Purple Sparkle</b><small>PLA Sparkle · #7651A8</small></span>
-<span class="badge">SPARKLE</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Sparkle" data-search="pla sparkle slate gray sparkle" onclick='applyColor({"material": "PLA Sparkle", "color_name": "Slate Gray Sparkle", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "sparkle"})'>
-<span class="swatch" style="background:radial-gradient(circle at 25% 35%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 70% 65%,#fff 0 1px,transparent 1.5px),#8E9396"></span>
-<span class="txt"><b>Slate Gray Sparkle</b><small>PLA Sparkle · #8E9396</small></span>
-<span class="badge">SPARKLE</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Sparkle" data-search="pla sparkle alpine green sparkle" onclick='applyColor({"material": "PLA Sparkle", "color_name": "Alpine Green Sparkle", "hex": "#3F6B57", "hexes": ["#3F6B57"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "sparkle"})'>
-<span class="swatch" style="background:radial-gradient(circle at 25% 35%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 70% 65%,#fff 0 1px,transparent 1.5px),#3F6B57"></span>
-<span class="txt"><b>Alpine Green Sparkle</b><small>PLA Sparkle · #3F6B57</small></span>
-<span class="badge">SPARKLE</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Sparkle" data-search="pla sparkle onyx black sparkle" onclick='applyColor({"material": "PLA Sparkle", "color_name": "Onyx Black Sparkle", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "sparkle"})'>
-<span class="swatch" style="background:radial-gradient(circle at 25% 35%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 70% 65%,#fff 0 1px,transparent 1.5px),#101010"></span>
-<span class="txt"><b>Onyx Black Sparkle</b><small>PLA Sparkle · #101010</small></span>
-<span class="badge">SPARKLE</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Sparkle" data-search="pla sparkle crimson red sparkle" onclick='applyColor({"material": "PLA Sparkle", "color_name": "Crimson Red Sparkle", "hex": "#D63A3A", "hexes": ["#D63A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "sparkle"})'>
-<span class="swatch" style="background:radial-gradient(circle at 25% 35%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 70% 65%,#fff 0 1px,transparent 1.5px),#D63A3A"></span>
-<span class="txt"><b>Crimson Red Sparkle</b><small>PLA Sparkle · #D63A3A</small></span>
-<span class="badge">SPARKLE</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Sparkle" data-search="pla sparkle classic gold sparkle" onclick='applyColor({"material": "PLA Sparkle", "color_name": "Classic Gold Sparkle", "hex": "#D2A64A", "hexes": ["#D2A64A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "sparkle"})'>
-<span class="swatch" style="background:radial-gradient(circle at 25% 35%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 70% 65%,#fff 0 1px,transparent 1.5px),#D2A64A"></span>
-<span class="txt"><b>Classic Gold Sparkle</b><small>PLA Sparkle · #D2A64A</small></span>
-<span class="badge">SPARKLE</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Metal" data-search="pla metal iron gray metallic" onclick='applyColor({"material": "PLA Metal", "color_name": "Iron Gray Metallic", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "metallic"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Iron Gray Metallic</b><small>PLA Metal · #8E9396</small></span>
-<span class="badge">METALLIC</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Metal" data-search="pla metal iridium gold metallic" onclick='applyColor({"material": "PLA Metal", "color_name": "Iridium Gold Metallic", "hex": "#D2A64A", "hexes": ["#D2A64A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "metallic"})'>
-<span class="swatch" style="background:#D2A64A"></span>
-<span class="txt"><b>Iridium Gold Metallic</b><small>PLA Metal · #D2A64A</small></span>
-<span class="badge">METALLIC</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Metal" data-search="pla metal oxide green metallic" onclick='applyColor({"material": "PLA Metal", "color_name": "Oxide Green Metallic", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "metallic"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Oxide Green Metallic</b><small>PLA Metal · #2E9B58</small></span>
-<span class="badge">METALLIC</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Metal" data-search="pla metal cobalt blue metallic" onclick='applyColor({"material": "PLA Metal", "color_name": "Cobalt Blue Metallic", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "metallic"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Cobalt Blue Metallic</b><small>PLA Metal · #2867B2</small></span>
-<span class="badge">METALLIC</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Metal" data-search="pla metal copper brown metallic" onclick='applyColor({"material": "PLA Metal", "color_name": "Copper Brown Metallic", "hex": "#8A5D3B", "hexes": ["#8A5D3B"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "metallic"})'>
-<span class="swatch" style="background:#8A5D3B"></span>
-<span class="txt"><b>Copper Brown Metallic</b><small>PLA Metal · #8A5D3B</small></span>
-<span class="badge">METALLIC</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent red" onclick='applyColor({"material": "PLA Translucent", "color_name": "Red", "hex": "#B50011", "hexes": ["#B50011"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#B5001199,#B5001199), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Red</b><small>PLA Translucent · #B50011</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent cherry pink" onclick='applyColor({"material": "PLA Translucent", "color_name": "Cherry Pink", "hex": "#F5B6CD", "hexes": ["#F5B6CD"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#F5B6CD99,#F5B6CD99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Cherry Pink</b><small>PLA Translucent · #F5B6CD</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent orange" onclick='applyColor({"material": "PLA Translucent", "color_name": "Orange", "hex": "#F74E02", "hexes": ["#F74E02"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#F74E0299,#F74E0299), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Orange</b><small>PLA Translucent · #F74E02</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent mellow yellow" onclick='applyColor({"material": "PLA Translucent", "color_name": "Mellow Yellow", "hex": "#F5DBAB", "hexes": ["#F5DBAB"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#F5DBAB99,#F5DBAB99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Mellow Yellow</b><small>PLA Translucent · #F5DBAB</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent light jade" onclick='applyColor({"material": "PLA Translucent", "color_name": "Light Jade", "hex": "#96D8AF", "hexes": ["#96D8AF"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#96D8AF99,#96D8AF99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Light Jade</b><small>PLA Translucent · #96D8AF</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent ice blue" onclick='applyColor({"material": "PLA Translucent", "color_name": "Ice Blue", "hex": "#B8CDE9", "hexes": ["#B8CDE9"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#B8CDE999,#B8CDE999), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Ice Blue</b><small>PLA Translucent · #B8CDE9</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent blue" onclick='applyColor({"material": "PLA Translucent", "color_name": "Blue", "hex": "#0047BB", "hexes": ["#0047BB"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#0047BB99,#0047BB99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Blue</b><small>PLA Translucent · #0047BB</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent teal" onclick='applyColor({"material": "PLA Translucent", "color_name": "Teal", "hex": "#009FA1", "hexes": ["#009FA1"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#009FA199,#009FA199), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Teal</b><small>PLA Translucent · #009FA1</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent purple" onclick='applyColor({"material": "PLA Translucent", "color_name": "Purple", "hex": "#8344B0", "hexes": ["#8344B0"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#8344B099,#8344B099), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Purple</b><small>PLA Translucent · #8344B0</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Translucent" data-search="pla translucent lavender" onclick='applyColor({"material": "PLA Translucent", "color_name": "Lavender", "hex": "#B8ACD6", "hexes": ["#B8ACD6"], "translucent": true, "opacity": 0.58, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#B8ACD699,#B8ACD699), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Lavender</b><small>PLA Translucent · #B8ACD6</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ baby blue" onclick='applyColor({"material": "PLA Silk+", "color_name": "Baby Blue", "hex": "#A8C6EE", "hexes": ["#A8C6EE"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#A8C6EE"></span>
-<span class="txt"><b>Baby Blue</b><small>PLA Silk+ · #A8C6EE</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ blue" onclick='applyColor({"material": "PLA Silk+", "color_name": "Blue", "hex": "#008BDA", "hexes": ["#008BDA"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#008BDA"></span>
-<span class="txt"><b>Blue</b><small>PLA Silk+ · #008BDA</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ titan gray" onclick='applyColor({"material": "PLA Silk+", "color_name": "Titan Gray", "hex": "#5F6367", "hexes": ["#5F6367"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#5F6367"></span>
-<span class="txt"><b>Titan Gray</b><small>PLA Silk+ · #5F6367</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ silver" onclick='applyColor({"material": "PLA Silk+", "color_name": "Silver", "hex": "#C8C8C8", "hexes": ["#C8C8C8"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#C8C8C8"></span>
-<span class="txt"><b>Silver</b><small>PLA Silk+ · #C8C8C8</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ candy green" onclick='applyColor({"material": "PLA Silk+", "color_name": "Candy Green", "hex": "#018814", "hexes": ["#018814"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#018814"></span>
-<span class="txt"><b>Candy Green</b><small>PLA Silk+ · #018814</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ mint" onclick='applyColor({"material": "PLA Silk+", "color_name": "Mint", "hex": "#96DCB9", "hexes": ["#96DCB9"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#96DCB9"></span>
-<span class="txt"><b>Mint</b><small>PLA Silk+ · #96DCB9</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ purple" onclick='applyColor({"material": "PLA Silk+", "color_name": "Purple", "hex": "#8671CB", "hexes": ["#8671CB"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#8671CB"></span>
-<span class="txt"><b>Purple</b><small>PLA Silk+ · #8671CB</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ candy red" onclick='applyColor({"material": "PLA Silk+", "color_name": "Candy Red", "hex": "#D02727", "hexes": ["#D02727"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#D02727"></span>
-<span class="txt"><b>Candy Red</b><small>PLA Silk+ · #D02727</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ rose gold" onclick='applyColor({"material": "PLA Silk+", "color_name": "Rose Gold", "hex": "#BA9594", "hexes": ["#BA9594"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#BA9594"></span>
-<span class="txt"><b>Rose Gold</b><small>PLA Silk+ · #BA9594</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ pink" onclick='applyColor({"material": "PLA Silk+", "color_name": "Pink", "hex": "#F7ADA6", "hexes": ["#F7ADA6"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#F7ADA6"></span>
-<span class="txt"><b>Pink</b><small>PLA Silk+ · #F7ADA6</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ white" onclick='applyColor({"material": "PLA Silk+", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PLA Silk+ · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ champagne" onclick='applyColor({"material": "PLA Silk+", "color_name": "Champagne", "hex": "#F3CFB2", "hexes": ["#F3CFB2"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#F3CFB2"></span>
-<span class="txt"><b>Champagne</b><small>PLA Silk+ · #F3CFB2</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk+" data-search="pla silk+ gold" onclick='applyColor({"material": "PLA Silk+", "color_name": "Gold", "hex": "#F4A925", "hexes": ["#F4A925"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:#F4A925"></span>
-<span class="txt"><b>Gold</b><small>PLA Silk+ · #F4A925</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color gilded rose" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Gilded Rose", "hex": "#8E9396", "hexes": ["#D4AF37", "#C9878E"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#D4AF37,#C9878E)"></span>
-<span class="txt"><b>Gilded Rose</b><small>PLA Silk Multi-Color · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color midnight blaze" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Midnight Blaze", "hex": "#8E9396", "hexes": ["#1A1A24", "#D34732"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#1A1A24,#D34732)"></span>
-<span class="txt"><b>Midnight Blaze</b><small>PLA Silk Multi-Color · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color neon city" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Neon City", "hex": "#8E9396", "hexes": ["#00D8C8", "#EA3FFF"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#00D8C8,#EA3FFF)"></span>
-<span class="txt"><b>Neon City</b><small>PLA Silk Multi-Color · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color blue hawaii" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Blue Hawaii", "hex": "#2867B2", "hexes": ["#188BC2", "#40D0B0"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#188BC2,#40D0B0)"></span>
-<span class="txt"><b>Blue Hawaii</b><small>PLA Silk Multi-Color · #2867B2</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color velvet eclipse (black-red)" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Velvet Eclipse (Black-Red)", "hex": "#101010", "hexes": ["#080808", "#A61723"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#080808,#A61723)"></span>
-<span class="txt"><b>Velvet Eclipse (Black-Red)</b><small>PLA Silk Multi-Color · #101010</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color south beach" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "South Beach", "hex": "#8E9396", "hexes": ["#4FC5D0", "#F2A0BD"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#4FC5D0,#F2A0BD)"></span>
-<span class="txt"><b>South Beach</b><small>PLA Silk Multi-Color · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color aurora purple" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Aurora Purple", "hex": "#7651A8", "hexes": ["#5C3F99", "#C180D1"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#5C3F99,#C180D1)"></span>
-<span class="txt"><b>Aurora Purple</b><small>PLA Silk Multi-Color · #7651A8</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color dawn radiance" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Dawn Radiance", "hex": "#8E9396", "hexes": ["#F1A26A", "#EFD7A8"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#F1A26A,#EFD7A8)"></span>
-<span class="txt"><b>Dawn Radiance</b><small>PLA Silk Multi-Color · #8E9396</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color mystic magenta" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Mystic Magenta", "hex": "#EC008C", "hexes": ["#9C2A73", "#E12B98"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#9C2A73,#E12B98)"></span>
-<span class="txt"><b>Mystic Magenta</b><small>PLA Silk Multi-Color · #EC008C</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Silk Multi-Color" data-search="pla silk multi-color phantom blue" onclick='applyColor({"material": "PLA Silk Multi-Color", "color_name": "Phantom Blue", "hex": "#2867B2", "hexes": ["#172950", "#3C70A5"], "translucent": false, "opacity": 1.0, "roughness": 0.18, "finish": "silk"})'>
-<span class="swatch" style="background:linear-gradient(135deg,#172950,#3C70A5)"></span>
-<span class="txt"><b>Phantom Blue</b><small>PLA Silk Multi-Color · #2867B2</small></span>
-<span class="badge">MULTI</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Galaxy" data-search="pla galaxy purple" onclick='applyColor({"material": "PLA Galaxy", "color_name": "Purple", "hex": "#7651A8", "hexes": ["#7651A8"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#7651A8"></span>
-<span class="txt"><b>Purple</b><small>PLA Galaxy · #7651A8</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Galaxy" data-search="pla galaxy green" onclick='applyColor({"material": "PLA Galaxy", "color_name": "Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Green</b><small>PLA Galaxy · #2E9B58</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Galaxy" data-search="pla galaxy nebulae" onclick='applyColor({"material": "PLA Galaxy", "color_name": "Nebulae", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Nebulae</b><small>PLA Galaxy · #8E9396</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Galaxy" data-search="pla galaxy brown" onclick='applyColor({"material": "PLA Galaxy", "color_name": "Brown", "hex": "#8A5D3B", "hexes": ["#8A5D3B"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8A5D3B"></span>
-<span class="txt"><b>Brown</b><small>PLA Galaxy · #8A5D3B</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Wood" data-search="pla wood classic birch" onclick='applyColor({"material": "PLA Wood", "color_name": "Classic Birch", "hex": "#D4B98C", "hexes": ["#D4B98C"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "wood"})'>
-<span class="swatch" style="background:#D4B98C"></span>
-<span class="txt"><b>Classic Birch</b><small>PLA Wood · #D4B98C</small></span>
-<span class="badge">WOOD</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Wood" data-search="pla wood black walnut" onclick='applyColor({"material": "PLA Wood", "color_name": "Black Walnut", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "wood"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black Walnut</b><small>PLA Wood · #101010</small></span>
-<span class="badge">WOOD</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Wood" data-search="pla wood clay brown" onclick='applyColor({"material": "PLA Wood", "color_name": "Clay Brown", "hex": "#8A5D3B", "hexes": ["#8A5D3B"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "wood"})'>
-<span class="swatch" style="background:#8A5D3B"></span>
-<span class="txt"><b>Clay Brown</b><small>PLA Wood · #8A5D3B</small></span>
-<span class="badge">WOOD</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Wood" data-search="pla wood rosewood" onclick='applyColor({"material": "PLA Wood", "color_name": "Rosewood", "hex": "#6B4D36", "hexes": ["#6B4D36"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "wood"})'>
-<span class="swatch" style="background:#6B4D36"></span>
-<span class="txt"><b>Rosewood</b><small>PLA Wood · #6B4D36</small></span>
-<span class="badge">WOOD</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Wood" data-search="pla wood white oak" onclick='applyColor({"material": "PLA Wood", "color_name": "White Oak", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "wood"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White Oak</b><small>PLA Wood · #FFFFFF</small></span>
-<span class="badge">WOOD</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Wood" data-search="pla wood ochre yellow" onclick='applyColor({"material": "PLA Wood", "color_name": "Ochre Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "wood"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Ochre Yellow</b><small>PLA Wood · #F2D23D</small></span>
-<span class="badge">WOOD</span>
-</button><button class="card" data-cat="PLA" data-material="PLA-CF" data-search="pla-cf royal blue" onclick='applyColor({"material": "PLA-CF", "color_name": "Royal Blue", "hex": "#2046A8", "hexes": ["#2046A8"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#2046A8"></span>
-<span class="txt"><b>Royal Blue</b><small>PLA-CF · #2046A8</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PLA" data-material="PLA-CF" data-search="pla-cf jeans blue" onclick='applyColor({"material": "PLA-CF", "color_name": "Jeans Blue", "hex": "#5B718E", "hexes": ["#5B718E"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#5B718E"></span>
-<span class="txt"><b>Jeans Blue</b><small>PLA-CF · #5B718E</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PLA" data-material="PLA-CF" data-search="pla-cf lava gray" onclick='applyColor({"material": "PLA-CF", "color_name": "Lava Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Lava Gray</b><small>PLA-CF · #8E9396</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PLA" data-material="PLA-CF" data-search="pla-cf matcha green" onclick='applyColor({"material": "PLA-CF", "color_name": "Matcha Green", "hex": "#8DA66C", "hexes": ["#8DA66C"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#8DA66C"></span>
-<span class="txt"><b>Matcha Green</b><small>PLA-CF · #8DA66C</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PLA" data-material="PLA-CF" data-search="pla-cf black" onclick='applyColor({"material": "PLA-CF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PLA-CF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PLA" data-material="PLA-CF" data-search="pla-cf iris purple" onclick='applyColor({"material": "PLA-CF", "color_name": "Iris Purple", "hex": "#70569A", "hexes": ["#70569A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#70569A"></span>
-<span class="txt"><b>Iris Purple</b><small>PLA-CF · #70569A</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PLA" data-material="PLA-CF" data-search="pla-cf burgundy red" onclick='applyColor({"material": "PLA-CF", "color_name": "Burgundy Red", "hex": "#7C2636", "hexes": ["#7C2636"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#7C2636"></span>
-<span class="txt"><b>Burgundy Red</b><small>PLA-CF · #7C2636</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PLA" data-material="PLA Tough+" data-search="pla tough+ black" onclick='applyColor({"material": "PLA Tough+", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PLA Tough+ · #101010</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough+" data-search="pla tough+ gray" onclick='applyColor({"material": "PLA Tough+", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>PLA Tough+ · #8E9396</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough+" data-search="pla tough+ silver" onclick='applyColor({"material": "PLA Tough+", "color_name": "Silver", "hex": "#A8ADB0", "hexes": ["#A8ADB0"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#A8ADB0"></span>
-<span class="txt"><b>Silver</b><small>PLA Tough+ · #A8ADB0</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough+" data-search="pla tough+ white" onclick='applyColor({"material": "PLA Tough+", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PLA Tough+ · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough+" data-search="pla tough+ orange" onclick='applyColor({"material": "PLA Tough+", "color_name": "Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Orange</b><small>PLA Tough+ · #F57C22</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough+" data-search="pla tough+ yellow" onclick='applyColor({"material": "PLA Tough+", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>PLA Tough+ · #F2D23D</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough+" data-search="pla tough+ cyan" onclick='applyColor({"material": "PLA Tough+", "color_name": "Cyan", "hex": "#00A9D6", "hexes": ["#00A9D6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#00A9D6"></span>
-<span class="txt"><b>Cyan</b><small>PLA Tough+ · #00A9D6</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough orange" onclick='applyColor({"material": "PLA Tough", "color_name": "Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Orange</b><small>PLA Tough · #F57C22</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough light blue" onclick='applyColor({"material": "PLA Tough", "color_name": "Light Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Light Blue</b><small>PLA Tough · #2867B2</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough lavender blue" onclick='applyColor({"material": "PLA Tough", "color_name": "Lavender Blue", "hex": "#B8ACD6", "hexes": ["#B8ACD6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#B8ACD6"></span>
-<span class="txt"><b>Lavender Blue</b><small>PLA Tough · #B8ACD6</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough gray" onclick='applyColor({"material": "PLA Tough", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>PLA Tough · #8E9396</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough silver" onclick='applyColor({"material": "PLA Tough", "color_name": "Silver", "hex": "#A8ADB0", "hexes": ["#A8ADB0"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#A8ADB0"></span>
-<span class="txt"><b>Silver</b><small>PLA Tough · #A8ADB0</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough pine green" onclick='applyColor({"material": "PLA Tough", "color_name": "Pine Green", "hex": "#3F6B57", "hexes": ["#3F6B57"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#3F6B57"></span>
-<span class="txt"><b>Pine Green</b><small>PLA Tough · #3F6B57</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough black" onclick='applyColor({"material": "PLA Tough", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PLA Tough · #101010</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough vermilion red" onclick='applyColor({"material": "PLA Tough", "color_name": "Vermilion Red", "hex": "#D74932", "hexes": ["#D74932"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D74932"></span>
-<span class="txt"><b>Vermilion Red</b><small>PLA Tough · #D74932</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough white" onclick='applyColor({"material": "PLA Tough", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PLA Tough · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Tough" data-search="pla tough yellow" onclick='applyColor({"material": "PLA Tough", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>PLA Tough · #F2D23D</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Pure" data-search="pla pure pure white" onclick='applyColor({"material": "PLA Pure", "color_name": "Pure White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>Pure White</b><small>PLA Pure · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Pure" data-search="pla pure absolute black" onclick='applyColor({"material": "PLA Pure", "color_name": "Absolute Black", "hex": "#000000", "hexes": ["#000000"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#000000"></span>
-<span class="txt"><b>Absolute Black</b><small>PLA Pure · #000000</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Pure" data-search="pla pure milky pink" onclick='applyColor({"material": "PLA Pure", "color_name": "Milky Pink", "hex": "#F4C7D5", "hexes": ["#F4C7D5"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F4C7D5"></span>
-<span class="txt"><b>Milky Pink</b><small>PLA Pure · #F4C7D5</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Pure" data-search="pla pure baby blue" onclick='applyColor({"material": "PLA Pure", "color_name": "Baby Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Baby Blue</b><small>PLA Pure · #2867B2</small></span>
-
-</button><button class="card" data-cat="PLA" data-material="PLA Pure" data-search="pla pure apricot" onclick='applyColor({"material": "PLA Pure", "color_name": "Apricot", "hex": "#F3BC8D", "hexes": ["#F3BC8D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F3BC8D"></span>
-<span class="txt"><b>Apricot</b><small>PLA Pure · #F3BC8D</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic black" onclick='applyColor({"material": "PETG Basic", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PETG Basic · #101010</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic white" onclick='applyColor({"material": "PETG Basic", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PETG Basic · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic gray" onclick='applyColor({"material": "PETG Basic", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>PETG Basic · #8E9396</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic yellow" onclick='applyColor({"material": "PETG Basic", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>PETG Basic · #F2D23D</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic red" onclick='applyColor({"material": "PETG Basic", "color_name": "Red", "hex": "#D63A3A", "hexes": ["#D63A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D63A3A"></span>
-<span class="txt"><b>Red</b><small>PETG Basic · #D63A3A</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic reflex blue" onclick='applyColor({"material": "PETG Basic", "color_name": "Reflex Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Reflex Blue</b><small>PETG Basic · #2867B2</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic dark brown" onclick='applyColor({"material": "PETG Basic", "color_name": "Dark Brown", "hex": "#5B4032", "hexes": ["#5B4032"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#5B4032"></span>
-<span class="txt"><b>Dark Brown</b><small>PETG Basic · #5B4032</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic green" onclick='applyColor({"material": "PETG Basic", "color_name": "Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Green</b><small>PETG Basic · #2E9B58</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic orange" onclick='applyColor({"material": "PETG Basic", "color_name": "Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Orange</b><small>PETG Basic · #F57C22</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic pine green" onclick='applyColor({"material": "PETG Basic", "color_name": "Pine Green", "hex": "#3F6B57", "hexes": ["#3F6B57"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#3F6B57"></span>
-<span class="txt"><b>Pine Green</b><small>PETG Basic · #3F6B57</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic navy blue" onclick='applyColor({"material": "PETG Basic", "color_name": "Navy Blue", "hex": "#203B68", "hexes": ["#203B68"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#203B68"></span>
-<span class="txt"><b>Navy Blue</b><small>PETG Basic · #203B68</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic misty blue" onclick='applyColor({"material": "PETG Basic", "color_name": "Misty Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Misty Blue</b><small>PETG Basic · #2867B2</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic dark beige" onclick='applyColor({"material": "PETG Basic", "color_name": "Dark Beige", "hex": "#B29C7B", "hexes": ["#B29C7B"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#B29C7B"></span>
-<span class="txt"><b>Dark Beige</b><small>PETG Basic · #B29C7B</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Basic" data-search="petg basic lime green" onclick='applyColor({"material": "PETG Basic", "color_name": "Lime Green", "hex": "#73D13D", "hexes": ["#73D13D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#73D13D"></span>
-<span class="txt"><b>Lime Green</b><small>PETG Basic · #73D13D</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf orange" onclick='applyColor({"material": "PETG HF", "color_name": "Orange", "hex": "#F75403", "hexes": ["#F75403"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F75403"></span>
-<span class="txt"><b>Orange</b><small>PETG HF · #F75403</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf blue" onclick='applyColor({"material": "PETG HF", "color_name": "Blue", "hex": "#002E96", "hexes": ["#002E96"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#002E96"></span>
-<span class="txt"><b>Blue</b><small>PETG HF · #002E96</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf lake blue" onclick='applyColor({"material": "PETG HF", "color_name": "Lake Blue", "hex": "#1F79E5", "hexes": ["#1F79E5"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#1F79E5"></span>
-<span class="txt"><b>Lake Blue</b><small>PETG HF · #1F79E5</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf gray" onclick='applyColor({"material": "PETG HF", "color_name": "Gray", "hex": "#ADB1B2", "hexes": ["#ADB1B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#ADB1B2"></span>
-<span class="txt"><b>Gray</b><small>PETG HF · #ADB1B2</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf dark gray" onclick='applyColor({"material": "PETG HF", "color_name": "Dark Gray", "hex": "#515151", "hexes": ["#515151"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#515151"></span>
-<span class="txt"><b>Dark Gray</b><small>PETG HF · #515151</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf green" onclick='applyColor({"material": "PETG HF", "color_name": "Green", "hex": "#00AE42", "hexes": ["#00AE42"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#00AE42"></span>
-<span class="txt"><b>Green</b><small>PETG HF · #00AE42</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf lime green" onclick='applyColor({"material": "PETG HF", "color_name": "Lime Green", "hex": "#6EE53C", "hexes": ["#6EE53C"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#6EE53C"></span>
-<span class="txt"><b>Lime Green</b><small>PETG HF · #6EE53C</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf forest green" onclick='applyColor({"material": "PETG HF", "color_name": "Forest Green", "hex": "#39541A", "hexes": ["#39541A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#39541A"></span>
-<span class="txt"><b>Forest Green</b><small>PETG HF · #39541A</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf black" onclick='applyColor({"material": "PETG HF", "color_name": "Black", "hex": "#000000", "hexes": ["#000000"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#000000"></span>
-<span class="txt"><b>Black</b><small>PETG HF · #000000</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf peanut brown" onclick='applyColor({"material": "PETG HF", "color_name": "Peanut Brown", "hex": "#875718", "hexes": ["#875718"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#875718"></span>
-<span class="txt"><b>Peanut Brown</b><small>PETG HF · #875718</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf red" onclick='applyColor({"material": "PETG HF", "color_name": "Red", "hex": "#EB3A3A", "hexes": ["#EB3A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#EB3A3A"></span>
-<span class="txt"><b>Red</b><small>PETG HF · #EB3A3A</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf white" onclick='applyColor({"material": "PETG HF", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PETG HF · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf yellow" onclick='applyColor({"material": "PETG HF", "color_name": "Yellow", "hex": "#FFD00B", "hexes": ["#FFD00B"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFD00B"></span>
-<span class="txt"><b>Yellow</b><small>PETG HF · #FFD00B</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG HF" data-search="petg hf cream" onclick='applyColor({"material": "PETG HF", "color_name": "Cream", "hex": "#F9DFB9", "hexes": ["#F9DFB9"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F9DFB9"></span>
-<span class="txt"><b>Cream</b><small>PETG HF · #F9DFB9</small></span>
-
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent orange" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Orange", "hex": "#FF911A", "hexes": ["#FF911A"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#FF911A99,#FF911A99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Orange</b><small>PETG Translucent · #FF911A</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent light blue" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Light Blue", "hex": "#61B0FF", "hexes": ["#61B0FF"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#61B0FF99,#61B0FF99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Light Blue</b><small>PETG Translucent · #61B0FF</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent clear" onclick='applyColor({"material": "PETG Translucent", "color_name": "Clear", "hex": "#E8F4F8", "hexes": ["#E8F4F8"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#E8F4F899,#E8F4F899), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Clear</b><small>PETG Translucent · #E8F4F8</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent gray" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Gray", "hex": "#8E8E8E", "hexes": ["#8E8E8E"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#8E8E8E99,#8E8E8E99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Gray</b><small>PETG Translucent · #8E8E8E</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent olive" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Olive", "hex": "#748C45", "hexes": ["#748C45"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#748C4599,#748C4599), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Olive</b><small>PETG Translucent · #748C45</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent teal" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Teal", "hex": "#77EDD7", "hexes": ["#77EDD7"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#77EDD799,#77EDD799), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Teal</b><small>PETG Translucent · #77EDD7</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent brown" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Brown", "hex": "#C9A381", "hexes": ["#C9A381"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#C9A38199,#C9A38199), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Brown</b><small>PETG Translucent · #C9A381</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent purple" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Purple", "hex": "#D6ABFF", "hexes": ["#D6ABFF"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#D6ABFF99,#D6ABFF99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Purple</b><small>PETG Translucent · #D6ABFF</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG Translucent" data-search="petg translucent translucent pink" onclick='applyColor({"material": "PETG Translucent", "color_name": "Translucent Pink", "hex": "#F9C1BD", "hexes": ["#F9C1BD"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "translucent"})'>
-<span class="swatch" style="background:linear-gradient(#F9C1BD99,#F9C1BD99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Translucent Pink</b><small>PETG Translucent · #F9C1BD</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PETG" data-material="PETG-CF" data-search="petg-cf indigo blue" onclick='applyColor({"material": "PETG-CF", "color_name": "Indigo Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Indigo Blue</b><small>PETG-CF · #2867B2</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PETG" data-material="PETG-CF" data-search="petg-cf titan gray" onclick='applyColor({"material": "PETG-CF", "color_name": "Titan Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Titan Gray</b><small>PETG-CF · #8E9396</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PETG" data-material="PETG-CF" data-search="petg-cf malachite green" onclick='applyColor({"material": "PETG-CF", "color_name": "Malachite Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Malachite Green</b><small>PETG-CF · #2E9B58</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PETG" data-material="PETG-CF" data-search="petg-cf black" onclick='applyColor({"material": "PETG-CF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PETG-CF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PETG" data-material="PETG-CF" data-search="petg-cf violet purple" onclick='applyColor({"material": "PETG-CF", "color_name": "Violet Purple", "hex": "#7451A6", "hexes": ["#7451A6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#7451A6"></span>
-<span class="txt"><b>Violet Purple</b><small>PETG-CF · #7451A6</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PETG" data-material="PETG-CF" data-search="petg-cf brick red" onclick='applyColor({"material": "PETG-CF", "color_name": "Brick Red", "hex": "#9B3B34", "hexes": ["#9B3B34"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#9B3B34"></span>
-<span class="txt"><b>Brick Red</b><small>PETG-CF · #9B3B34</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs orange" onclick='applyColor({"material": "ABS", "color_name": "Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Orange</b><small>ABS · #F57C22</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs blue" onclick='applyColor({"material": "ABS", "color_name": "Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Blue</b><small>ABS · #2867B2</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs azure" onclick='applyColor({"material": "ABS", "color_name": "Azure", "hex": "#3AA4E3", "hexes": ["#3AA4E3"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#3AA4E3"></span>
-<span class="txt"><b>Azure</b><small>ABS · #3AA4E3</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs navy blue" onclick='applyColor({"material": "ABS", "color_name": "Navy Blue", "hex": "#203B68", "hexes": ["#203B68"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#203B68"></span>
-<span class="txt"><b>Navy Blue</b><small>ABS · #203B68</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs mint" onclick='applyColor({"material": "ABS", "color_name": "Mint", "hex": "#9DD9BE", "hexes": ["#9DD9BE"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#9DD9BE"></span>
-<span class="txt"><b>Mint</b><small>ABS · #9DD9BE</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs silver" onclick='applyColor({"material": "ABS", "color_name": "Silver", "hex": "#A8ADB0", "hexes": ["#A8ADB0"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#A8ADB0"></span>
-<span class="txt"><b>Silver</b><small>ABS · #A8ADB0</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs bambu green" onclick='applyColor({"material": "ABS", "color_name": "Bambu Green", "hex": "#00AE42", "hexes": ["#00AE42"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#00AE42"></span>
-<span class="txt"><b>Bambu Green</b><small>ABS · #00AE42</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs olive" onclick='applyColor({"material": "ABS", "color_name": "Olive", "hex": "#7D8548", "hexes": ["#7D8548"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#7D8548"></span>
-<span class="txt"><b>Olive</b><small>ABS · #7D8548</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs black" onclick='applyColor({"material": "ABS", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>ABS · #101010</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs lavender" onclick='applyColor({"material": "ABS", "color_name": "Lavender", "hex": "#B8ACD6", "hexes": ["#B8ACD6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#B8ACD6"></span>
-<span class="txt"><b>Lavender</b><small>ABS · #B8ACD6</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs purple" onclick='applyColor({"material": "ABS", "color_name": "Purple", "hex": "#7651A8", "hexes": ["#7651A8"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#7651A8"></span>
-<span class="txt"><b>Purple</b><small>ABS · #7651A8</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs red" onclick='applyColor({"material": "ABS", "color_name": "Red", "hex": "#D63A3A", "hexes": ["#D63A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D63A3A"></span>
-<span class="txt"><b>Red</b><small>ABS · #D63A3A</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs white" onclick='applyColor({"material": "ABS", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>ABS · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs yellow" onclick='applyColor({"material": "ABS", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>ABS · #F2D23D</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs tangerine yellow" onclick='applyColor({"material": "ABS", "color_name": "Tangerine Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Tangerine Yellow</b><small>ABS · #F2D23D</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS" data-search="abs beige" onclick='applyColor({"material": "ABS", "color_name": "Beige", "hex": "#D9C6A6", "hexes": ["#D9C6A6"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D9C6A6"></span>
-<span class="txt"><b>Beige</b><small>ABS · #D9C6A6</small></span>
-
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf orange" onclick='applyColor({"material": "ABS-GF", "color_name": "Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Orange</b><small>ABS-GF · #F57C22</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf blue" onclick='applyColor({"material": "ABS-GF", "color_name": "Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Blue</b><small>ABS-GF · #2867B2</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf gray" onclick='applyColor({"material": "ABS-GF", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>ABS-GF · #8E9396</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf green" onclick='applyColor({"material": "ABS-GF", "color_name": "Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Green</b><small>ABS-GF · #2E9B58</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf black" onclick='applyColor({"material": "ABS-GF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>ABS-GF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf red" onclick='applyColor({"material": "ABS-GF", "color_name": "Red", "hex": "#D63A3A", "hexes": ["#D63A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#D63A3A"></span>
-<span class="txt"><b>Red</b><small>ABS-GF · #D63A3A</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf white" onclick='applyColor({"material": "ABS-GF", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>ABS-GF · #FFFFFF</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ABS" data-material="ABS-GF" data-search="abs-gf yellow" onclick='applyColor({"material": "ABS-GF", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>ABS-GF · #F2D23D</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="ASA" data-material="ASA" data-search="asa blue" onclick='applyColor({"material": "ASA", "color_name": "Blue", "hex": "#2140B4", "hexes": ["#2140B4"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2140B4"></span>
-<span class="txt"><b>Blue</b><small>ASA · #2140B4</small></span>
-
-</button><button class="card" data-cat="ASA" data-material="ASA" data-search="asa gray" onclick='applyColor({"material": "ASA", "color_name": "Gray", "hex": "#8A949E", "hexes": ["#8A949E"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8A949E"></span>
-<span class="txt"><b>Gray</b><small>ASA · #8A949E</small></span>
-
-</button><button class="card" data-cat="ASA" data-material="ASA" data-search="asa green" onclick='applyColor({"material": "ASA", "color_name": "Green", "hex": "#00A6A0", "hexes": ["#00A6A0"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#00A6A0"></span>
-<span class="txt"><b>Green</b><small>ASA · #00A6A0</small></span>
-
-</button><button class="card" data-cat="ASA" data-material="ASA" data-search="asa black" onclick='applyColor({"material": "ASA", "color_name": "Black", "hex": "#000000", "hexes": ["#000000"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#000000"></span>
-<span class="txt"><b>Black</b><small>ASA · #000000</small></span>
-
-</button><button class="card" data-cat="ASA" data-material="ASA" data-search="asa red" onclick='applyColor({"material": "ASA", "color_name": "Red", "hex": "#E02928", "hexes": ["#E02928"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#E02928"></span>
-<span class="txt"><b>Red</b><small>ASA · #E02928</small></span>
-
-</button><button class="card" data-cat="ASA" data-material="ASA" data-search="asa white" onclick='applyColor({"material": "ASA", "color_name": "White", "hex": "#FFFAF2", "hexes": ["#FFFAF2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFAF2"></span>
-<span class="txt"><b>White</b><small>ASA · #FFFAF2</small></span>
-
-</button><button class="card" data-cat="ASA" data-material="ASA Aero" data-search="asa aero white" onclick='applyColor({"material": "ASA Aero", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>ASA Aero · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="ASA" data-material="ASA-CF" data-search="asa-cf black" onclick='applyColor({"material": "ASA-CF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>ASA-CF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="PC" data-material="PC" data-search="pc clear black" onclick='applyColor({"material": "PC", "color_name": "Clear Black", "hex": "#101010", "hexes": ["#101010"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(#10101099,#10101099), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Clear Black</b><small>PC · #101010</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PC" data-material="PC" data-search="pc transparent" onclick='applyColor({"material": "PC", "color_name": "Transparent", "hex": "#EEF8FA", "hexes": ["#EEF8FA"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(#EEF8FA99,#EEF8FA99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Transparent</b><small>PC · #EEF8FA</small></span>
-<span class="badge">TRANS</span>
-</button><button class="card" data-cat="PC" data-material="PC" data-search="pc black" onclick='applyColor({"material": "PC", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PC · #101010</small></span>
-
-</button><button class="card" data-cat="PC" data-material="PC" data-search="pc white" onclick='applyColor({"material": "PC", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PC · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="PC" data-material="PC FR" data-search="pc fr gray" onclick='applyColor({"material": "PC FR", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>PC FR · #8E9396</small></span>
-
-</button><button class="card" data-cat="PC" data-material="PC FR" data-search="pc fr black" onclick='applyColor({"material": "PC FR", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PC FR · #101010</small></span>
-
-</button><button class="card" data-cat="PC" data-material="PC FR" data-search="pc fr white" onclick='applyColor({"material": "PC FR", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PC FR · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="TPU" data-material="TPU for AMS" data-search="tpu for ams blue" onclick='applyColor({"material": "TPU for AMS", "color_name": "Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Blue</b><small>TPU for AMS · #2867B2</small></span>
-
-</button><button class="card" data-cat="TPU" data-material="TPU for AMS" data-search="tpu for ams gray" onclick='applyColor({"material": "TPU for AMS", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>TPU for AMS · #8E9396</small></span>
-
-</button><button class="card" data-cat="TPU" data-material="TPU for AMS" data-search="tpu for ams neon green" onclick='applyColor({"material": "TPU for AMS", "color_name": "Neon Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Neon Green</b><small>TPU for AMS · #2E9B58</small></span>
-
-</button><button class="card" data-cat="TPU" data-material="TPU for AMS" data-search="tpu for ams black" onclick='applyColor({"material": "TPU for AMS", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>TPU for AMS · #101010</small></span>
-
-</button><button class="card" data-cat="TPU" data-material="TPU for AMS" data-search="tpu for ams red" onclick='applyColor({"material": "TPU for AMS", "color_name": "Red", "hex": "#D63A3A", "hexes": ["#D63A3A"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#D63A3A"></span>
-<span class="txt"><b>Red</b><small>TPU for AMS · #D63A3A</small></span>
-
-</button><button class="card" data-cat="TPU" data-material="TPU for AMS" data-search="tpu for ams white" onclick='applyColor({"material": "TPU for AMS", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>TPU for AMS · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="TPU" data-material="TPU for AMS" data-search="tpu for ams yellow" onclick='applyColor({"material": "TPU for AMS", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>TPU for AMS · #F2D23D</small></span>
-
-</button><button class="card" data-cat="Engineering" data-material="PAHT-CF" data-search="paht-cf black" onclick='applyColor({"material": "PAHT-CF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PAHT-CF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf blue" onclick='applyColor({"material": "PA6-GF", "color_name": "Blue", "hex": "#2867B2", "hexes": ["#2867B2"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#2867B2"></span>
-<span class="txt"><b>Blue</b><small>PA6-GF · #2867B2</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf white" onclick='applyColor({"material": "PA6-GF", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>PA6-GF · #FFFFFF</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf gray" onclick='applyColor({"material": "PA6-GF", "color_name": "Gray", "hex": "#8E9396", "hexes": ["#8E9396"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#8E9396"></span>
-<span class="txt"><b>Gray</b><small>PA6-GF · #8E9396</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf lime" onclick='applyColor({"material": "PA6-GF", "color_name": "Lime", "hex": "#7BCB45", "hexes": ["#7BCB45"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#7BCB45"></span>
-<span class="txt"><b>Lime</b><small>PA6-GF · #7BCB45</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf black" onclick='applyColor({"material": "PA6-GF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PA6-GF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf brown" onclick='applyColor({"material": "PA6-GF", "color_name": "Brown", "hex": "#8A5D3B", "hexes": ["#8A5D3B"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#8A5D3B"></span>
-<span class="txt"><b>Brown</b><small>PA6-GF · #8A5D3B</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf orange" onclick='applyColor({"material": "PA6-GF", "color_name": "Orange", "hex": "#F57C22", "hexes": ["#F57C22"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#F57C22"></span>
-<span class="txt"><b>Orange</b><small>PA6-GF · #F57C22</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PA6-GF" data-search="pa6-gf yellow" onclick='applyColor({"material": "PA6-GF", "color_name": "Yellow", "hex": "#F2D23D", "hexes": ["#F2D23D"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#F2D23D"></span>
-<span class="txt"><b>Yellow</b><small>PA6-GF · #F2D23D</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PPA-CF" data-search="ppa-cf black" onclick='applyColor({"material": "PPA-CF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PPA-CF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Engineering" data-material="PPS-CF" data-search="pps-cf black" onclick='applyColor({"material": "PPS-CF", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "fiber"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>PPS-CF · #101010</small></span>
-<span class="badge">FIBER</span>
-</button><button class="card" data-cat="Support" data-material="Support for PLA/PETG" data-search="support for pla/petg nature" onclick='applyColor({"material": "Support for PLA/PETG", "color_name": "Nature", "hex": "#E6DEC8", "hexes": ["#E6DEC8"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#E6DEC8"></span>
-<span class="txt"><b>Nature</b><small>Support for PLA/PETG · #E6DEC8</small></span>
-
-</button><button class="card" data-cat="Support" data-material="Support for PLA/PETG" data-search="support for pla/petg black" onclick='applyColor({"material": "Support for PLA/PETG", "color_name": "Black", "hex": "#101010", "hexes": ["#101010"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#101010"></span>
-<span class="txt"><b>Black</b><small>Support for PLA/PETG · #101010</small></span>
-
-</button><button class="card" data-cat="Support" data-material="Support for PLA" data-search="support for pla white" onclick='applyColor({"material": "Support for PLA", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>Support for PLA · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="Support" data-material="Support for ABS" data-search="support for abs white" onclick='applyColor({"material": "Support for ABS", "color_name": "White", "hex": "#FFFFFF", "hexes": ["#FFFFFF"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#FFFFFF"></span>
-<span class="txt"><b>White</b><small>Support for ABS · #FFFFFF</small></span>
-
-</button><button class="card" data-cat="Support" data-material="Support for PA/PET" data-search="support for pa/pet green" onclick='applyColor({"material": "Support for PA/PET", "color_name": "Green", "hex": "#2E9B58", "hexes": ["#2E9B58"], "translucent": false, "opacity": 1.0, "roughness": 0.44, "finish": "standard"})'>
-<span class="swatch" style="background:#2E9B58"></span>
-<span class="txt"><b>Green</b><small>Support for PA/PET · #2E9B58</small></span>
-
-</button><button class="card" data-cat="Support" data-material="PVA" data-search="pva clear" onclick='applyColor({"material": "PVA", "color_name": "Clear", "hex": "#E8F4F8", "hexes": ["#E8F4F8"], "translucent": true, "opacity": 0.34, "roughness": 0.28, "finish": "standard"})'>
-<span class="swatch" style="background:linear-gradient(#E8F4F899,#E8F4F899), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px"></span>
-<span class="txt"><b>Clear</b><small>PVA · #E8F4F8</small></span>
-<span class="badge">TRANS</span>
-</button></div>
+<div id="status"></div></header>
+<div id="grid" class="grid"></div>
 <script>
-function applyColor(d){
- document.querySelectorAll('.card').forEach(x=>x.classList.remove('active'));event.currentTarget.classList.add('active');
- document.getElementById('status').textContent='Application : '+d.material+' · '+d.color_name;
- const scope=document.getElementById('scope').value; d.scope=scope; adsk.fusionSendData('apply',JSON.stringify(d));
+const FINISH_ORDER=['translucent','multi','glow','sparkle','metallic','wood','fiber','standard','matte','silk'];
+const FINISH_BADGE={glow:'GLOW',sparkle:'SPARKLE',metallic:'METALLIC',wood:'WOOD',fiber:'FIBER'};
+const SCOPE_OPTIONS=['body','face','component','selected_all','all_model'];
+
+let currentLang='en';
+let catalog=[];
+let activeKey='';
+let catalogMeta={version:'-',entryCount:0,source:'none'};
+let catalogLoaded=false;
+let requestAttempts=0;
+const MAX_REQUEST_ATTEMPTS=4;
+
+function textFor(entry,key){
+  const obj=entry[key];
+  if(obj && typeof obj==='object') return obj[currentLang]||obj.en||'';
+  return '';
 }
+
+function normalizeEntry(raw){
+  if(!raw || typeof raw!=='object') return null;
+  const category=raw.category||raw.family||'';
+  const material=raw.material||raw.product_line||'';
+  const colorName=raw.color_name||raw.color||raw.name||'';
+  const hex=raw.hex||raw.primary_hex||'';
+  if(!material || !colorName || !hex) return null;
+  const hexes=Array.isArray(raw.hexes)&&raw.hexes.length?raw.hexes:[hex];
+  const translucent=!!raw.translucent;
+  const multi=raw.is_multi_color===true || hexes.length>1;
+  const finish=(raw.finish||'standard').toLowerCase();
+  const badges=[];
+  if(translucent) badges.push('TRANS');
+  if(multi) badges.push('MULTI');
+  if(FINISH_BADGE[finish]) badges.push(FINISH_BADGE[finish]);
+  return {
+    category:category,
+    material:material,
+    color_name:colorName,
+    categoryDisplay:textFor(raw,'category_i18n')||category,
+    materialDisplay:textFor(raw,'material_i18n')||material,
+    colorDisplay:textFor(raw,'color_name_i18n')||colorName,
+    hex:hex,
+    hexes:hexes,
+    translucent:translucent,
+    opacity:Number(raw.opacity||1),
+    roughness:Number(raw.roughness||0.44),
+    finish:finish,
+    searchText:(raw.search_text||(`${category} ${material} ${colorName}`)).toLowerCase(),
+    badges:Array.isArray(raw.ui_badges)&&raw.ui_badges.length?raw.ui_badges:badges
+  };
+}
+
+function extractCatalogPayload(rawPayload){
+  if(Array.isArray(rawPayload)){
+    return {entries:rawPayload,meta:{version:'legacy-array',entryCount:rawPayload.length}};
+  }
+  if(!rawPayload || typeof rawPayload!=='object'){
+    return {entries:[],meta:{version:'invalid',entryCount:0}};
+  }
+  const entries=
+    Array.isArray(rawPayload.entries)?rawPayload.entries:
+    (Array.isArray(rawPayload.items)?rawPayload.items:
+    (Array.isArray(rawPayload.data)?rawPayload.data:[]));
+  const version=String(rawPayload.catalog_version||rawPayload.version||rawPayload.generated_epoch||'unknown');
+  const entryCount=Number(rawPayload.entry_count||entries.length||0);
+  return {entries:entries,meta:{version:version,entryCount:entryCount,schema:rawPayload.schema_version||'n/a'}};
+}
+
+function colorKey(e){
+  return [e.material,e.color_name,e.hex].join('|');
+}
+
+function swatchBackground(e){
+  const colors=e.hexes.filter(Boolean);
+  const gradient=colors.length>1?`linear-gradient(90deg, ${colors.join(', ')})`:(colors[0]||e.hex||'#999999');
+  if(e.translucent){
+    return `linear-gradient(${(e.hex||colors[0]||'#cccccc')}99, ${(e.hex||colors[0]||'#cccccc')}99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px`;
+  }
+  return gradient;
+}
+
+function buildScopeOptions(){
+  const t=I18N[currentLang];
+  const labels={
+    body:t.scopeBody,
+    face:t.scopeFace,
+    component:t.scopeComponent,
+    selected_all:t.scopeSelected,
+    all_model:t.scopeModel
+  };
+  const scope=document.getElementById('scope');
+  const prev=scope.value||'body';
+  scope.innerHTML='';
+  SCOPE_OPTIONS.forEach(k=>{
+    const o=document.createElement('option');
+    o.value=k;
+    o.textContent=labels[k];
+    scope.appendChild(o);
+  });
+  scope.value=SCOPE_OPTIONS.includes(prev)?prev:'body';
+}
+
+function uniqueSorted(values){
+  return Array.from(new Set(values)).sort((a,b)=>a.localeCompare(b));
+}
+
+function fillSelect(select,firstLabel,values,labelFn){
+  const prev=select.value||'';
+  select.innerHTML='';
+  const any=document.createElement('option');
+  any.value='';
+  any.textContent=firstLabel;
+  select.appendChild(any);
+  values.forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;
+    o.textContent=labelFn?labelFn(v):v;
+    select.appendChild(o);
+  });
+  select.value=values.includes(prev)?prev:'';
+}
+
+function populateFilters(){
+  const t=I18N[currentLang];
+  const categories=uniqueSorted(catalog.map(e=>e.category));
+  const materials=uniqueSorted(catalog.map(e=>e.material));
+  const finishes=uniqueSorted(catalog.map(e=>e.finish));
+  const finOptions=[...FINISH_ORDER.filter(x=>x==='multi'||finishes.includes(x)),...finishes.filter(x=>!FINISH_ORDER.includes(x))];
+
+  fillSelect(document.getElementById('cat'),t.allFamilies,categories,c=>{
+    const sample=catalog.find(e=>e.category===c);
+    return sample?sample.categoryDisplay:c;
+  });
+  fillSelect(document.getElementById('mat'),t.allLines,materials,m=>{
+    const sample=catalog.find(e=>e.material===m);
+    return sample?sample.materialDisplay:m;
+  });
+  fillSelect(document.getElementById('finish'),t.allFinishes,finOptions,f=>t.finishLabels[f]||f);
+}
+
+function updateCount(){
+  const refs=catalog.length;
+  const lines=new Set(catalog.map(e=>e.material)).size;
+  document.getElementById('count').textContent=`${refs} references - ${lines} product lines - data ${catalogMeta.version} (${catalogMeta.source})`;
+}
+
+function renderCards(items){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  const frag=document.createDocumentFragment();
+
+  items.forEach(e=>{
+    const btn=document.createElement('button');
+    btn.className='card';
+    const key=colorKey(e);
+    if(activeKey===key) btn.classList.add('active');
+    btn.dataset.cat=e.category;
+    btn.dataset.material=e.material;
+    btn.dataset.search=e.searchText;
+
+    const sw=document.createElement('span');
+    sw.className='swatch';
+    sw.style.background=swatchBackground(e);
+
+    const txt=document.createElement('span');
+    txt.className='txt';
+    const b=document.createElement('b');
+    b.textContent=e.colorDisplay;
+    const sm=document.createElement('small');
+    sm.textContent=`${e.materialDisplay} · ${e.hex}`;
+    txt.appendChild(b);
+    txt.appendChild(sm);
+
+    btn.appendChild(sw);
+    btn.appendChild(txt);
+
+    e.badges.forEach(label=>{
+      const badge=document.createElement('span');
+      badge.className='badge';
+      badge.textContent=label;
+      btn.appendChild(badge);
+    });
+
+    btn.addEventListener('click',()=>applyColor(e,btn));
+    frag.appendChild(btn);
+  });
+
+  grid.appendChild(frag);
+}
+
+function applyColor(e,btn){
+  document.querySelectorAll('.card').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  activeKey=colorKey(e);
+  document.getElementById('status').textContent=I18N[currentLang].applying+e.materialDisplay+' · '+e.colorDisplay;
+  const payload={
+    material:e.material,
+    color_name:e.color_name,
+    hex:e.hex,
+    hexes:e.hexes,
+    translucent:e.translucent,
+    opacity:e.opacity,
+    roughness:e.roughness,
+    finish:e.finish,
+    scope:document.getElementById('scope').value
+  };
+  adsk.fusionSendData('apply',JSON.stringify(payload));
+}
+
+function finishMatch(entry,finishFilter){
+  if(!finishFilter) return true;
+  if(finishFilter==='multi') return entry.badges.includes('MULTI');
+  if(finishFilter==='translucent') return entry.badges.includes('TRANS');
+  return entry.finish===finishFilter;
+}
+
 function filterCards(){
- const q=document.getElementById('q').value.toLowerCase(),cat=document.getElementById('cat').value,mat=document.getElementById('mat').value,fin=document.getElementById('finish').value;
- document.querySelectorAll('.card').forEach(c=>{
-   let ok=(!q||c.dataset.search.includes(q))&&(!cat||c.dataset.cat===cat)&&(!mat||c.dataset.material===mat);
-   if(fin==='Translucent') ok=ok&&c.querySelector('.badge')&&c.querySelector('.badge').textContent.includes('TRANS');
-   if(fin==='Multi') ok=ok&&c.querySelector('.badge')&&c.querySelector('.badge').textContent.includes('MULTI');
-   c.style.display=ok?'flex':'none';
- });
+  const q=document.getElementById('q').value.toLowerCase();
+  const cat=document.getElementById('cat').value;
+  const mat=document.getElementById('mat').value;
+  const fin=document.getElementById('finish').value;
+
+  const filtered=catalog.filter(e=>{
+    if(q && !e.searchText.includes(q)) return false;
+    if(cat && e.category!==cat) return false;
+    if(mat && e.material!==mat) return false;
+    if(!finishMatch(e,fin)) return false;
+    return true;
+  });
+
+  renderCards(filtered);
 }
-window.fusionJavaScriptHandler={handle:function(action,data){if(action==='status')document.getElementById('status').textContent=data;return 'OK';}};
+
+function setUiLanguage(lang){
+  currentLang=I18N[lang]?lang:'en';
+  const t=I18N[currentLang];
+  document.documentElement.lang=t.lang;
+  document.getElementById('title').textContent=t.title;
+  document.getElementById('q').placeholder=t.searchPlaceholder;
+  document.getElementById('exportF3d').textContent=t.exportF3d;
+  document.getElementById('export3mf').textContent=t.export3mf;
+  document.getElementById('exportBoth').textContent=t.exportBoth;
+  buildScopeOptions();
+  populateFilters();
+  updateCount();
+  if(!document.getElementById('status').textContent) document.getElementById('status').textContent=t.idleStatus;
+  filterCards();
+}
+
+function setCatalog(rawCatalog,meta,source){
+  const next=(Array.isArray(rawCatalog)?rawCatalog:[])
+    .map(normalizeEntry)
+    .filter(Boolean);
+  catalog=next;
+  catalogMeta={
+    version:(meta && meta.version)?String(meta.version):'unknown',
+    entryCount:(meta && Number.isFinite(meta.entryCount))?meta.entryCount:next.length,
+    source:source||'unknown'
+  };
+  catalogLoaded=next.length>0;
+  populateFilters();
+  updateCount();
+  filterCards();
+  if(!catalogLoaded){
+    document.getElementById('status').textContent='Catalog is empty. Check JSON schema or file availability.';
+  }
+}
+
+function requestCatalog(){
+  requestAttempts+=1;
+  try{
+    adsk.fusionSendData('request_catalog','');
+    return true;
+  }catch(_){
+    return false;
+  }
+}
+
+function requestLanguage(){
+  try{
+    adsk.fusionSendData('request_lang','');
+    return true;
+  }catch(_){
+    return false;
+  }
+}
+
+async function fallbackLoadCatalog(){
+  try{
+    const response=await fetch('./bambulab_full_catalog.json');
+    if(!response.ok) return;
+    const data=await response.json();
+    const extracted=extractCatalogPayload(data);
+    if(catalog.length===0) setCatalog(extracted.entries,extracted.meta,'file-fetch');
+  }catch(_){
+    // Keep silent; Fusion bridge is the primary source.
+  }
+}
+
+function scheduleCatalogRetries(){
+  [250,800,1600,3000].forEach((ms,index)=>{
+    setTimeout(()=>{
+      if(catalogLoaded || requestAttempts>=MAX_REQUEST_ATTEMPTS) return;
+      requestCatalog();
+      if(index===3 && !catalogLoaded) fallbackLoadCatalog();
+    },ms);
+  });
+}
+
+function scheduleLanguageRetries(){
+  [250,800,1600,3000].forEach((ms)=>{
+    setTimeout(()=>{
+      if(typeof adsk !== 'undefined' && adsk && typeof adsk.fusionSendData === 'function') {
+        requestLanguage();
+      }
+    },ms);
+  });
+}
+
+window.fusionJavaScriptHandler={
+  handle:function(action,data){
+    if(action==='status') document.getElementById('status').textContent=data;
+    if(action==='setLang') setUiLanguage((data||'').toLowerCase());
+    if(action==='catalog'){
+      try{
+        const parsed=JSON.parse(data||'[]');
+        const extracted=extractCatalogPayload(parsed);
+        setCatalog(extracted.entries,extracted.meta,'fusion-bridge');
+      }
+      catch(_){ setCatalog([],null,'fusion-bridge'); }
+    }
+    return 'OK';
+  }
+};
+
+setUiLanguage('fr');
+requestLanguage();
+scheduleLanguageRetries();
+requestCatalog();
+scheduleCatalogRetries();
+setTimeout(()=>{ if(!catalogLoaded) fallbackLoadCatalog(); },500);
 </script></body></html>

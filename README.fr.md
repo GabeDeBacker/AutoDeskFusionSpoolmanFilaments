@@ -142,12 +142,24 @@ Exemple :
   "material": "PLA Basic",
   "color_name": "Red",
   "hex": "#C12E1F",
+  "hexes": ["#C12E1F"],
   "finish": "standard",
-  "translucent": false
+  "translucent": false,
+  "opacity": 1.0,
+  "roughness": 0.44,
+  "hex_quality": "exact",
+  "category_i18n": { "en": "PLA", "fr": "PLA" },
+  "material_i18n": { "en": "PLA Basic", "fr": "PLA Basic" },
+  "color_name_i18n": { "en": "Red", "fr": "Red" },
+  "is_multi_color": false,
+  "ui_badges": [],
+  "search_text": "pla pla basic red"
 }
 ```
 
 Certaines entrées disposent d'un HEX exact ; d'autres utilisent une approximation visuelle lorsqu'une valeur publique fiable n'était pas disponible.
+
+Les champs utiles a l'UI sont maintenant explicites dans le catalogue (`*_i18n`, `is_multi_color`, `ui_badges`, `search_text`) pour pouvoir generer le panneau depuis le JSON sans duplication HTML.
 
 ## Compatibilité
 

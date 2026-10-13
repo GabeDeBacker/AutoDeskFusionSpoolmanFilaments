@@ -1,0 +1,62 @@
+const I18N = {
+  en: {
+    lang: 'en',
+    title: 'Bambu Lab · NATIVE V10',
+    searchPlaceholder: 'Search...',
+    allFamilies: 'All families',
+    allLines: 'All product lines',
+    allFinishes: 'All finishes',
+    finishLabels: {
+      translucent: 'Translucent',
+      multi: 'Multi',
+      glow: 'Glow',
+      sparkle: 'Sparkle',
+      metallic: 'Metallic',
+      wood: 'Wood',
+      fiber: 'Fiber',
+      standard: 'Standard',
+      matte: 'Matte',
+      silk: 'Silk'
+    },
+    scopeBody: 'Apply: Body / object',
+    scopeFace: 'Apply: Face(s)',
+    scopeComponent: 'Apply: Full component',
+    scopeSelected: 'Apply: Entire selection',
+    scopeModel: 'Apply: Entire visible model',
+    exportF3d: 'Fusion parent .F3D',
+    export3mf: 'Full model .3MF',
+    exportBoth: 'Export F3D + 3MF',
+    idleStatus: 'NATIVE V10: apply colors and export the full model with its parent file.',
+    applying: 'Applying: '
+  },
+  fr: {
+    lang: 'fr',
+    title: 'Bambu Lab · NATIVE V10',
+    searchPlaceholder: 'Rechercher...',
+    allFamilies: 'Toutes familles',
+    allLines: 'Toutes gammes',
+    allFinishes: 'Tous rendus',
+    finishLabels: {
+      translucent: 'Translucent',
+      multi: 'Multi',
+      glow: 'Glow',
+      sparkle: 'Sparkle',
+      metallic: 'Metallic',
+      wood: 'Wood',
+      fiber: 'Fiber',
+      standard: 'Standard',
+      matte: 'Matte',
+      silk: 'Silk'
+    },
+    scopeBody: 'Appliquer : Corps / objet',
+    scopeFace: 'Appliquer : Face(s)',
+    scopeComponent: 'Appliquer : Composant entier',
+    scopeSelected: 'Appliquer : Toute la selection',
+    scopeModel: 'Appliquer : Tout le modele visible',
+    exportF3d: 'Parent Fusion .F3D',
+    export3mf: 'Modele complet .3MF',
+    exportBoth: 'Exporter F3D + 3MF',
+    idleStatus: 'NATIVE V10 : applique les couleurs puis exporte le modele complet avec son fichier parent.',
+    applying: 'Application : '
+  }
+};

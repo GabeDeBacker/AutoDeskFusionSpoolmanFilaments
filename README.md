@@ -142,12 +142,24 @@ Example:
   "material": "PLA Basic",
   "color_name": "Red",
   "hex": "#C12E1F",
+  "hexes": ["#C12E1F"],
   "finish": "standard",
-  "translucent": false
+  "translucent": false,
+  "opacity": 1.0,
+  "roughness": 0.44,
+  "hex_quality": "exact",
+  "category_i18n": { "en": "PLA", "fr": "PLA" },
+  "material_i18n": { "en": "PLA Basic", "fr": "PLA Basic" },
+  "color_name_i18n": { "en": "Red", "fr": "Red" },
+  "is_multi_color": false,
+  "ui_badges": [],
+  "search_text": "pla pla basic red"
 }
 ```
 
 Some entries have an exact HEX value; others use a visual approximation when no reliable public value was available.
+
+UI-oriented fields are now explicit in the catalog (`*_i18n`, `is_multi_color`, `ui_badges`, `search_text`) so the palette can be generated directly from JSON without HTML-only duplication.
 
 ## Compatibility
 

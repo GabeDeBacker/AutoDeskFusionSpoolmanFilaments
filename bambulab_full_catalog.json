@@ -12,7 +12,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -27,7 +42,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Pumpkin Orange",
+      "fr": "Pumpkin Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic pumpkin orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -42,7 +72,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Blue Gray",
+      "fr": "Blue Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic blue gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -57,7 +102,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Cobalt Blue",
+      "fr": "Cobalt Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic cobalt blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -72,7 +132,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Turquoise",
+      "fr": "Turquoise"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic turquoise"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -87,7 +162,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Cyan",
+      "fr": "Cyan"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic cyan"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -102,7 +192,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -117,7 +222,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -132,7 +252,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Silver",
+      "fr": "Silver"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic silver"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -147,7 +282,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Light Gray",
+      "fr": "Light Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic light gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -162,7 +312,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Dark Gray",
+      "fr": "Dark Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic dark gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -177,7 +342,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Mistletoe Green",
+      "fr": "Mistletoe Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic mistletoe green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -192,7 +372,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Bright Green",
+      "fr": "Bright Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic bright green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -207,7 +402,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Bambu Green",
+      "fr": "Bambu Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic bambu green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -222,7 +432,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -237,7 +462,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Brown",
+      "fr": "Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -252,7 +492,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Cocoa Brown",
+      "fr": "Cocoa Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic cocoa brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -267,7 +522,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Beige",
+      "fr": "Beige"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic beige"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -282,7 +552,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Pink",
+      "fr": "Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -297,7 +582,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Indigo Purple",
+      "fr": "Indigo Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic indigo purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -312,7 +612,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Purple",
+      "fr": "Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -327,7 +642,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Magenta",
+      "fr": "Magenta"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic magenta"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -342,7 +672,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -357,7 +702,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Maroon Red",
+      "fr": "Maroon Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic maroon red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -372,7 +732,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Hot Pink",
+      "fr": "Hot Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic hot pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -387,7 +762,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Jade White",
+      "fr": "Jade White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic jade white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -402,7 +792,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -417,7 +822,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Sunflower Yellow",
+      "fr": "Sunflower Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic sunflower yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -432,7 +852,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Bronze",
+      "fr": "Bronze"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic bronze"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -447,7 +882,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Gold",
+      "fr": "Gold"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic gold"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -462,7 +912,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic",
+      "fr": "PLA Basic"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla basic green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -477,7 +942,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -492,7 +972,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -507,7 +1002,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -522,7 +1032,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Cyan",
+      "fr": "Cyan"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite cyan"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -537,7 +1062,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -552,7 +1092,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -567,7 +1122,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -582,7 +1152,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Sunflower Yellow",
+      "fr": "Sunflower Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite sunflower yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -597,7 +1182,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -612,7 +1212,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -627,7 +1242,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Matte Beige",
+      "fr": "Matte Beige"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite matte beige"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -642,7 +1272,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Cocoa Brown",
+      "fr": "Cocoa Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite cocoa brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -657,7 +1302,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Lite",
+      "fr": "PLA Lite"
+    },
+    "color_name_i18n": {
+      "en": "Dark Gray",
+      "fr": "Dark Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla lite dark gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -672,7 +1332,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Mandarin Orange",
+      "fr": "Mandarin Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte mandarin orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -687,7 +1362,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Sky Blue",
+      "fr": "Sky Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte sky blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -702,7 +1392,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Marine Blue",
+      "fr": "Marine Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte marine blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -717,7 +1422,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Ice Blue",
+      "fr": "Ice Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte ice blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -732,7 +1452,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Dark Blue",
+      "fr": "Dark Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte dark blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -747,7 +1482,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Nardo Gray",
+      "fr": "Nardo Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte nardo gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -762,7 +1512,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Ash Gray",
+      "fr": "Ash Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte ash gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -777,7 +1542,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Apple Green",
+      "fr": "Apple Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte apple green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -792,7 +1572,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Grass Green",
+      "fr": "Grass Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte grass green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -807,7 +1602,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Dark Green",
+      "fr": "Dark Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte dark green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -822,7 +1632,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Charcoal",
+      "fr": "Charcoal"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte charcoal"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -837,7 +1662,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Dark Chocolate",
+      "fr": "Dark Chocolate"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte dark chocolate"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -852,7 +1692,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Latte Brown",
+      "fr": "Latte Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte latte brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -867,7 +1722,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Dark Brown",
+      "fr": "Dark Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte dark brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -882,7 +1752,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Caramel",
+      "fr": "Caramel"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte caramel"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -897,7 +1782,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Sakura Pink",
+      "fr": "Sakura Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte sakura pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -912,7 +1812,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Lilac Purple",
+      "fr": "Lilac Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte lilac purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -927,7 +1842,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Scarlet Red",
+      "fr": "Scarlet Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte scarlet red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -942,7 +1872,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Terracotta",
+      "fr": "Terracotta"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte terracotta"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -957,7 +1902,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Plum",
+      "fr": "Plum"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte plum"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -972,7 +1932,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Dark Red",
+      "fr": "Dark Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte dark red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -987,7 +1962,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Ivory White",
+      "fr": "Ivory White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte ivory white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1002,7 +1992,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Bone White",
+      "fr": "Bone White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte bone white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1017,7 +2022,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Lemon Yellow",
+      "fr": "Lemon Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte lemon yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1032,7 +2052,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.72,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Matte",
+      "fr": "PLA Matte"
+    },
+    "color_name_i18n": {
+      "en": "Desert Tan",
+      "fr": "Desert Tan"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla matte desert tan"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1048,7 +2083,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Arctic Whisper",
+      "fr": "Arctic Whisper"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient arctic whisper"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1064,7 +2116,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Solar Breeze",
+      "fr": "Solar Breeze"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient solar breeze"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1080,7 +2149,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Ocean to Meadow",
+      "fr": "Ocean to Meadow"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient ocean to meadow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1096,7 +2182,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Pink Citrus",
+      "fr": "Pink Citrus"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient pink citrus"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1112,7 +2215,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Mint Lime",
+      "fr": "Mint Lime"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient mint lime"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1128,7 +2248,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Blueberry Bubblegum",
+      "fr": "Blueberry Bubblegum"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient blueberry bubblegum"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1144,7 +2281,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Dusk Glare",
+      "fr": "Dusk Glare"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient dusk glare"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1160,7 +2314,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Basic Gradient",
+      "fr": "PLA Basic Gradient"
+    },
+    "color_name_i18n": {
+      "en": "Cotton Candy Cloud",
+      "fr": "Cotton Candy Cloud"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla basic gradient cotton candy cloud"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1175,7 +2346,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Glow",
+      "fr": "PLA Glow"
+    },
+    "color_name_i18n": {
+      "en": "Glow Orange",
+      "fr": "Glow Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "GLOW"
+    ],
+    "search_text": "pla pla glow glow orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1190,7 +2378,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Glow",
+      "fr": "PLA Glow"
+    },
+    "color_name_i18n": {
+      "en": "Glow Blue",
+      "fr": "Glow Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "GLOW"
+    ],
+    "search_text": "pla pla glow glow blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1205,7 +2410,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Glow",
+      "fr": "PLA Glow"
+    },
+    "color_name_i18n": {
+      "en": "Glow Green",
+      "fr": "Glow Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "GLOW"
+    ],
+    "search_text": "pla pla glow glow green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1220,7 +2442,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Glow",
+      "fr": "PLA Glow"
+    },
+    "color_name_i18n": {
+      "en": "Glow Pink",
+      "fr": "Glow Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "GLOW"
+    ],
+    "search_text": "pla pla glow glow pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1235,7 +2474,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Glow",
+      "fr": "PLA Glow"
+    },
+    "color_name_i18n": {
+      "en": "Glow Yellow",
+      "fr": "Glow Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "GLOW"
+    ],
+    "search_text": "pla pla glow glow yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1250,7 +2506,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Marble",
+      "fr": "PLA Marble"
+    },
+    "color_name_i18n": {
+      "en": "White Marble",
+      "fr": "White Marble"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla marble white marble"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1265,7 +2536,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Marble",
+      "fr": "PLA Marble"
+    },
+    "color_name_i18n": {
+      "en": "Red Granite",
+      "fr": "Red Granite"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla marble red granite"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1280,7 +2566,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Aero",
+      "fr": "PLA Aero"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla aero gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1295,7 +2596,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Aero",
+      "fr": "PLA Aero"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla aero black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1310,7 +2626,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Aero",
+      "fr": "PLA Aero"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla aero white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1325,7 +2656,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Sparkle",
+      "fr": "PLA Sparkle"
+    },
+    "color_name_i18n": {
+      "en": "Royal Purple Sparkle",
+      "fr": "Royal Purple Sparkle"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "SPARKLE"
+    ],
+    "search_text": "pla pla sparkle royal purple sparkle"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1340,7 +2688,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Sparkle",
+      "fr": "PLA Sparkle"
+    },
+    "color_name_i18n": {
+      "en": "Slate Gray Sparkle",
+      "fr": "Slate Gray Sparkle"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "SPARKLE"
+    ],
+    "search_text": "pla pla sparkle slate gray sparkle"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1355,7 +2720,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Sparkle",
+      "fr": "PLA Sparkle"
+    },
+    "color_name_i18n": {
+      "en": "Alpine Green Sparkle",
+      "fr": "Alpine Green Sparkle"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "SPARKLE"
+    ],
+    "search_text": "pla pla sparkle alpine green sparkle"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1370,7 +2752,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Sparkle",
+      "fr": "PLA Sparkle"
+    },
+    "color_name_i18n": {
+      "en": "Onyx Black Sparkle",
+      "fr": "Onyx Black Sparkle"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "SPARKLE"
+    ],
+    "search_text": "pla pla sparkle onyx black sparkle"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1385,7 +2784,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Sparkle",
+      "fr": "PLA Sparkle"
+    },
+    "color_name_i18n": {
+      "en": "Crimson Red Sparkle",
+      "fr": "Crimson Red Sparkle"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "SPARKLE"
+    ],
+    "search_text": "pla pla sparkle crimson red sparkle"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1400,7 +2816,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Sparkle",
+      "fr": "PLA Sparkle"
+    },
+    "color_name_i18n": {
+      "en": "Classic Gold Sparkle",
+      "fr": "Classic Gold Sparkle"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "SPARKLE"
+    ],
+    "search_text": "pla pla sparkle classic gold sparkle"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1415,7 +2848,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Metal",
+      "fr": "PLA Metal"
+    },
+    "color_name_i18n": {
+      "en": "Iron Gray Metallic",
+      "fr": "Iron Gray Metallic"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "METALLIC"
+    ],
+    "search_text": "pla pla metal iron gray metallic"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1430,7 +2880,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Metal",
+      "fr": "PLA Metal"
+    },
+    "color_name_i18n": {
+      "en": "Iridium Gold Metallic",
+      "fr": "Iridium Gold Metallic"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "METALLIC"
+    ],
+    "search_text": "pla pla metal iridium gold metallic"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1445,7 +2912,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Metal",
+      "fr": "PLA Metal"
+    },
+    "color_name_i18n": {
+      "en": "Oxide Green Metallic",
+      "fr": "Oxide Green Metallic"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "METALLIC"
+    ],
+    "search_text": "pla pla metal oxide green metallic"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1460,7 +2944,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Metal",
+      "fr": "PLA Metal"
+    },
+    "color_name_i18n": {
+      "en": "Cobalt Blue Metallic",
+      "fr": "Cobalt Blue Metallic"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "METALLIC"
+    ],
+    "search_text": "pla pla metal cobalt blue metallic"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1475,7 +2976,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Metal",
+      "fr": "PLA Metal"
+    },
+    "color_name_i18n": {
+      "en": "Copper Brown Metallic",
+      "fr": "Copper Brown Metallic"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "METALLIC"
+    ],
+    "search_text": "pla pla metal copper brown metallic"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1490,7 +3008,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1505,7 +3040,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Cherry Pink",
+      "fr": "Cherry Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent cherry pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1520,7 +3072,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1535,7 +3104,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Mellow Yellow",
+      "fr": "Mellow Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent mellow yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1550,7 +3136,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Light Jade",
+      "fr": "Light Jade"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent light jade"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1565,7 +3168,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Ice Blue",
+      "fr": "Ice Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent ice blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1580,7 +3200,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1595,7 +3232,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Teal",
+      "fr": "Teal"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent teal"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1610,7 +3264,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Purple",
+      "fr": "Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1625,7 +3296,24 @@
     "translucent": true,
     "opacity": 0.58,
     "roughness": 0.28,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Translucent",
+      "fr": "PLA Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Lavender",
+      "fr": "Lavender"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pla pla translucent lavender"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1640,7 +3328,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Baby Blue",
+      "fr": "Baby Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ baby blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1655,7 +3358,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1670,7 +3388,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Titan Gray",
+      "fr": "Titan Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ titan gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1685,7 +3418,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Silver",
+      "fr": "Silver"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ silver"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1700,7 +3448,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Candy Green",
+      "fr": "Candy Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ candy green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1715,7 +3478,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Mint",
+      "fr": "Mint"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ mint"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1730,7 +3508,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Purple",
+      "fr": "Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1745,7 +3538,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Candy Red",
+      "fr": "Candy Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ candy red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1760,7 +3568,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Rose Gold",
+      "fr": "Rose Gold"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ rose gold"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1775,7 +3598,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Pink",
+      "fr": "Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1790,7 +3628,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1805,7 +3658,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Champagne",
+      "fr": "Champagne"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ champagne"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1820,7 +3688,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk+",
+      "fr": "PLA Silk+"
+    },
+    "color_name_i18n": {
+      "en": "Gold",
+      "fr": "Gold"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla silk+ gold"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1836,7 +3719,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Gilded Rose",
+      "fr": "Gilded Rose"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color gilded rose"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1852,7 +3752,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Midnight Blaze",
+      "fr": "Midnight Blaze"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color midnight blaze"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1868,7 +3785,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Neon City",
+      "fr": "Neon City"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color neon city"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1884,7 +3818,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Blue Hawaii",
+      "fr": "Blue Hawaii"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color blue hawaii"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1900,7 +3851,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Velvet Eclipse (Black-Red)",
+      "fr": "Velvet Eclipse (Black-Red)"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color velvet eclipse (black-red)"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1916,7 +3884,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "South Beach",
+      "fr": "South Beach"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color south beach"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1932,7 +3917,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Aurora Purple",
+      "fr": "Aurora Purple"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color aurora purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1948,7 +3950,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Dawn Radiance",
+      "fr": "Dawn Radiance"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color dawn radiance"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1964,7 +3983,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Mystic Magenta",
+      "fr": "Mystic Magenta"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color mystic magenta"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1980,7 +4016,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.18,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Silk Multi-Color",
+      "fr": "PLA Silk Multi-Color"
+    },
+    "color_name_i18n": {
+      "en": "Phantom Blue",
+      "fr": "Phantom Blue"
+    },
+    "is_multi_color": true,
+    "ui_badges": [
+      "MULTI"
+    ],
+    "search_text": "pla pla silk multi-color phantom blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -1995,7 +4048,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Galaxy",
+      "fr": "PLA Galaxy"
+    },
+    "color_name_i18n": {
+      "en": "Purple",
+      "fr": "Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla galaxy purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2010,7 +4078,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Galaxy",
+      "fr": "PLA Galaxy"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla galaxy green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2025,7 +4108,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Galaxy",
+      "fr": "PLA Galaxy"
+    },
+    "color_name_i18n": {
+      "en": "Nebulae",
+      "fr": "Nebulae"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla galaxy nebulae"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2040,7 +4138,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Galaxy",
+      "fr": "PLA Galaxy"
+    },
+    "color_name_i18n": {
+      "en": "Brown",
+      "fr": "Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla galaxy brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2055,7 +4168,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Wood",
+      "fr": "PLA Wood"
+    },
+    "color_name_i18n": {
+      "en": "Classic Birch",
+      "fr": "Classic Birch"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "WOOD"
+    ],
+    "search_text": "pla pla wood classic birch"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2070,7 +4200,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Wood",
+      "fr": "PLA Wood"
+    },
+    "color_name_i18n": {
+      "en": "Black Walnut",
+      "fr": "Black Walnut"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "WOOD"
+    ],
+    "search_text": "pla pla wood black walnut"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2085,7 +4232,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Wood",
+      "fr": "PLA Wood"
+    },
+    "color_name_i18n": {
+      "en": "Clay Brown",
+      "fr": "Clay Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "WOOD"
+    ],
+    "search_text": "pla pla wood clay brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2100,7 +4264,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Wood",
+      "fr": "PLA Wood"
+    },
+    "color_name_i18n": {
+      "en": "Rosewood",
+      "fr": "Rosewood"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "WOOD"
+    ],
+    "search_text": "pla pla wood rosewood"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2115,7 +4296,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Wood",
+      "fr": "PLA Wood"
+    },
+    "color_name_i18n": {
+      "en": "White Oak",
+      "fr": "White Oak"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "WOOD"
+    ],
+    "search_text": "pla pla wood white oak"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2130,7 +4328,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Wood",
+      "fr": "PLA Wood"
+    },
+    "color_name_i18n": {
+      "en": "Ochre Yellow",
+      "fr": "Ochre Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "WOOD"
+    ],
+    "search_text": "pla pla wood ochre yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2145,7 +4360,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA-CF",
+      "fr": "PLA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Royal Blue",
+      "fr": "Royal Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "pla pla-cf royal blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2160,7 +4392,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA-CF",
+      "fr": "PLA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Jeans Blue",
+      "fr": "Jeans Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "pla pla-cf jeans blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2175,7 +4424,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA-CF",
+      "fr": "PLA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Lava Gray",
+      "fr": "Lava Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "pla pla-cf lava gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2190,7 +4456,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA-CF",
+      "fr": "PLA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Matcha Green",
+      "fr": "Matcha Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "pla pla-cf matcha green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2205,7 +4488,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA-CF",
+      "fr": "PLA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "pla pla-cf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2220,7 +4520,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA-CF",
+      "fr": "PLA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Iris Purple",
+      "fr": "Iris Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "pla pla-cf iris purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2235,7 +4552,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA-CF",
+      "fr": "PLA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Burgundy Red",
+      "fr": "Burgundy Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "pla pla-cf burgundy red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2250,7 +4584,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough+",
+      "fr": "PLA Tough+"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough+ black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2265,7 +4614,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough+",
+      "fr": "PLA Tough+"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough+ gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2280,7 +4644,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough+",
+      "fr": "PLA Tough+"
+    },
+    "color_name_i18n": {
+      "en": "Silver",
+      "fr": "Silver"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough+ silver"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2295,7 +4674,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough+",
+      "fr": "PLA Tough+"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough+ white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2310,7 +4704,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough+",
+      "fr": "PLA Tough+"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough+ orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2325,7 +4734,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough+",
+      "fr": "PLA Tough+"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough+ yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2340,7 +4764,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough+",
+      "fr": "PLA Tough+"
+    },
+    "color_name_i18n": {
+      "en": "Cyan",
+      "fr": "Cyan"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough+ cyan"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2355,7 +4794,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2370,7 +4824,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Light Blue",
+      "fr": "Light Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough light blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2385,7 +4854,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Lavender Blue",
+      "fr": "Lavender Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough lavender blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2400,7 +4884,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2415,7 +4914,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Silver",
+      "fr": "Silver"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough silver"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2430,7 +4944,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Pine Green",
+      "fr": "Pine Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough pine green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2445,7 +4974,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2460,7 +5004,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Vermilion Red",
+      "fr": "Vermilion Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough vermilion red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2475,7 +5034,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2490,7 +5064,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Tough",
+      "fr": "PLA Tough"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla tough yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2505,7 +5094,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Pure",
+      "fr": "PLA Pure"
+    },
+    "color_name_i18n": {
+      "en": "Pure White",
+      "fr": "Pure White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla pure pure white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2520,7 +5124,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Pure",
+      "fr": "PLA Pure"
+    },
+    "color_name_i18n": {
+      "en": "Absolute Black",
+      "fr": "Absolute Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla pure absolute black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2535,7 +5154,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Pure",
+      "fr": "PLA Pure"
+    },
+    "color_name_i18n": {
+      "en": "Milky Pink",
+      "fr": "Milky Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla pure milky pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2550,7 +5184,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Pure",
+      "fr": "PLA Pure"
+    },
+    "color_name_i18n": {
+      "en": "Baby Blue",
+      "fr": "Baby Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla pure baby blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2565,7 +5214,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PLA",
+      "fr": "PLA"
+    },
+    "material_i18n": {
+      "en": "PLA Pure",
+      "fr": "PLA Pure"
+    },
+    "color_name_i18n": {
+      "en": "Apricot",
+      "fr": "Apricot"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pla pla pure apricot"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2580,7 +5244,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2595,7 +5274,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2610,7 +5304,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2625,7 +5334,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2640,7 +5364,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2655,7 +5394,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Reflex Blue",
+      "fr": "Reflex Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic reflex blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2670,7 +5424,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Dark Brown",
+      "fr": "Dark Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic dark brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2685,7 +5454,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2700,7 +5484,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2715,7 +5514,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Pine Green",
+      "fr": "Pine Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic pine green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2730,7 +5544,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Navy Blue",
+      "fr": "Navy Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic navy blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2745,7 +5574,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Misty Blue",
+      "fr": "Misty Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic misty blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2760,7 +5604,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Dark Beige",
+      "fr": "Dark Beige"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic dark beige"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2775,7 +5634,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Basic",
+      "fr": "PETG Basic"
+    },
+    "color_name_i18n": {
+      "en": "Lime Green",
+      "fr": "Lime Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg basic lime green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2790,7 +5664,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2805,7 +5694,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2820,7 +5724,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Lake Blue",
+      "fr": "Lake Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf lake blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2835,7 +5754,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2850,7 +5784,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Dark Gray",
+      "fr": "Dark Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf dark gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2865,7 +5814,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2880,7 +5844,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Lime Green",
+      "fr": "Lime Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf lime green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2895,7 +5874,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Forest Green",
+      "fr": "Forest Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf forest green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2910,7 +5904,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2925,7 +5934,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Peanut Brown",
+      "fr": "Peanut Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf peanut brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2940,7 +5964,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2955,7 +5994,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2970,7 +6024,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -2985,7 +6054,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG HF",
+      "fr": "PETG HF"
+    },
+    "color_name_i18n": {
+      "en": "Cream",
+      "fr": "Cream"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "petg petg hf cream"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3000,7 +6084,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Orange",
+      "fr": "Translucent Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3015,7 +6116,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Light Blue",
+      "fr": "Translucent Light Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent light blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3030,7 +6148,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Clear",
+      "fr": "Clear"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent clear"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3045,7 +6180,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Gray",
+      "fr": "Translucent Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3060,7 +6212,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Olive",
+      "fr": "Translucent Olive"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent olive"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3075,7 +6244,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Teal",
+      "fr": "Translucent Teal"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent teal"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3090,7 +6276,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Brown",
+      "fr": "Translucent Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3105,7 +6308,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Purple",
+      "fr": "Translucent Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3120,7 +6340,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG Translucent",
+      "fr": "PETG Translucent"
+    },
+    "color_name_i18n": {
+      "en": "Translucent Pink",
+      "fr": "Translucent Pink"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "petg petg translucent translucent pink"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3135,7 +6372,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG-CF",
+      "fr": "PETG-CF"
+    },
+    "color_name_i18n": {
+      "en": "Indigo Blue",
+      "fr": "Indigo Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "petg petg-cf indigo blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3150,7 +6404,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG-CF",
+      "fr": "PETG-CF"
+    },
+    "color_name_i18n": {
+      "en": "Titan Gray",
+      "fr": "Titan Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "petg petg-cf titan gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3165,7 +6436,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG-CF",
+      "fr": "PETG-CF"
+    },
+    "color_name_i18n": {
+      "en": "Malachite Green",
+      "fr": "Malachite Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "petg petg-cf malachite green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3180,7 +6468,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG-CF",
+      "fr": "PETG-CF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "petg petg-cf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3195,7 +6500,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG-CF",
+      "fr": "PETG-CF"
+    },
+    "color_name_i18n": {
+      "en": "Violet Purple",
+      "fr": "Violet Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "petg petg-cf violet purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3210,7 +6532,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PETG",
+      "fr": "PETG"
+    },
+    "material_i18n": {
+      "en": "PETG-CF",
+      "fr": "PETG-CF"
+    },
+    "color_name_i18n": {
+      "en": "Brick Red",
+      "fr": "Brick Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "petg petg-cf brick red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3225,7 +6564,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3240,7 +6594,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3255,7 +6624,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Azure",
+      "fr": "Azure"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs azure"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3270,7 +6654,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Navy Blue",
+      "fr": "Navy Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs navy blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3285,7 +6684,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Mint",
+      "fr": "Mint"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs mint"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3300,7 +6714,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Silver",
+      "fr": "Silver"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs silver"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3315,7 +6744,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Bambu Green",
+      "fr": "Bambu Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs bambu green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3330,7 +6774,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Olive",
+      "fr": "Olive"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs olive"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3345,7 +6804,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3360,7 +6834,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Lavender",
+      "fr": "Lavender"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs lavender"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3375,7 +6864,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Purple",
+      "fr": "Purple"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs purple"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3390,7 +6894,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3405,7 +6924,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3420,7 +6954,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3435,7 +6984,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Tangerine Yellow",
+      "fr": "Tangerine Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs tangerine yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3450,7 +7014,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Beige",
+      "fr": "Beige"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs beige"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3465,7 +7044,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3480,7 +7076,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3495,7 +7108,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3510,7 +7140,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3525,7 +7172,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3540,7 +7204,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3555,7 +7236,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3570,7 +7268,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS-GF",
+      "fr": "ABS-GF"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "abs abs-gf yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3585,7 +7300,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "asa asa blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3600,7 +7330,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "asa asa gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3615,7 +7360,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "asa asa green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3630,7 +7390,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "asa asa black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3645,7 +7420,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "asa asa red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3660,7 +7450,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "exact"
+    "hex_quality": "exact",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "asa asa white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3675,7 +7480,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA Aero",
+      "fr": "ASA Aero"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "asa asa aero white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3690,7 +7510,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ASA",
+      "fr": "ASA"
+    },
+    "material_i18n": {
+      "en": "ASA-CF",
+      "fr": "ASA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "asa asa-cf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3705,7 +7542,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "material_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "color_name_i18n": {
+      "en": "Clear Black",
+      "fr": "Clear Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pc pc clear black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3720,7 +7574,24 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "material_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "color_name_i18n": {
+      "en": "Transparent",
+      "fr": "Transparent"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "pc pc transparent"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3735,7 +7606,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "material_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pc pc black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3750,7 +7636,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "material_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pc pc white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3765,7 +7666,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "material_i18n": {
+      "en": "PC FR",
+      "fr": "PC FR"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pc pc fr gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3780,7 +7696,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "material_i18n": {
+      "en": "PC FR",
+      "fr": "PC FR"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pc pc fr black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3795,7 +7726,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "PC",
+      "fr": "PC"
+    },
+    "material_i18n": {
+      "en": "PC FR",
+      "fr": "PC FR"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "pc pc fr white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3810,7 +7756,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "TPU",
+      "fr": "TPU"
+    },
+    "material_i18n": {
+      "en": "TPU for AMS",
+      "fr": "TPU for AMS"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "tpu tpu for ams blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3825,7 +7786,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "TPU",
+      "fr": "TPU"
+    },
+    "material_i18n": {
+      "en": "TPU for AMS",
+      "fr": "TPU for AMS"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "tpu tpu for ams gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3840,7 +7816,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "TPU",
+      "fr": "TPU"
+    },
+    "material_i18n": {
+      "en": "TPU for AMS",
+      "fr": "TPU for AMS"
+    },
+    "color_name_i18n": {
+      "en": "Neon Green",
+      "fr": "Neon Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "tpu tpu for ams neon green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3855,7 +7846,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "TPU",
+      "fr": "TPU"
+    },
+    "material_i18n": {
+      "en": "TPU for AMS",
+      "fr": "TPU for AMS"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "tpu tpu for ams black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3870,7 +7876,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "TPU",
+      "fr": "TPU"
+    },
+    "material_i18n": {
+      "en": "TPU for AMS",
+      "fr": "TPU for AMS"
+    },
+    "color_name_i18n": {
+      "en": "Red",
+      "fr": "Red"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "tpu tpu for ams red"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3885,7 +7906,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "TPU",
+      "fr": "TPU"
+    },
+    "material_i18n": {
+      "en": "TPU for AMS",
+      "fr": "TPU for AMS"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "tpu tpu for ams white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3900,7 +7936,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "TPU",
+      "fr": "TPU"
+    },
+    "material_i18n": {
+      "en": "TPU for AMS",
+      "fr": "TPU for AMS"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "tpu tpu for ams yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3915,7 +7966,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PAHT-CF",
+      "fr": "PAHT-CF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering paht-cf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3930,7 +7998,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "Blue",
+      "fr": "Blue"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf blue"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3945,7 +8030,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3960,7 +8062,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "Gray",
+      "fr": "Gray"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf gray"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3975,7 +8094,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "Lime",
+      "fr": "Lime"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf lime"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -3990,7 +8126,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4005,7 +8158,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "Brown",
+      "fr": "Brown"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf brown"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4020,7 +8190,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "Orange",
+      "fr": "Orange"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf orange"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4035,7 +8222,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PA6-GF",
+      "fr": "PA6-GF"
+    },
+    "color_name_i18n": {
+      "en": "Yellow",
+      "fr": "Yellow"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pa6-gf yellow"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4050,7 +8254,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PPA-CF",
+      "fr": "PPA-CF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering ppa-cf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4065,7 +8286,24 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Engineering",
+      "fr": "Ingenierie"
+    },
+    "material_i18n": {
+      "en": "PPS-CF",
+      "fr": "PPS-CF"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "FIBER"
+    ],
+    "search_text": "engineering pps-cf black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4080,7 +8318,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Support",
+      "fr": "Support"
+    },
+    "material_i18n": {
+      "en": "Support for PLA/PETG",
+      "fr": "Support for PLA/PETG"
+    },
+    "color_name_i18n": {
+      "en": "Nature",
+      "fr": "Nature"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "support support for pla/petg nature"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4095,7 +8348,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Support",
+      "fr": "Support"
+    },
+    "material_i18n": {
+      "en": "Support for PLA/PETG",
+      "fr": "Support for PLA/PETG"
+    },
+    "color_name_i18n": {
+      "en": "Black",
+      "fr": "Black"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "support support for pla/petg black"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4110,7 +8378,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Support",
+      "fr": "Support"
+    },
+    "material_i18n": {
+      "en": "Support for PLA",
+      "fr": "Support for PLA"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "support support for pla white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4125,7 +8408,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Support",
+      "fr": "Support"
+    },
+    "material_i18n": {
+      "en": "Support for ABS",
+      "fr": "Support for ABS"
+    },
+    "color_name_i18n": {
+      "en": "White",
+      "fr": "White"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "support support for abs white"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4140,7 +8438,22 @@
     "translucent": false,
     "opacity": 1.0,
     "roughness": 0.44,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Support",
+      "fr": "Support"
+    },
+    "material_i18n": {
+      "en": "Support for PA/PET",
+      "fr": "Support for PA/PET"
+    },
+    "color_name_i18n": {
+      "en": "Green",
+      "fr": "Green"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "support support for pa/pet green"
   },
   {
     "manufacturer": "Bambu Lab",
@@ -4155,6 +8468,23 @@
     "translucent": true,
     "opacity": 0.34,
     "roughness": 0.28,
-    "hex_quality": "visual-reference"
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "Support",
+      "fr": "Support"
+    },
+    "material_i18n": {
+      "en": "PVA",
+      "fr": "PVA"
+    },
+    "color_name_i18n": {
+      "en": "Clear",
+      "fr": "Clear"
+    },
+    "is_multi_color": false,
+    "ui_badges": [
+      "TRANS"
+    ],
+    "search_text": "support pva clear"
   }
 ]
