@@ -4,14 +4,15 @@ import os
 import sys
 import time
 import importlib.util
+from pathlib import Path
 import adsk.core
 import adsk.fusion
 
 
 def _load_i18n_symbols():
     try:
-        from BambuLabNativeV10_i18n import  _t,_ensure_lang
-        return _t,_ensure_lang
+        from BambuLabNativeV10_i18n import  _getText,_ensure_lang
+        return _getText,_ensure_lang
     except Exception:
         pass
 
@@ -27,10 +28,10 @@ def _load_i18n_symbols():
 
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    return mod._t, mod._ensure_lang
+    return mod._getText, mod._ensure_lang
 
 
-_t, _ensure_lang = _load_i18n_symbols()
+_getText, _ensure_lang = _load_i18n_symbols()
 
 PALETTE_ID='BambuLabNativePaletteV10';CMD_ID='BambuLabNativeV10';handlers=[]
 
@@ -41,7 +42,7 @@ def C(h,a=255):
 # On Windows, the path comes with backslashes, so we need to replace them with forward slashes for the file URL.
 # Otherwise when Fusion is running on Windows, it fails to find the palette.
 def make_file_url(path):
-    return "file:///" + path.replace("\\", "/")
+    return Path(path).as_uri()
 
 def _find_native_base(translucent=False):
     """
@@ -219,10 +220,10 @@ def apply_sel(a, scope='auto', sel=None):
                 n+=1
             except:
                 pass
-        return _t('apply_all_model_success',n=n) if n else _t('apply_all_model_none')
+        return _getText('apply_all_model_success',n=n) if n else _getText('apply_all_model_none')
 
     if s.count==0:
-        return _t('select_prompt')
+        return _getText('select_prompt')
 
     for i in range(s.count):
         e=s.item(i)
@@ -301,13 +302,13 @@ def apply_sel(a, scope='auto', sel=None):
             pass
 
     labels={
-        'face':_t('label_face'),
-        'body':_t('label_body'),
-        'component':_t('label_component'),
-        'selected_all':_t('label_selected_all'),
-        'auto':_t('label_auto')
+        'face':_getText('label_face'),
+        'body':_getText('label_body'),
+        'component':_getText('label_component'),
+        'selected_all':_getText('label_selected_all'),
+        'auto':_getText('label_auto')
     }
-    return _t('apply_scope_success',n=n,label=labels.get(scope,_t('label_auto'))) if n else _t('selection_mode_mismatch') 
+    return _getText('apply_scope_success',n=n,label=labels.get(scope,_getText('label_auto'))) if n else _getText('selection_mode_mismatch') 
 
 
 def _safe_doc_name(name):
@@ -318,7 +319,7 @@ def _safe_doc_name(name):
 
 def _pick_folder(ui):
     dlg=ui.createFolderDialog()
-    dlg.title=_t('pick_folder_title')
+    dlg.title=_getText('pick_folder_title')
     if dlg.showDialog()!=adsk.core.DialogResults.DialogOK:
         return None
     return dlg.folder
@@ -347,11 +348,11 @@ def export_parent(kind='bundle'):
     ui=app.userInterface
     design=adsk.fusion.Design.cast(app.activeProduct)
     if not design:
-        return False,_t('open_design')
+        return False,_getText('open_design')
 
     folder=_pick_folder(ui)
     if not folder:
-        return False,_t('export_cancelled')
+        return False,_getText('export_cancelled')
 
     doc=app.activeDocument
     base=_safe_doc_name(doc.name if doc else 'Bambu_Model')
@@ -381,17 +382,17 @@ def export_parent(kind='bundle'):
     if kind=='bundle':
         try:
             with open(os.path.join(folder,'BAMBU_PARENT_EXPORT_README.txt'),'w',encoding='utf-8') as f:
-                f.write(_t('export_readme',base=base))
+                f.write(_getText('export_readme',base=base))
         except:
             pass
 
     msg=''
     if done:
-        msg+=_t('export_done')+', '.join(done)
+        msg+=_getText('export_done')+', '.join(done)
     if failed:
         if msg: msg+=' · '
-        msg+=_t('export_failed')+' | '.join(failed)
-    msg+=' · '+_t('export_folder',folder=folder)
+        msg+=_getText('export_failed')+' | '.join(failed)
+    msg+=' · '+_getText('export_folder',folder=folder)
     return len(done)>0,msg
 
 def _read_catalog_json_text():
@@ -457,13 +458,16 @@ class PH(adsk.core.HTMLEventHandler):
                 return
 
             if args.action!='apply':return
+            # We need to cache the selection here because during the appearance copy process
+            # "something" in Fusion will remove the selection, so we cache it here.
             sel = adsk.core.Application.get().userInterface.activeSelections.all
             design=adsk.fusion.Design.cast(app.activeProduct)
             d=json.loads(args.data);a=get_app(design,d)
-            msg=apply_sel(a, d.get('scope','auto'), sel) if a else _t('appearance_create_failed')
+            msg=apply_sel(a, d.get('scope','auto'), sel) if a else _getText('appearance_create_failed')
             p=ui.palettes.itemById(PALETTE_ID)
-            if p:p.sendInfoToHTML('status',f"{_t('native_tag')} · {d['material']} · {d['color_name']} - {msg}")
+            if p:p.sendInfoToHTML('status',f"{_getText('native_tag')} · {d['material']} · {d['color_name']} - {msg}")
             adsk.doEvents()
+            # Restore the cached selection after applying the appearance.
             adsk.core.Application.get().userInterface.activeSelections.all = sel
         except:
             pass
@@ -474,7 +478,7 @@ class CH(adsk.core.CommandCreatedEventHandler):
         if not p:
             path=os.path.join(os.path.dirname(os.path.realpath(__file__)),'palette.html')
             palette_path=make_file_url(path)
-            p=ui.palettes.add(PALETTE_ID,_t('palette_title'),palette_path,True,True,True,520,720,True)
+            p=ui.palettes.add(PALETTE_ID,_getText('palette_title'),palette_path,True,True,True,520,720,True)
             p.dockingState=adsk.core.PaletteDockingStates.PaletteDockStateRight
             h=PH();p.incomingFromHTML.add(h);handlers.append(h)
             p.isVisible=True
@@ -497,8 +501,8 @@ def run(context):
     if not d:
         d=ui.commandDefinitions.addButtonDefinition(
             CMD_ID,
-            _t('command_name'),
-            _t('command_description')
+            _getText('command_name'),
+            _getText('command_description')
         )
     h=CH();d.commandCreated.add(h);handlers.append(h)
 

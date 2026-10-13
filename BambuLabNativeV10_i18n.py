@@ -117,6 +117,8 @@ def _detect_lang():
         return 'en'
 
     try:
+        # This should never fail unless the user is using a REALLY old version
+        # of Fusion.
         app = adsk.core.Application.get()
         user_lang = app.preferences.generalPreferences.userLanguage
         fused = _to_lang_key(user_lang)
@@ -125,6 +127,7 @@ def _detect_lang():
     except Exception:
         pass
 
+    # This is set on "some" platforms. so let's try this as a fallback.
     for env_key in ('LANG', 'LC_ALL', 'LC_CTYPE'):
         val = (os.environ.get(env_key) or '').lower()
         if val.startswith('fr'):
@@ -152,7 +155,7 @@ def _ensure_lang():
     return LANG
 
 
-def _t(key, **kwargs):
+def _getText(key, **kwargs):
     lang = _ensure_lang()
     table = I18N.get(lang, I18N['en'])
     txt = table.get(key, I18N['en'].get(key, key))
