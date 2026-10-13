@@ -6735,6 +6735,36 @@
     "manufacturer": "Bambu Lab",
     "category": "ABS",
     "material": "ABS",
+    "color_name": "Silver (4102)",
+    "hex": "#87909A",
+    "hexes": [
+      "#87909A"
+    ],
+    "finish": "standard",
+    "translucent": false,
+    "opacity": 1.0,
+    "roughness": 0.44,
+    "hex_quality": "visual-reference",
+    "category_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "material_i18n": {
+      "en": "ABS",
+      "fr": "ABS"
+    },
+    "color_name_i18n": {
+      "en": "Silver (4102)",
+      "fr": "Silver (4102)"
+    },
+    "is_multi_color": false,
+    "ui_badges": [],
+    "search_text": "abs abs silver 4102"
+  },
+  {
+    "manufacturer": "Bambu Lab",
+    "category": "ABS",
+    "material": "ABS",
     "color_name": "Bambu Green",
     "hex": "#00AE42",
     "hexes": [
