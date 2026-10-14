@@ -1,18 +1,79 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="palette.css"><script src="palette-i18n.js"></script></head><body>
 <header><h1 id="title">Paramètres des filaments</h1></header>
-<div id="catalogAttribution" class="count"></div>
-<div class="parentbar">
-  <button id="refreshCatalog" class="parentbtn wide" onclick="refreshCatalog()"></button>
+<section class="settings-section">
+  <h2 id="catalogSectionTitle" class="settings-section-title">Catalog</h2>
+  <div class="settings-kv">
+    <span id="catalogRefsLabel" class="count">References</span>
+    <strong id="catalogRefsValue">-</strong>
+  </div>
+  <div class="settings-kv">
+    <span id="catalogManufacturersLabel" class="count">Manufacturers</span>
+    <strong id="catalogManufacturersValue">-</strong>
+  </div>
+  <div class="settings-kv">
+    <span id="catalogLinesLabel" class="count">Product lines</span>
+    <strong id="catalogLinesValue">-</strong>
+  </div>
+  <div id="catalogAttribution" class="count"></div>
+  <div id="catalogVersion" class="count"></div>
+  <div class="parentbar settings-actions">
+    <button id="refreshCatalog" class="parentbtn wide" onclick="refreshCatalog()"></button>
+  </div>
+</section>
+<div class="setting-row">
+  <label class="setting-toggle" for="debugModeToggle">
+    <input id="debugModeToggle" type="checkbox" onchange="toggleDebugMode(this.checked)">
+    <span id="debugModeLabel">Debug mode</span>
+  </label>
 </div>
 <div id="status"></div>
 <script>
 let currentLang='en';
 const CATALOG_CREDIT_URL='https://donkie.github.io/SpoolmanDB/';
+let catalogMeta={version:'-',source:'none',entryCount:0};
+
+function sourceCreditLabel(source){
+  const t=I18N[currentLang]||I18N.en;
+  const src=(source||'').toLowerCase();
+  if(src==='spoolman-db') return t.dataSourceSpoolman;
+  if(src.includes('spoolman') || src.includes('cache') || src.includes('stale')) return t.dataSourceCache;
+  return t.dataSourceUnknown;
+}
+
+function setCatalogSummary(entries,meta){
+  const list=Array.isArray(entries)?entries:[];
+  const nextMeta=(meta && typeof meta==='object')?meta:{};
+  const refs=Number.isFinite(Number(nextMeta.entryCount))?Number(nextMeta.entryCount):list.length;
+  const manufacturers=new Set(list.map((e)=>String((e&&e.manufacturer)||'').trim()).filter(Boolean)).size;
+  const lines=new Set(list.map((e)=>String((e&&e.material)||'').trim()).filter(Boolean)).size;
+  document.getElementById('catalogRefsValue').textContent=String(refs);
+  document.getElementById('catalogManufacturersValue').textContent=String(manufacturers);
+  document.getElementById('catalogLinesValue').textContent=String(lines);
+}
+
+function extractCatalogPayload(rawPayload){
+  const payload=(rawPayload && typeof rawPayload==='object')?rawPayload:{};
+  const entries=Array.isArray(payload.entries)?payload.entries:(Array.isArray(payload)?payload:[]);
+  const payloadMeta=(payload.meta && typeof payload.meta==='object')?payload.meta:{};
+  const source=String(payloadMeta.source||payload.source||'unknown');
+  const version=String(payloadMeta.version||payload.catalog_version||payload.version||'unknown');
+  const entryCount=(Number.isFinite(Number(payloadMeta.entryCount))?Number(payloadMeta.entryCount):entries.length);
+  return {entries,meta:{source,version,entryCount}};
+}
 
 function updateCatalogAttribution(){
   const t=I18N[currentLang]||I18N.en;
   const el=document.getElementById('catalogAttribution');
-  el.innerHTML=`${t.dataSourceLabel}: <a href="${CATALOG_CREDIT_URL}" target="_blank" rel="noopener noreferrer">${t.dataSourceSpoolman}</a>`;
+  const label=sourceCreditLabel(catalogMeta.source);
+  el.innerHTML=`${t.dataSourceLabel}: <a href="${CATALOG_CREDIT_URL}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  document.getElementById('catalogVersion').textContent=`${t.dataVersionLabel}: ${String(catalogMeta.version||'unknown')}`;
+}
+
+function applyCatalogPayload(rawPayload){
+  const extracted=extractCatalogPayload(rawPayload);
+  catalogMeta=extracted.meta;
+  setCatalogSummary(extracted.entries,extracted.meta);
+  updateCatalogAttribution();
 }
 
 function setUiLanguage(lang){
@@ -20,11 +81,13 @@ function setUiLanguage(lang){
   const t=I18N[currentLang];
   document.documentElement.lang=t.lang;
   document.getElementById('title').textContent=t.palette_settings_title||'Filament Settings';
+  document.getElementById('catalogSectionTitle').textContent=t.catalogSectionTitle||'Catalog';
+  document.getElementById('catalogRefsLabel').textContent=t.catalogReferencesLabel||'References';
+  document.getElementById('catalogManufacturersLabel').textContent=t.catalogManufacturersLabel||'Manufacturers';
+  document.getElementById('catalogLinesLabel').textContent=t.catalogLinesLabel||'Product lines';
+  document.getElementById('debugModeLabel').textContent=t.debugMode||'Debug mode';
   document.getElementById('refreshCatalog').textContent=t.refreshCatalog;
   updateCatalogAttribution();
-  if(!document.getElementById('status').textContent){
-    document.getElementById('status').textContent=t.idleStatus;
-  }
 }
 
 function requestLanguage(){
@@ -36,11 +99,32 @@ function requestLanguage(){
   }
 }
 
+function requestCatalogMeta(){
+  try{
+    adsk.fusionSendData('request_catalog_settings','');
+    return true;
+  }catch(_){
+    return false;
+  }
+}
+
+function scheduleCatalogMetaRetries(){
+  [250,800,1600,3000].forEach((ms)=>{
+    setTimeout(()=>{ requestCatalogMeta(); },ms);
+  });
+}
+
+function scheduleLanguageRetries(){
+  [250,800,1600,3000].forEach((ms)=>{
+    setTimeout(()=>{ requestLanguage(); },ms);
+  });
+}
+
 function refreshCatalog(){
   const t=I18N[currentLang]||I18N.en;
   document.getElementById('status').textContent=t.refreshingCatalog;
   try{
-    adsk.fusionSendData('request_catalog_force','');
+    adsk.fusionSendData('request_catalog_force_settings','');
     return true;
   }catch(_){
     document.getElementById('status').textContent=(I18N[currentLang]||I18N.en).catalogUpdateRequestFailed;
@@ -48,10 +132,38 @@ function refreshCatalog(){
   }
 }
 
+function toggleDebugMode(enabled){
+  try{
+    adsk.fusionSendData('set_debug_mode', enabled ? '1' : '0');
+    if(enabled){
+      adsk.fusionSendData('open_debug_palette','');
+    }
+    return true;
+  }catch(_){
+    return false;
+  }
+}
+
 window.fusionJavaScriptHandler={
   handle:function(action,data){
     if(action==='status') document.getElementById('status').textContent=data;
-    if(action==='setLang') setUiLanguage((data||'').toLowerCase());
+    if(action==='setLang'){
+      setUiLanguage((data||'').toLowerCase());
+      requestCatalogMeta();
+    }
+    if(action==='catalog'){
+      try{
+        const payload=JSON.parse(data||'{}');
+        applyCatalogPayload(payload);
+      }catch(_){
+        // Ignore malformed payload and keep previous catalog snapshot.
+      }
+    }
+    if(action==='setDebugMode'){
+      const enabled = String(data||'').toLowerCase() === '1' || String(data||'').toLowerCase() === 'true';
+      const el = document.getElementById('debugModeToggle');
+      if(el) el.checked = enabled;
+    }
     return 'OK';
   }
 };
@@ -59,4 +171,8 @@ window.fusionJavaScriptHandler={
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
 requestLanguage();
+scheduleLanguageRetries();
+requestCatalogMeta();
+scheduleCatalogMetaRetries();
+window.addEventListener('focus',()=>{ requestCatalogMeta(); });
 </script></body></html>

@@ -1,6 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="palette.css"><script src="palette-i18n.js"></script></head><body>
-<header><div class="headrow"><h1 id="title">Filament Colors · NATIVE V10</h1><div class="headicons"><button id="openActions" class="iconbtn" onclick="openActionsPalette()"></button><button id="openSettings" class="iconbtn" onclick="openSettingsPalette()"></button></div></div><div id="count" class="count"></div><div id="renderHint" class="count"></div>
-<div id="catalogAttribution" class="count"></div>
+<header>
 <div class="controls">
 <input id="q" placeholder="Search..." oninput="onFilterChange()">
 <select id="cat" onchange="onFilterChange()"></select>
@@ -15,33 +14,51 @@
     <span id="colorFilterLabel"></span>
   </label>
   <div id="colorFilterDetails">
-  <div class="colorfilter-row">
-    <input id="colorFilterHex" type="color" value="#4f8cff" oninput="onColorHexInput()">
-    <input id="colorFilterDistance" type="range" min="0" max="30" step="1" value="12" oninput="onColorDistanceInput()">
-    <span id="colorFilterDistanceValue" class="count"></span>
-  </div>
-  <div class="colorfilter-preview">
-    <div id="colorWheel" class="colorwheel">
-      <span class="colorwheel-dim"></span>
-      <span id="colorWheelAllowedA" class="colorwheel-allowed"></span>
-      <span id="colorWheelAllowedB" class="colorwheel-allowed"></span>
-      <span id="colorWheelCenter" class="colorwheel-center"></span>
+    <div class="colorfilter-row">
+      <div id="colorWheel" class="colorwheel" onclick="pickColorFromWheel(event)" aria-label="Color wheel" role="button" tabindex="0">
+        <span class="colorwheel-dim"></span>
+        <span id="colorWheelAllowedA" class="colorwheel-allowed"></span>
+        <span id="colorWheelAllowedB" class="colorwheel-allowed"></span>
+        <span id="colorWheelCenter" class="colorwheel-center" ondblclick="document.getElementById('colorFilterHex').click()" aria-label="Open color picker" role="button" tabindex="0"></span>
+      </div>
+      <div class="colorfilter-sliders">
+        <div class="colorfilter-label">Tolerances</div>
+        <div class="colorfilter-slider">
+          <label for="colorFilterHue">H</label>
+          <input id="colorFilterHue" type="range" min="0" max="100" step="1" value="10" oninput="onColorToleranceInput()">
+          <span id="colorFilterHueValue" class="count">10%</span>
+        </div>
+        <div class="colorfilter-slider">
+          <label for="colorFilterSat">S</label>
+          <input id="colorFilterSat" type="range" min="0" max="100" step="1" value="10" oninput="onColorToleranceInput()">
+          <span id="colorFilterSatValue" class="count">10%</span>
+        </div>
+        <div class="colorfilter-slider">
+          <label for="colorFilterVal">V</label>
+          <input id="colorFilterVal" type="range" min="0" max="100" step="1" value="10" oninput="onColorToleranceInput()">
+          <span id="colorFilterValValue" class="count">10%</span>
+        </div>
+      </div>
+      <input id="colorFilterHex" type="color" value="#4f8cff" oninput="onColorHexInput()" style="display:none; position:absolute; opacity:0; pointer-events:none;">
     </div>
-    <div id="colorHueHint" class="count"></div>
-  </div>
   </div>
 </div>
-<div id="status"></div></header>
+<div id="status"></div>
+</header>
 <div id="grid" class="grid"></div>
 <footer id="pager" class="pagerfooter">
-  <div class="pagerrow">
-    <button id="firstPageBtn" class="pagerbtn" onclick="firstPage()"></button>
-    <button id="prevPageBtn" class="pagerbtn" onclick="prevPage()"></button>
-    <span id="pageIndicator" class="pageindicator"></span>
-    <button id="nextPageBtn" class="pagerbtn" onclick="nextPage()"></button>
-    <button id="lastPageBtn" class="pagerbtn" onclick="lastPage()"></button>
-  </div>
-  <div class="pagerrow pagerrow-secondary">
+  <div class="pagerrow pagerrow-bottom">
+    <div class="headicons footer-icons">
+      <button id="openActions" class="iconbtn" onclick="openActionsPalette()"></button>
+      <button id="openSettings" class="iconbtn" onclick="openSettingsPalette()"></button>
+    </div>
+    <div class="pager-controls">
+      <button id="firstPageBtn" class="pagerbtn" onclick="firstPage()"></button>
+      <button id="prevPageBtn" class="pagerbtn" onclick="prevPage()"></button>
+      <span id="pageIndicator" class="pageindicator"></span>
+      <button id="nextPageBtn" class="pagerbtn" onclick="nextPage()"></button>
+      <button id="lastPageBtn" class="pagerbtn" onclick="lastPage()"></button>
+    </div>
     <select id="pageSizeSelect" onchange="onPageSizeChange()"></select>
   </div>
 </footer>
@@ -49,12 +66,14 @@
 const FINISH_ORDER=['translucent','multi','glow','sparkle','metallic','wood','fiber','standard','matte','silk'];
 const FINISH_BADGE={glow:'GLOW',sparkle:'SPARKLE',metallic:'METALLIC',wood:'WOOD',fiber:'FIBER'};
 const SCOPE_OPTIONS=['body','face','component','selected_all','all_model'];
-const CATALOG_CREDIT_URL='https://donkie.github.io/SpoolmanDB/';
 const PAGE_SIZE_OPTIONS=[20,40,80,120,200];
 const DEFAULT_PAGE_SIZE=40;
 const DEFAULT_COLOR_FILTER_HEX='#4F8CFF';
-const MAX_COLOR_FILTER_TOLERANCE=30;
-const DEFAULT_COLOR_FILTER_DISTANCE=12;
+const MAX_COLOR_FILTER_TOLERANCE=100;
+const DEFAULT_COLOR_FILTER_DISTANCE=10;
+const DEFAULT_HUE_TOLERANCE=10;
+const DEFAULT_SAT_TOLERANCE=10;
+const DEFAULT_VAL_TOLERANCE=10;
 const COLOR_DISTANCE_HUE_WEIGHT=0.9;
 const COLOR_DISTANCE_SAT_WEIGHT=0.07;
 const COLOR_DISTANCE_LUM_WEIGHT=0.03;
@@ -284,20 +303,35 @@ function setScopeFromUi(){
   }
 }
 
+function clampTolerance(value, fallback, maxValue=MAX_COLOR_FILTER_TOLERANCE){
+  const numeric=Number(value);
+  if(!Number.isFinite(numeric)) return fallback;
+  return Math.max(0,Math.min(maxValue,Math.round(numeric)));
+}
+
+function getColorToleranceSettings(){
+  return {
+    hue: clampTolerance(document.getElementById('colorFilterHue').value, DEFAULT_HUE_TOLERANCE),
+    sat: clampTolerance(document.getElementById('colorFilterSat').value, DEFAULT_SAT_TOLERANCE),
+    val: clampTolerance(document.getElementById('colorFilterVal').value, DEFAULT_VAL_TOLERANCE)
+  };
+}
+
 function updateColorFilterUiState(){
   const enabled=document.getElementById('colorFilterOn').checked;
   document.getElementById('colorFilterHex').disabled=!enabled;
-  document.getElementById('colorFilterDistance').disabled=!enabled;
+  document.getElementById('colorFilterHue').disabled=!enabled;
+  document.getElementById('colorFilterSat').disabled=!enabled;
+  document.getElementById('colorFilterVal').disabled=!enabled;
   document.getElementById('colorFilterDetails').classList.toggle('hidden',!enabled);
   document.getElementById('colorWheel').classList.toggle('disabled',!enabled);
 }
 
 function updateColorDistanceLabel(){
-  const t=I18N[currentLang]||I18N.en;
-  const raw=Number(document.getElementById('colorFilterDistance').value||DEFAULT_COLOR_FILTER_DISTANCE);
-  const value=Number.isFinite(raw)?Math.max(0,Math.min(MAX_COLOR_FILTER_TOLERANCE,raw)):DEFAULT_COLOR_FILTER_DISTANCE;
-  const label=t.colorDistanceLabel||'Distance';
-  document.getElementById('colorFilterDistanceValue').textContent=`${label}: ${value}%`;
+  const tolerance=getColorToleranceSettings();
+  document.getElementById('colorFilterHueValue').textContent=`${tolerance.hue}%`;
+  document.getElementById('colorFilterSatValue').textContent=`${tolerance.sat}%`;
+  document.getElementById('colorFilterValValue').textContent=`${tolerance.val}%`;
 }
 
 function hueDistanceRadius(targetHsl,threshold){
@@ -318,11 +352,77 @@ function setWheelArc(el,startDeg,endDeg){
   el.style.background=`conic-gradient(from ${startDeg-90}deg, rgba(255,255,255,.62) 0deg, rgba(255,255,255,.62) ${span}deg, transparent ${span}deg, transparent 360deg)`;
 }
 
+function rgbToHex(r, g, b){
+  const toHex=(v)=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+}
+
+function hslToRgb(h, s, l){
+  const c=(1 - Math.abs(2*l - 1)) * s;
+  const x=c * (1 - Math.abs((h/60) % 2 - 1));
+  const m=l - c / 2;
+  let r=0,g=0,b=0;
+  if(h>=0 && h<60){r=c; g=x; b=0;}
+  else if(h>=60 && h<120){r=x; g=c; b=0;}
+  else if(h>=120 && h<180){r=0; g=c; b=x;}
+  else if(h>=180 && h<240){r=0; g=x; b=c;}
+  else if(h>=240 && h<300){r=x; g=0; b=c;}
+  else {r=c; g=0; b=x;}
+  return {r:r*255 + m*255, g:g*255 + m*255, b:b*255 + m*255};
+}
+
+function setSelectedColorHex(hex){
+  const value=sanitizeColorHex(hex);
+  document.getElementById('colorFilterHex').value=value;
+  onColorHexInput();
+}
+
+function removeLegacyColorWheelUi(){
+  try{
+    const details=document.getElementById('colorFilterDetails');
+    if(!details) return;
+    const wheels=details.querySelectorAll('.colorwheel');
+    for(let i=0;i<wheels.length;i+=1){
+      const wheel=wheels[i];
+      if(wheel && wheel.id!=='colorWheel' && wheel.parentNode){
+        wheel.parentNode.removeChild(wheel);
+      }
+    }
+    const legacy=details.querySelectorAll('.colorfilter-preview,.colorfilter-summary,#colorHueHint');
+    for(let i=0;i<legacy.length;i+=1){
+      const el=legacy[i];
+      if(el && el.parentNode){
+        el.parentNode.removeChild(el);
+      }
+    }
+  }catch(_){
+    // Keep startup resilient; catalog/language boot should continue even if cleanup fails.
+  }
+}
+
+function pickColorFromWheel(event){
+  const wheel=document.getElementById('colorWheel');
+  if(!wheel) return;
+  const rect=wheel.getBoundingClientRect();
+  const cx=rect.left + rect.width / 2;
+  const cy=rect.top + rect.height / 2;
+  const dx=(event.clientX || cx) - cx;
+  const dy=(event.clientY || cy) - cy;
+  const distance=Math.sqrt(dx*dx + dy*dy);
+  const radius=Math.min(rect.width,rect.height) / 2;
+  if(distance > radius) return;
+  const wheelAngle=(Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
+  const angle=(wheelAngle + 180) % 360;
+  const sat=Math.min(1, distance / radius);
+  const rgb=hslToRgb(angle, sat, 0.5);
+  setSelectedColorHex(rgbToHex(rgb.r, rgb.g, rgb.b));
+}
+
 function updateColorRangePreview(filters){
-  const t=I18N[currentLang]||I18N.en;
   const safeFilters=filters||getCurrentFilters();
   const target=toHsl(safeFilters.cHex||DEFAULT_COLOR_FILTER_HEX);
-  const threshold=Math.max(0,Math.min(MAX_COLOR_FILTER_TOLERANCE,Number(safeFilters.cDist||DEFAULT_COLOR_FILTER_DISTANCE)))/100;
+  const hueTolerance=Number(safeFilters.cHue||DEFAULT_HUE_TOLERANCE)/100;
+  const threshold=Math.max(0.05,Math.min(0.5,hueTolerance*0.5));
   const radius=hueDistanceRadius(target,threshold);
   const start=target.h-radius;
   const end=target.h+radius;
@@ -349,31 +449,9 @@ function updateColorRangePreview(filters){
   }
 
   const deg=Math.round(radius*360);
-  const hint=(target.s<0.08?(t.colorHueHintGray||'Near-neutral anchor: wider hue span is expected.'):(t.colorHueHint||'Approx. allowed hue span: ±{degrees}°')).replace('{degrees}',String(deg));
-  document.getElementById('colorHueHint').textContent=hint;
-}
-
-function updateCount(){
-  const refs=catalog.length;
-  const manufacturers=new Set(catalog.map(e=>e.manufacturer)).size;
-  const lines=new Set(catalog.map(e=>e.material)).size;
-  document.getElementById('count').textContent=`${refs} references - ${manufacturers} manufacturers - ${lines} product lines - data ${catalogMeta.version} (${catalogMeta.source})`;
-}
-
-function sourceCreditLabel(source){
-  const t=I18N[currentLang]||I18N.en;
-  const src=(source||'').toLowerCase();
-  if(src==='spoolman-db') return t.dataSourceSpoolman;
-  if(src.includes('spoolman') || src.includes('cache') || src.includes('stale')) return t.dataSourceCache;
-  return t.dataSourceUnknown;
-}
-
-function updateCatalogAttribution(){
-  const t=I18N[currentLang]||I18N.en;
-  const label=sourceCreditLabel(catalogMeta.source);
-  const el=document.getElementById('catalogAttribution');
-  const version=String(catalogMeta.version||'unknown');
-  el.innerHTML=`${t.dataSourceLabel}: <a href="${CATALOG_CREDIT_URL}" target="_blank" rel="noopener noreferrer">${label}</a> · ${t.dataVersionLabel}: ${version}`;
+  if(document.getElementById('colorHueHint')) {
+    document.getElementById('colorHueHint').textContent='';
+  }
 }
 
 function displayManufacturer(entry){
@@ -386,20 +464,6 @@ function displayMaterial(entry){
 
 function displayColor(entry){
   return textFor(entry,'color_name_i18n')||entry.color_name;
-}
-
-function updateRenderHint(page,totalPages,shown,total){
-  const hint=document.getElementById('renderHint');
-  const t=I18N[currentLang]||I18N.en;
-  if(total>0){
-    hint.textContent=(t.pageSummary||'')
-      .replace('{page}',String(page))
-      .replace('{pages}',String(totalPages))
-      .replace('{shown}',String(shown))
-      .replace('{total}',String(total));
-  }else{
-    hint.textContent='';
-  }
 }
 
 function renderCardsWindow(indexes){
@@ -472,7 +536,6 @@ function renderCards(){
   const start=(currentPage-1)*pageSize;
   const pageIndexes=filteredIndexes.slice(start,start+pageSize);
   renderCardsWindow(pageIndexes);
-  updateRenderHint(currentPage,totalPages,pageIndexes.length,filteredIndexes.length);
 }
 
 function prevPage(){
@@ -530,10 +593,9 @@ function finishMatch(entry,finishFilter){
 }
 
 function getCurrentFilters(){
-  const colorDistanceRaw=Number(document.getElementById('colorFilterDistance').value||DEFAULT_COLOR_FILTER_DISTANCE);
-  const colorDistance=Number.isFinite(colorDistanceRaw)?Math.max(0,Math.min(MAX_COLOR_FILTER_TOLERANCE,Math.round(colorDistanceRaw))):DEFAULT_COLOR_FILTER_DISTANCE;
   const cOn=document.getElementById('colorFilterOn').checked;
   const cHex=sanitizeColorHex(document.getElementById('colorFilterHex').value);
+  const tolerance=getColorToleranceSettings();
   return {
     q:document.getElementById('q').value.toLowerCase(),
     cat:document.getElementById('cat').value,
@@ -542,20 +604,25 @@ function getCurrentFilters(){
     sort:document.getElementById('sort').value,
     cOn:cOn?'1':'0',
     cHex:cHex,
-    cDist:String(colorDistance),
+    cHue:String(tolerance.hue),
+    cSat:String(tolerance.sat),
+    cVal:String(tolerance.val),
+    cDist:String(Math.round((tolerance.hue+tolerance.sat+tolerance.val)/3)),
     pageSize:String(getPageSize())
   };
 }
 
 function sanitizeFilters(filters){
-  if(!filters || typeof filters!=='object') return {q:'',cat:'',mat:'',fin:'',sort:'name',cOn:'0',cHex:DEFAULT_COLOR_FILTER_HEX,cDist:String(DEFAULT_COLOR_FILTER_DISTANCE),pageSize:String(DEFAULT_PAGE_SIZE)};
+  if(!filters || typeof filters!=='object') return {q:'',cat:'',mat:'',fin:'',sort:'name',cOn:'0',cHex:DEFAULT_COLOR_FILTER_HEX,cHue:String(DEFAULT_HUE_TOLERANCE),cSat:String(DEFAULT_SAT_TOLERANCE),cVal:String(DEFAULT_VAL_TOLERANCE),cDist:String(DEFAULT_COLOR_FILTER_DISTANCE),pageSize:String(DEFAULT_PAGE_SIZE)};
   const pageSizeRaw=Number(filters.pageSize||DEFAULT_PAGE_SIZE);
   const pageSize=PAGE_SIZE_OPTIONS.includes(pageSizeRaw)?pageSizeRaw:DEFAULT_PAGE_SIZE;
   const sort=filters.sort==='color'?'color':'name';
   const cOn=filters.cOn==='1'?'1':'0';
   const cHex=sanitizeColorHex(filters.cHex||DEFAULT_COLOR_FILTER_HEX);
-  const cDistRaw=Number(filters.cDist||DEFAULT_COLOR_FILTER_DISTANCE);
-  const cDist=Number.isFinite(cDistRaw)?Math.max(0,Math.min(MAX_COLOR_FILTER_TOLERANCE,Math.round(cDistRaw))):DEFAULT_COLOR_FILTER_DISTANCE;
+  const hue=clampTolerance(filters.cHue, DEFAULT_HUE_TOLERANCE);
+  const sat=clampTolerance(filters.cSat, DEFAULT_SAT_TOLERANCE);
+  const val=clampTolerance(filters.cVal, DEFAULT_VAL_TOLERANCE);
+  const cDist=clampTolerance(filters.cDist, DEFAULT_COLOR_FILTER_DISTANCE);
   return {
     q:typeof filters.q==='string'?filters.q:'',
     cat:typeof filters.cat==='string'?filters.cat:'',
@@ -564,6 +631,9 @@ function sanitizeFilters(filters){
     sort:sort,
     cOn:cOn,
     cHex:cHex,
+    cHue:String(hue),
+    cSat:String(sat),
+    cVal:String(val),
     cDist:String(cDist),
     pageSize:String(pageSize)
   };
@@ -591,7 +661,9 @@ function applySavedFilters(filters){
   document.getElementById('sort').value=persistedFilters.sort;
   document.getElementById('colorFilterOn').checked=persistedFilters.cOn==='1';
   document.getElementById('colorFilterHex').value=persistedFilters.cHex;
-  document.getElementById('colorFilterDistance').value=persistedFilters.cDist;
+  document.getElementById('colorFilterHue').value=persistedFilters.cHue||String(DEFAULT_HUE_TOLERANCE);
+  document.getElementById('colorFilterSat').value=persistedFilters.cSat||String(DEFAULT_SAT_TOLERANCE);
+  document.getElementById('colorFilterVal').value=persistedFilters.cVal||String(DEFAULT_VAL_TOLERANCE);
   updateColorFilterUiState();
   updateColorDistanceLabel();
   restoringFilters=false;
@@ -632,22 +704,34 @@ function hueDistance(a,b){
   return Math.min(delta,1-delta);
 }
 
-function colorDistance(entry,target){
+function colorDistance(entry,target,settings){
+  const tolerance=settings||{
+    hue: Number(DEFAULT_HUE_TOLERANCE),
+    sat: Number(DEFAULT_SAT_TOLERANCE),
+    val: Number(DEFAULT_VAL_TOLERANCE)
+  };
   const entrySat=(entry.colorSat||0);
   const targetSat=(target.s||0);
   const targetIsNeutral=targetSat<NEUTRAL_SAT_THRESHOLD;
   const entryIsNeutral=entrySat<NEUTRAL_SAT_THRESHOLD;
-  if((!targetIsNeutral && entryIsNeutral) || (targetIsNeutral && entrySat>VIBRANT_SAT_THRESHOLD)){
-    return 1;
+  const hueTolerance=Math.max(5,Number(tolerance.hue||DEFAULT_HUE_TOLERANCE))/100;
+  const satTolerance=Math.max(5,Number(tolerance.sat||DEFAULT_SAT_TOLERANCE))/100;
+  const valTolerance=Math.max(5,Number(tolerance.val||DEFAULT_VAL_TOLERANCE))/100;
+
+  if(!targetIsNeutral && entryIsNeutral && entrySat < Math.max(0.08, targetSat*0.35)){
+    return 1.5;
   }
+  if(targetIsNeutral && entrySat>VIBRANT_SAT_THRESHOLD && !entryIsNeutral){
+    return 1.5;
+  }
+
   const dh=hueDistance(entry.colorHue,target.h);
   const ds=Math.abs(entrySat-targetSat);
   const dl=Math.abs((entry.colorLum||0)-target.l);
-  const hueWeight=(entryIsNeutral && targetIsNeutral)?0.2:1.0;
-  const hueTerm=dh*COLOR_DISTANCE_HUE_WEIGHT*hueWeight;
-  const satTerm=ds*COLOR_DISTANCE_SAT_WEIGHT;
-  const lumTerm=dl*COLOR_DISTANCE_LUM_WEIGHT;
-  return hueTerm+satTerm+lumTerm;
+  const hueTerm=(dh/Math.max(0.01,hueTolerance*0.5))*0.55;
+  const satTerm=(ds/Math.max(0.01,satTolerance))*0.30;
+  const lumTerm=(dl/Math.max(0.01,valTolerance))*0.15;
+  return Math.min(1.5,hueTerm+satTerm+lumTerm);
 }
 
 function entryMatchesFilters(entry,filters,ignoreKey){
@@ -656,8 +740,13 @@ function entryMatchesFilters(entry,filters,ignoreKey){
   if(ignoreKey!=='mat' && filters.mat && entry.material!==filters.mat) return false;
   if(ignoreKey!=='fin' && !finishMatch(entry,filters.fin)) return false;
   if(filters.cOn==='1'){
-    const threshold=Math.max(0,Math.min(MAX_COLOR_FILTER_TOLERANCE,Number(filters.cDist||DEFAULT_COLOR_FILTER_DISTANCE)))/100;
-    if(colorDistance(entry,filters.cHsl||toHsl(filters.cHex||DEFAULT_COLOR_FILTER_HEX))>threshold) return false;
+    const target=filters.cHsl||toHsl(filters.cHex||DEFAULT_COLOR_FILTER_HEX);
+    const tolerance={
+      hue:Number(filters.cHue||DEFAULT_HUE_TOLERANCE),
+      sat:Number(filters.cSat||DEFAULT_SAT_TOLERANCE),
+      val:Number(filters.cVal||DEFAULT_VAL_TOLERANCE)
+    };
+    if(colorDistance(entry,target,tolerance)>1.0) return false;
   }
   return true;
 }
@@ -775,7 +864,7 @@ function onColorFilterToggleChange(){
   onFilterChange({focusAnchor:document.getElementById('colorFilterOn').checked});
 }
 
-function onColorDistanceInput(){
+function onColorToleranceInput(){
   updateColorDistanceLabel();
   onFilterChange({focusAnchor:true});
 }
@@ -806,7 +895,6 @@ function setUiLanguage(lang){
   currentLang=I18N[lang]?lang:'en';
   const t=I18N[currentLang];
   document.documentElement.lang=t.lang;
-  document.getElementById('title').textContent=t.title;
   document.getElementById('q').placeholder=t.searchPlaceholder;
   document.getElementById('openActions').textContent='⤓';
   document.getElementById('openActions').title=t.openActions;
@@ -829,9 +917,6 @@ function setUiLanguage(lang){
   updateColorDistanceLabel();
   updateColorRangePreview();
   populateFilters();
-  updateCount();
-  updateCatalogAttribution();
-  if(!document.getElementById('status').textContent) document.getElementById('status').textContent=t.idleStatus;
   filterCards();
 }
 
@@ -853,17 +938,7 @@ function setCatalog(rawCatalog,meta,source){
     applySavedFilters(persistedFilters);
     populateFilters();
   }
-  updateCount();
-  updateCatalogAttribution();
   filterCards();
-  if(!catalogLoaded){
-    const t=I18N[currentLang]||I18N.en;
-    document.getElementById('status').textContent=t.catalogEmpty;
-    return;
-  }
-  if(!document.getElementById('status').textContent || document.getElementById('status').textContent===I18N[currentLang].loadingCatalog || document.getElementById('status').textContent===I18N[currentLang].refreshingCatalog){
-    document.getElementById('status').textContent=`${I18N[currentLang].loadedCatalog} ${catalogMeta.entryCount} · ${catalogMeta.source}`;
-  }
 }
 
 function requestCatalog(){
@@ -984,7 +1059,7 @@ function scheduleScopeRetries(){
 window.fusionJavaScriptHandler={
   handle:function(action,data){
     if(action==='status') document.getElementById('status').textContent=data;
-    if(action==='setLang'){
+      if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
       if(!catalogLoaded){
         setTimeout(()=>{ requestCatalog(); },0);
@@ -1039,10 +1114,10 @@ window.fusionJavaScriptHandler={
 
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
+removeLegacyColorWheelUi();
 updateColorFilterUiState();
 updateColorDistanceLabel();
 updateColorRangePreview();
-document.getElementById('status').textContent=I18N[currentLang].loadingCatalog;
 requestLanguage();
 scheduleLanguageRetries();
 requestCatalog();

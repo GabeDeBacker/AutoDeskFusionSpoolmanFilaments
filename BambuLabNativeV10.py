@@ -5,6 +5,7 @@ import os
 import re
 import sys
 import time
+import traceback
 import importlib.util
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -40,17 +41,23 @@ _getText, _ensure_lang = _load_i18n_symbols()
 PALETTE_ID='BambuLabNativePaletteV10'
 TOOLS_PALETTE_ID='BambuLabNativeToolsPaletteV10'
 SETTINGS_PALETTE_ID='BambuLabNativeSettingsPaletteV10'
+DEBUG_PALETTE_ID='BambuLabNativeDebugPaletteV10'
 CMD_ID='BambuLabNativeV10'
 handlers=[]
 ACTIVE_SCOPE='body'
+DEBUG_LOGS=[]
+DEBUG_ERRORS=[]
 
 CATALOG_CACHE_URL='https://donkie.github.io/SpoolmanDB/filaments.json'
 CATALOG_CACHE_FILE='filament_catalog_cache.json'
 UI_STATE_FILE='ui_state.json'
 CATALOG_CACHE_TTL_SECONDS=7*24*60*60
 HEX_RE=re.compile(r'^[0-9A-Fa-f]{6}$')
-MAX_COLOR_FILTER_TOLERANCE=30
-DEFAULT_COLOR_FILTER_TOLERANCE=12
+MAX_COLOR_FILTER_TOLERANCE=100
+DEFAULT_COLOR_FILTER_TOLERANCE=10
+DEFAULT_HUE_TOLERANCE=10
+DEFAULT_SAT_TOLERANCE=10
+DEFAULT_VAL_TOLERANCE=10
 
 
 def _get_palette(ui,palette_id):
@@ -63,15 +70,109 @@ def _send_to_palette(ui,palette_id,action,data):
         p.sendInfoToHTML(action,data)
 
 
+def _send_catalog_to_main_palette(ui, payload):
+    if not isinstance(payload, dict):
+        payload = _build_catalog_payload(force_refresh=False)
+    _send_to_palette(ui,PALETTE_ID,'catalog',_json_text(payload))
+
+
+def _send_catalog_to_settings_palette(ui, payload):
+    if not isinstance(payload, dict):
+        payload = _build_catalog_payload(force_refresh=False)
+    _send_to_palette(ui,SETTINGS_PALETTE_ID,'catalog',_json_text(payload))
+
+
 def _broadcast_status(ui,message):
     _send_to_palette(ui,PALETTE_ID,'status',message)
     _send_to_palette(ui,TOOLS_PALETTE_ID,'status',message)
     _send_to_palette(ui,SETTINGS_PALETTE_ID,'status',message)
 
 
+def _broadcast_catalog_status(ui,message):
+    _send_to_palette(ui,TOOLS_PALETTE_ID,'status',message)
+    _send_to_palette(ui,SETTINGS_PALETTE_ID,'status',message)
+
+
+def _append_debug_entry(message, detail=None, is_error=False):
+    entry={
+        'message': str(message),
+        'detail': '' if detail is None else str(detail),
+        'timestamp': time.time()
+    }
+    if is_error:
+        DEBUG_ERRORS.append(entry)
+        DEBUG_ERRORS[:] = DEBUG_ERRORS[-200:]
+    else:
+        DEBUG_LOGS.append(entry)
+        DEBUG_LOGS[:] = DEBUG_LOGS[-200:]
+    return entry
+
+
+def _push_debug_state(ui):
+    if ui is None:
+        return
+    _send_to_palette(ui, DEBUG_PALETTE_ID, 'debug_snapshot', _json_text({'logs': DEBUG_LOGS[-50:], 'errors': DEBUG_ERRORS[-50:]}))
+
+
+def _send_debug(ui, message, detail=None):
+    if ui is None:
+        return
+    _append_debug_entry(message, detail, is_error=False)
+    _push_debug_state(ui)
+
+
+def _send_debug_error(ui, message, detail=None):
+    if ui is None:
+        return
+    _append_debug_entry(message, detail, is_error=True)
+    _push_debug_state(ui)
+
+
+def _normalize_debug_flag(value):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in ('1','true','yes','on')
+    if isinstance(value, (int,float)):
+        return bool(value)
+    return False
+
+
+def _get_debug_mode():
+    env_flag = str(os.environ.get('BAMBU_DEBUG','')).strip().lower()
+    if env_flag in ('1','true','yes','on'):
+        return True
+    return _normalize_debug_flag(_load_ui_state().get('debug', False))
+
+
+def _set_debug_mode(ui, enabled):
+    if ui is None:
+        return
+    flag = bool(enabled)
+    _send_to_palette(ui, PALETTE_ID, 'setDebugMode', '1' if flag else '0')
+    _send_to_palette(ui, TOOLS_PALETTE_ID, 'setDebugMode', '1' if flag else '0')
+    _send_to_palette(ui, SETTINGS_PALETTE_ID, 'setDebugMode', '1' if flag else '0')
+    p_debug = _get_palette(ui, DEBUG_PALETTE_ID)
+    if p_debug:
+        p_debug.isVisible = flag
+    if flag:
+        _push_debug_state(ui)
+
+
+def _save_debug_mode(enabled):
+    state = _load_ui_state()
+    state['debug'] = bool(enabled)
+    _save_ui_state(state)
+    return state['debug']
+
+
 def _ensure_palette(ui,palette_id,title,file_name,width,height):
     p=_get_palette(ui,palette_id)
     if p:
+        try:
+            p.name=title
+        except:
+            pass
         return p
     file_path=os.path.join(os.path.dirname(os.path.realpath(__file__)),file_name)
     palette_path=make_file_url(file_path)
@@ -90,6 +191,7 @@ def _ui_state_path():
 def _default_ui_state():
     return {
         'scope':'body',
+        'debug':False,
         'filters':{
             'q':'',
             'cat':'',
@@ -98,6 +200,9 @@ def _default_ui_state():
             'sort':'name',
             'cOn':'0',
             'cHex':'#4F8CFF',
+            'cHue':str(DEFAULT_HUE_TOLERANCE),
+            'cSat':str(DEFAULT_SAT_TOLERANCE),
+            'cVal':str(DEFAULT_VAL_TOLERANCE),
             'cDist':str(DEFAULT_COLOR_FILTER_TOLERANCE),
             'pageSize':'40'
         }
@@ -108,7 +213,7 @@ def _sanitize_filters(filters):
     if not isinstance(filters,dict):
         return _default_ui_state()['filters']
     out={}
-    for key in ('q','cat','mat','fin','sort','cOn','cHex','cDist','pageSize'):
+    for key in ('q','cat','mat','fin','sort','cOn','cHex','cHue','cSat','cVal','cDist','pageSize'):
         value=filters.get(key,'')
         out[key]=value if isinstance(value,str) else ''
     if out.get('sort') not in ('name','color'):
@@ -120,6 +225,12 @@ def _sanitize_filters(filters):
         out['cHex']='#'+color_hex.upper()
     else:
         out['cHex']='#4F8CFF'
+    for key, fallback in (('cHue',DEFAULT_HUE_TOLERANCE),('cSat',DEFAULT_SAT_TOLERANCE),('cVal',DEFAULT_VAL_TOLERANCE)):
+        try:
+            value=int(out.get(key) or str(fallback))
+        except ValueError:
+            value=fallback
+        out[key]=str(max(0,min(MAX_COLOR_FILTER_TOLERANCE,value)))
     try:
         distance=int(out.get('cDist') or str(DEFAULT_COLOR_FILTER_TOLERANCE))
     except ValueError:
@@ -141,6 +252,7 @@ def _load_ui_state():
     scope=loaded.get('scope')
     if scope in ('body','face','component','selected_all','all_model'):
         state['scope']=scope
+    state['debug']=_normalize_debug_flag(loaded.get('debug', False))
     state['filters']=_sanitize_filters(loaded.get('filters'))
     return state
 
@@ -151,6 +263,7 @@ def _save_ui_state(state):
         scope=state.get('scope')
         if scope in ('body','face','component','selected_all','all_model'):
             safe['scope']=scope
+        safe['debug']=_normalize_debug_flag(state.get('debug', False))
         safe['filters']=_sanitize_filters(state.get('filters'))
     _write_json_file(_ui_state_path(),safe)
     return safe
@@ -805,6 +918,27 @@ class PH(adsk.core.HTMLEventHandler):
                 _send_to_palette(ui,PALETTE_ID,'setLang',lang)
                 _send_to_palette(ui,TOOLS_PALETTE_ID,'setLang',lang)
                 _send_to_palette(ui,SETTINGS_PALETTE_ID,'setLang',lang)
+                _set_debug_mode(ui, _get_debug_mode())
+                _send_debug(ui, 'request_lang', f"lang={lang}")
+                adsk.doEvents()
+                return
+
+            if eventArgs.action=='open_debug_palette':
+                p_debug = _ensure_palette(ui,DEBUG_PALETTE_ID,'Filaments Debug','palette_debug.html',360,420)
+                p_debug.isVisible = True
+                _push_debug_state(ui)
+                adsk.doEvents()
+                return
+
+            if eventArgs.action=='clear_debug_log':
+                DEBUG_LOGS.clear(); DEBUG_ERRORS.clear();
+                _send_to_palette(ui, DEBUG_PALETTE_ID, 'debug_cleared', '')
+                _push_debug_state(ui)
+                adsk.doEvents()
+                return
+
+            if eventArgs.action=='request_debug_snapshot':
+                _push_debug_state(ui)
                 adsk.doEvents()
                 return
 
@@ -819,12 +953,31 @@ class PH(adsk.core.HTMLEventHandler):
                 p_settings=_ensure_palette(ui,SETTINGS_PALETTE_ID,_getText('palette_settings_title'),'palette_settings.html',300,280)
                 p_settings.isVisible=True
                 _send_to_palette(ui,SETTINGS_PALETTE_ID,'setLang',_ensure_lang())
+                _send_to_palette(ui,SETTINGS_PALETTE_ID,'setDebugMode','1' if _get_debug_mode() else '0')
                 adsk.doEvents()
                 return
 
             if eventArgs.action=='request_scope':
                 _send_to_palette(ui,PALETTE_ID,'setScope',ACTIVE_SCOPE)
                 _send_to_palette(ui,TOOLS_PALETTE_ID,'setScope',ACTIVE_SCOPE)
+                _set_debug_mode(ui, _get_debug_mode())
+                adsk.doEvents()
+                return
+
+            if eventArgs.action=='set_debug_mode':
+                enabled = _normalize_debug_flag(eventArgs.data)
+                _save_debug_mode(enabled)
+                if enabled:
+                    _send_debug(ui, 'debug mode enabled', 'debug palette active')
+                    p_debug = _ensure_palette(ui,DEBUG_PALETTE_ID,'Filaments Debug','palette_debug.html',360,420)
+                    p_debug.isVisible = True
+                else:
+                    p_debug = _get_palette(ui,DEBUG_PALETTE_ID)
+                    if p_debug:
+                        p_debug.isVisible = False
+                    _send_debug(ui, 'debug mode disabled', '')
+                _set_debug_mode(ui, enabled)
+                _push_debug_state(ui)
                 adsk.doEvents()
                 return
 
@@ -854,14 +1007,35 @@ class PH(adsk.core.HTMLEventHandler):
 
             if eventArgs.action=='request_catalog':
                 payload=_build_catalog_payload(force_refresh=False)
-                _send_to_palette(ui,PALETTE_ID,'catalog',_json_text(payload))
+                _send_catalog_to_main_palette(ui, payload)
+                if _get_debug_mode():
+                    _send_debug(ui, 'request_catalog', f"source={payload.get('source') or 'unknown'} entries={len(payload.get('entries') or [])}")
+                adsk.doEvents()
+                return
+
+            if eventArgs.action=='request_catalog_settings':
+                payload=_build_catalog_payload(force_refresh=False)
+                _send_catalog_to_settings_palette(ui, payload)
+                if _get_debug_mode():
+                    _send_debug(ui, 'request_catalog_settings', f"source={payload.get('source') or 'unknown'} entries={len(payload.get('entries') or [])}")
                 adsk.doEvents()
                 return
 
             if eventArgs.action=='request_catalog_force':
                 payload=_build_catalog_payload(force_refresh=True)
-                _send_to_palette(ui,PALETTE_ID,'catalog',_json_text(payload))
-                _broadcast_status(ui,_catalog_update_status_message(payload))
+                _send_catalog_to_main_palette(ui, payload)
+                _broadcast_catalog_status(ui,_catalog_update_status_message(payload))
+                if _get_debug_mode():
+                    _send_debug(ui, 'request_catalog_force', f"source={payload.get('source') or 'unknown'} entries={len(payload.get('entries') or [])}")
+                adsk.doEvents()
+                return
+
+            if eventArgs.action=='request_catalog_force_settings':
+                payload=_build_catalog_payload(force_refresh=True)
+                _send_catalog_to_settings_palette(ui, payload)
+                _send_to_palette(ui,SETTINGS_PALETTE_ID,'status',_catalog_update_status_message(payload))
+                if _get_debug_mode():
+                    _send_debug(ui, 'request_catalog_force_settings', f"source={payload.get('source') or 'unknown'} entries={len(payload.get('entries') or [])}")
                 adsk.doEvents()
                 return
 
@@ -869,6 +1043,8 @@ class PH(adsk.core.HTMLEventHandler):
                 kind='f3d' if eventArgs.action=='export_parent_f3d' else ('3mf' if eventArgs.action=='export_parent_3mf' else 'bundle')
                 _, msg = export_parent(kind)
                 _broadcast_status(ui,msg)
+                if _get_debug_mode():
+                    _send_debug(ui, 'export_parent', f"kind={kind} message={msg}")
                 adsk.doEvents()
                 return
 
@@ -884,7 +1060,12 @@ class PH(adsk.core.HTMLEventHandler):
             adsk.doEvents()
             # Restore the cached selection after applying the appearance.
             adsk.core.Application.get().userInterface.activeSelections.all = sel
-        except:
+        except Exception as ex:
+            tb = traceback.format_exc()
+            if _get_debug_mode():
+                _send_debug_error(ui, 'palette event exception', tb)
+            else:
+                _append_debug_entry('palette event exception', tb, is_error=True)
             pass
 
 class CH(adsk.core.CommandCreatedEventHandler):
@@ -902,10 +1083,13 @@ class CH(adsk.core.CommandCreatedEventHandler):
             if not next_visible:
                 p_tools=_get_palette(ui,TOOLS_PALETTE_ID)
                 p_settings=_get_palette(ui,SETTINGS_PALETTE_ID)
+                p_debug=_get_palette(ui,DEBUG_PALETTE_ID)
                 if p_tools:
                     p_tools.isVisible=False
                 if p_settings:
                     p_settings.isVisible=False
+                if p_debug:
+                    p_debug.isVisible=False
 
 def run(context):
     global ACTIVE_SCOPE
@@ -951,6 +1135,9 @@ def stop(context):
         p_settings=ui.palettes.itemById(SETTINGS_PALETTE_ID)
         if p_settings:
             p_settings.deleteMe()
+        p_debug=ui.palettes.itemById(DEBUG_PALETTE_ID)
+        if p_debug:
+            p_debug.deleteMe()
         panel=ui.allToolbarPanels.itemById('SolidModifyPanel')
         if panel:
             c=panel.controls.itemById(CMD_ID)
