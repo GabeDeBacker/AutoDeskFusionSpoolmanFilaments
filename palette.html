@@ -593,6 +593,7 @@ function applyColor(e,btn){
   activeKey=colorKey(e);
   document.getElementById('status').textContent=I18N[currentLang].applying+displayMaterial(e)+' · '+displayColor(e);
   const payload={
+    manufacturer:e.manufacturer,
     material:e.material,
     color_name:e.color_name,
     hex:e.hex,

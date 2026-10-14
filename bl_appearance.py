@@ -119,19 +119,14 @@ def set_native_copied_color(appearance, filament):
 def get_or_create_appearance(design, filament, get_text=None):
     """Return an existing or newly created design appearance for a filament."""
     manufacturer = str(filament.get('manufacturer') or '').strip()
-    prefix = (
-        get_text('appearance_name_prefix')
-        if callable(get_text)
-        else 'SpoolmanDB Filament'
-    )
     if manufacturer:
         name = (
-            f"{prefix} | {manufacturer} | {filament['material']} | "
+            f"{manufacturer} | {filament['material']} | "
             f"{filament['color_name']} | {filament['hex']}"
         )
     else:
         name = (
-            f"{prefix} | {filament['material']} | "
+            f"{filament['material']} | "
             f"{filament['color_name']} | {filament['hex']}"
         )
     existing = design.appearances.itemByName(name)

@@ -40,8 +40,9 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
 
-from bl_common import json_text, make_file_url
+from bl_common import addon_dir, json_text, make_file_url
 from bl_ui_state import (
+    UI_STATE_FILE,
     get_saved_filters,
     load_saved_scope,
     load_ui_state,
@@ -163,7 +164,7 @@ def _ensure_palette(ui, palette_id, title, file_name, width, height):
         palette_id,
         title,
         palette_path,
-        True,
+        False,
         True,
         True,
         width,
@@ -431,7 +432,6 @@ class CH(adsk.core.CommandCreatedEventHandler):
                 520,
                 720,
             )
-            p_catalog.isVisible = True
             adsk.doEvents()
         else:
             next_visible = not p_catalog.isVisible
@@ -455,18 +455,26 @@ def run(_context):
     ACTIVE_SCOPE = load_saved_scope()
     app = adsk.core.Application.get()
     ui = app.userInterface
+    panel = ui.allToolbarPanels.itemById('SolidModifyPanel')
+    if panel:
+        existing_control = panel.controls.itemById(CMD_ID)
+        if existing_control:
+            existing_control.deleteMe()
     d = ui.commandDefinitions.itemById(CMD_ID)
-    if not d:
-        d = ui.commandDefinitions.addButtonDefinition(
-            CMD_ID,
-            _getText('command_name'),
-            _getText('command_description'),
-        )
+    if d:
+        d.deleteMe()
+    resource_dir = os.path.join(addon_dir(), 'resources', 'spool')
+    d = ui.commandDefinitions.addButtonDefinition(
+        CMD_ID,
+        _getText('command_name'),
+        _getText('command_description'),
+        resource_dir
+    )
     h = CH()
+    d.toolClipFilename = os.path.join(addon_dir(), 'resources', 'spool', '32x32@2.png')
     d.commandCreated.add(h)
     handlers.append(h)
 
-    panel = ui.allToolbarPanels.itemById('SolidModifyPanel')
     if panel and not panel.controls.itemById(CMD_ID):
         c = panel.controls.addCommand(d)
         try:

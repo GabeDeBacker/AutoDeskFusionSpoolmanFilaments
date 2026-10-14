@@ -50,8 +50,7 @@ I18N = {
         'palette_settings_title': 'Filament Settings',
         'command_name': 'SpoolmanDB Filament Colors',
         'command_description': (
-            'Filament appearances generated from the SpoolmanDB catalog '
-            'using Autodesk library copies. Suggested shortcut: Cmd+B.'
+            'Apply filament appearances generated from the SpoolmanDB catalog.'
         )
     },
     'fr': {
