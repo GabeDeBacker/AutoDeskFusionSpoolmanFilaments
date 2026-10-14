@@ -1,10 +1,59 @@
 :root {
   color-scheme: dark;
-  --bg: #202428;
-  --panel: #2a2f34;
-  --border: #41484f;
-  --text: #f3f3f3;
-  --muted: #aab1b7;
+  --bg: #3f495c;
+  --panel: #364052;
+  --panel-alt: #323b4c;
+  --border: #59667a;
+  --text: #eef2f8;
+  --muted: #c2cbda;
+  --button-bg: #3a4456;
+  --button-hover-border: #8f9db1;
+  --overlay-soft: rgba(8,12,18,0.22);
+  --debug-accent: #f4d38d;
+  --debug-error: #ffb0a1;
+  --debug-log-text: #f9d9a3;
+  --debug-panel-border: #6c4f1e;
+  --debug-panel-bg: rgba(108, 79, 30, 0.24);
+  --debug-clear-border: #8a6b35;
+  --debug-clear-bg: rgba(14, 19, 27, 0.34);
+  --wheel-inner-ring: rgba(255,255,255,.22);
+  --wheel-dim: rgba(18,26,39,.42);
+  --wheel-center-border: #fff;
+  --wheel-center-shadow: rgba(0,0,0,.42);
+  --card-hover-border: #97a7be;
+  --swatch-border: #ffffff45;
+  --badge-border: #ffffff33;
+  --badge-bg: #ffffff15;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --bg: #f3f5f7;
+    --panel: #ffffff;
+    --panel-alt: #eef2f6;
+    --border: #c8d0d9;
+    --text: #1f2730;
+    --muted: #5e6a78;
+    --button-bg: #e6ebf1;
+    --button-hover-border: #9aa8b8;
+    --overlay-soft: rgba(0,0,0,0.06);
+    --debug-accent: #7a5600;
+    --debug-error: #b24c3a;
+    --debug-log-text: #6d4d00;
+    --debug-panel-border: #c59e57;
+    --debug-panel-bg: rgba(197, 158, 87, 0.18);
+    --debug-clear-border: #b8914c;
+    --debug-clear-bg: rgba(184,145,76,0.14);
+    --wheel-inner-ring: rgba(255,255,255,.45);
+    --wheel-dim: rgba(255,255,255,.28);
+    --wheel-center-border: #fff;
+    --wheel-center-shadow: rgba(0,0,0,.25);
+    --card-hover-border: #8f9bad;
+    --swatch-border: #00000035;
+    --badge-border: #00000020;
+    --badge-bg: #00000010;
+  }
 }
 
 * {
@@ -55,7 +104,7 @@ h1 {
   padding: 0;
   border-radius: 6px;
   border: 1px solid var(--border);
-  background: #343a40;
+  background: var(--button-bg);
   color: var(--text);
   font-size: 13px;
   line-height: 1;
@@ -63,7 +112,7 @@ h1 {
 }
 
 .iconbtn:hover {
-  border-color: #8b9298;
+  border-color: var(--button-hover-border);
 }
 
 .count {
@@ -82,7 +131,7 @@ h1 {
 .colorfilter {
   border: 1px solid var(--border);
   border-radius: 7px;
-  background: #262b30;
+  background: var(--panel-alt);
   padding: 6px 8px;
   margin-bottom: 7px;
 }
@@ -97,14 +146,14 @@ h1 {
 .debug-section {
   border: 1px solid var(--border);
   border-radius: 7px;
-  background: rgba(0,0,0,0.12);
+  background: var(--overlay-soft);
   padding: 6px 8px;
 }
 
 .debug-section h2 {
   margin: 0 0 6px;
   font-size: 11px;
-  color: #f4d38d;
+  color: var(--debug-accent);
 }
 
 .debug-list {
@@ -118,7 +167,7 @@ h1 {
 }
 
 .debug-list-error {
-  color: #ffb0a1;
+  color: var(--debug-error);
 }
 
 .debug-empty {
@@ -133,9 +182,9 @@ h1 {
 
 .debug-panel {
   margin-top: 8px;
-  border: 1px solid #6c4f1e;
+  border: 1px solid var(--debug-panel-border);
   border-radius: 7px;
-  background: rgba(108, 79, 30, 0.18);
+  background: var(--debug-panel-bg);
   padding: 6px 8px;
 }
 
@@ -146,17 +195,17 @@ h1 {
   gap: 8px;
   font-size: 10px;
   font-weight: 600;
-  color: #f4d38d;
+  color: var(--debug-accent);
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .debug-clear {
-  border: 1px solid #8a6b35;
+  border: 1px solid var(--debug-clear-border);
   border-radius: 5px;
-  background: rgba(0,0,0,0.15);
-  color: #f4d38d;
+  background: var(--debug-clear-bg);
+  color: var(--debug-accent);
   padding: 3px 6px;
   font-size: 9px;
   cursor: pointer;
@@ -164,10 +213,10 @@ h1 {
 
 .debug-clear-btn {
   margin: 0 10px 10px;
-  border: 1px solid #8a6b35;
+  border: 1px solid var(--debug-clear-border);
   border-radius: 5px;
-  background: rgba(0,0,0,0.15);
-  color: #f4d38d;
+  background: var(--debug-clear-bg);
+  color: var(--debug-accent);
   padding: 5px 8px;
   font-size: 9px;
   cursor: pointer;
@@ -181,13 +230,13 @@ h1 {
   gap: 4px;
   font-size: 9px;
   line-height: 1.35;
-  color: #f9d9a3;
+  color: var(--debug-log-text);
 }
 
 .debug-entry {
   padding: 2px 4px;
   border-radius: 4px;
-  background: rgba(0,0,0,0.12);
+  background: var(--overlay-soft);
   word-break: break-word;
 }
 
@@ -274,7 +323,7 @@ h1 {
     hsl(300 100% 50%),
     hsl(360 100% 50%)
   );
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.15);
+  box-shadow: inset 0 0 0 1px var(--wheel-inner-ring);
   cursor: pointer;
   user-select: none;
   margin: 0 auto;
@@ -284,7 +333,7 @@ h1 {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: rgba(0,0,0,.5);
+  background: var(--wheel-dim);
 }
 
 .colorwheel-allowed {
@@ -300,8 +349,8 @@ h1 {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+  border: 2px solid var(--wheel-center-border);
+  box-shadow: 0 0 0 1px var(--wheel-center-shadow);
   transform: translate(-50%,-50%);
 }
 
@@ -337,7 +386,7 @@ select {
   margin: 10px 10px 0;
   border: 1px solid var(--border);
   border-radius: 7px;
-  background: #262b30;
+  background: var(--panel-alt);
   padding: 8px;
 }
 
@@ -436,7 +485,7 @@ select {
   padding: 0;
   border-radius: 6px;
   border: 1px solid var(--border);
-  background: #343a40;
+  background: var(--button-bg);
   color: var(--text);
   cursor: pointer;
   font-size: 12px;
@@ -463,13 +512,13 @@ select {
   padding: 8px;
   border-radius: 7px;
   border: 1px solid var(--border);
-  background: #343a40;
+  background: var(--button-bg);
   color: var(--text);
   cursor: pointer;
 }
 
 .parentbtn:hover {
-  border-color: #8b9298;
+  border-color: var(--button-hover-border);
 }
 
 .grid {
@@ -496,7 +545,7 @@ select {
 }
 
 .card:hover {
-  border-color: #858b90;
+  border-color: var(--card-hover-border);
 }
 
 .card.active {
@@ -508,7 +557,7 @@ select {
   height: 40px;
   min-width: 40px;
   border-radius: 7px;
-  border: 1px solid #ffffff45;
+  border: 1px solid var(--swatch-border);
   background-size: 100% 100%;
 }
 
@@ -539,8 +588,8 @@ select {
   right: 4px;
   top: 3px;
   font-size: 6px;
-  border: 1px solid #ffffff33;
-  background: #ffffff15;
+  border: 1px solid var(--badge-border);
+  background: var(--badge-bg);
   padding: 1px 3px;
   border-radius: 3px;
 }
