@@ -114,7 +114,7 @@ def load_ui_state():
     if not isinstance(loaded, dict):
         return state
     scope = loaded.get('scope')
-    if scope in ('body', 'face', 'component', 'selected_all', 'all_model'):
+    if scope in ('body', 'face'):
         state['scope'] = scope
     state['debug'] = normalize_debug_flag(loaded.get('debug', False))
     state['filters'] = sanitize_filters(loaded.get('filters'))
@@ -126,7 +126,7 @@ def save_ui_state(state):
     safe = default_ui_state()
     if isinstance(state, dict):
         scope = state.get('scope')
-        if scope in ('body', 'face', 'component', 'selected_all', 'all_model'):
+        if scope in ('body', 'face'):
             safe['scope'] = scope
         safe['debug'] = normalize_debug_flag(state.get('debug', False))
         safe['filters'] = sanitize_filters(state.get('filters'))
@@ -154,6 +154,6 @@ def load_saved_scope():
 def save_scope(scope):
     """Persist a valid apply scope value."""
     state = load_ui_state()
-    if scope in ('body', 'face', 'component', 'selected_all', 'all_model'):
+    if scope in ('body', 'face'):
         state['scope'] = scope
     save_ui_state(state)

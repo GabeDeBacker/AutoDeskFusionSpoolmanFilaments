@@ -6,7 +6,7 @@
 <select id="mat" onchange="onFilterChange()"></select>
 <select id="finish" onchange="onFilterChange()"></select>
 <select id="sort" onchange="onFilterChange()"></select>
-<select id="scope" onchange="setScopeFromUi()"></select>
+<div id="scopeGroup" class="scope-radio-group" role="radiogroup" aria-label="Apply scope"></div>
 </div>
 <div class="colorfilter">
   <label class="colorfilter-toggle">
@@ -65,7 +65,7 @@
 <script>
 const FINISH_ORDER=['translucent','multi','glow','sparkle','metallic','wood','fiber','standard','matte','silk'];
 const FINISH_BADGE={glow:'GLOW',sparkle:'SPARKLE',metallic:'METALLIC',wood:'WOOD',fiber:'FIBER'};
-const SCOPE_OPTIONS=['body','face','component','selected_all','all_model'];
+const SCOPE_OPTIONS=['body','face'];
 const PAGE_SIZE_OPTIONS=[20,40,80,120,200];
 const DEFAULT_PAGE_SIZE=40;
 const DEFAULT_COLOR_FILTER_HEX='#4F8CFF';
@@ -275,27 +275,47 @@ function buildScopeOptions(){
   const t=I18N[currentLang]||I18N.en;
   const labels={
     body:t.scopeBody,
-    face:t.scopeFace,
-    component:t.scopeComponent,
-    selected_all:t.scopeSelected,
-    all_model:t.scopeModel
+    face:t.scopeFace
   };
-  const scope=document.getElementById('scope');
-  const prev=currentScope||scope.value||'body';
-  scope.innerHTML='';
-  SCOPE_OPTIONS.forEach(k=>{
-    const o=document.createElement('option');
-    o.value=k;
-    o.textContent=labels[k]||k;
-    scope.appendChild(o);
+  const scopeGroup=document.getElementById('scopeGroup');
+  const prev=currentScope||'body';
+  scopeGroup.innerHTML='';
+  const title=document.createElement('span');
+  title.id='scopeLabel';
+  title.className='scope-radio-title';
+  title.textContent=t.scopeLabel;
+  scopeGroup.appendChild(title);
+  SCOPE_OPTIONS.forEach((k)=>{
+    const id=`scope-${k}`;
+    const label=document.createElement('label');
+    label.className='scope-radio-option';
+    label.htmlFor=id;
+
+    const input=document.createElement('input');
+    input.type='radio';
+    input.name='scope';
+    input.id=id;
+    input.value=k;
+    input.checked=k===prev;
+    input.addEventListener('change',()=>setScopeFromUi(k));
+
+    const text=document.createElement('span');
+    text.textContent=labels[k]||k;
+
+    label.appendChild(input);
+    label.appendChild(text);
+    scopeGroup.appendChild(label);
   });
   currentScope=SCOPE_OPTIONS.includes(prev)?prev:'body';
-  scope.value=currentScope;
+  const active=document.querySelector(`input[name="scope"][value="${currentScope}"]`);
+  if(active) active.checked=true;
 }
 
-function setScopeFromUi(){
-  const scope=document.getElementById('scope').value;
-  currentScope=SCOPE_OPTIONS.includes(scope)?scope:'body';
+function setScopeFromUi(nextScope){
+  const selected=typeof nextScope==='string'
+    ? nextScope
+    : ((document.querySelector('input[name="scope"]:checked')||{}).value||'body');
+  currentScope=SCOPE_OPTIONS.includes(selected)?selected:'body';
   try{
     adsk.fusionSendData('set_scope',currentScope);
   }catch(_){
@@ -1105,8 +1125,8 @@ window.fusionJavaScriptHandler={
     if(action==='setScope'){
       const scope=(data||'').toString();
       currentScope=SCOPE_OPTIONS.includes(scope)?scope:'body';
-      const el=document.getElementById('scope');
-      if(el) el.value=currentScope;
+      const el=document.querySelector(`input[name="scope"][value="${currentScope}"]`);
+      if(el) el.checked=true;
     }
     return 'OK';
   }

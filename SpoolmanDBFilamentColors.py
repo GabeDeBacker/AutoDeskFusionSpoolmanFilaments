@@ -68,6 +68,17 @@ ACTIVE_SCOPE = 'body'
 DEBUG = DebugController(load_ui_state, save_ui_state, normalize_debug_flag)
 
 
+def _create_appearance(design, filament):
+    """Call appearance factory with compatibility for older 2-arg signatures."""
+    try:
+        return get_or_create_appearance(design, filament, _getText)
+    except TypeError as exc:
+        message = str(exc)
+        if not message.startswith('get_or_create_appearance() takes'):
+            raise
+        return get_or_create_appearance(design, filament)
+
+
 def _get_palette(ui, palette_id):
     """Return palette by ID from Fusion UI."""
     return ui.palettes.itemById(palette_id)
@@ -279,7 +290,7 @@ class PH(adsk.core.HTMLEventHandler):
 
             if eventArgs.action == 'set_scope':
                 scope = (eventArgs.data or '').strip()
-                if scope in ('body', 'face', 'component', 'selected_all', 'all_model'):
+                if scope in ('body', 'face'):
                     ACTIVE_SCOPE = scope
                     save_scope(scope)
                 _send_to_palette(ui, PALETTE_ID, 'setScope', ACTIVE_SCOPE)
@@ -382,7 +393,7 @@ class PH(adsk.core.HTMLEventHandler):
             sel = adsk.core.Application.get().userInterface.activeSelections.all
             design = adsk.fusion.Design.cast(app.activeProduct)
             filament = json.loads(eventArgs.data)
-            appearance = get_or_create_appearance(design, filament, _getText)
+            appearance = _create_appearance(design, filament)
             msg = (
                 apply_selection(appearance, ACTIVE_SCOPE, sel, _getText)
                 if appearance

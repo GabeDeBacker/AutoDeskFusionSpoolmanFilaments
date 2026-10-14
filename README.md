@@ -16,7 +16,7 @@ Open-source **Autodesk Fusion** add-in to quickly apply filament colors to your 
 - Translucent material handling
 - Visual handling of gradients and multi-colors
 - Appearances based on native Autodesk appearances
-- Apply to a face, body, component, selection, or the entire visible model
+- Apply to a body or face
 - Dedicated Fusion command
 - Customizable keyboard shortcut, e.g. `⌘B` on macOS
 - Full model export to `.f3d` and `.3mf`
@@ -51,7 +51,7 @@ Support for PLA, Support for PLA/PETG, Support for ABS, Support for PA/PET, PVA.
 
 ## Usage
 
-1. Select a face, body, or component.
+1. Select a face or body.
 2. Choose the application level in the panel.
 3. Search for a filament.
 4. Click its color.
@@ -68,9 +68,6 @@ SpoolmanDB Filament | Example Manufacturer | PLA Basic | Red | #C12E1F
 | --- | --- |
 | Face(s) | Applies only to selected faces |
 | Body / object | Applies to the selected body |
-| Entire component | Applies to all bodies in the component |
-| Entire selection | Applies to all selected items |
-| Entire visible model | Applies to all visible bodies |
 
 ## Keyboard shortcut
 
@@ -223,7 +220,7 @@ See `LICENSE`.
 
 ## Author
 
-Created and maintained by **Gabriel Fourier** ([GAb0222](https://github.com/GAb0222)).
+Created and maintained by **Gabriel DeBacker** ([GAb0222](https://github.com/GAb0222)).
 
 ## Trademarks
 

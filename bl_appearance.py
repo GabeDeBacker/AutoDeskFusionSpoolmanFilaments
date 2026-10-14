@@ -5,7 +5,6 @@ import adsk.fusion
 
 FUSION_API_ERRORS = (RuntimeError, AttributeError, TypeError, ValueError, IndexError)
 
-
 def color_from_hex(hex_value, alpha=255):
     """Create a Fusion ``Color`` from a ``#RRGGBB`` string."""
     h = hex_value.lstrip('#')
@@ -151,63 +150,13 @@ def get_or_create_appearance(design, filament, get_text=None):
         return None
 
 
-def all_visible_bodies(design):
-    """Collect visible root and occurrence bodies from the active design."""
-    bodies = []
-    try:
-        root = design.rootComponent
-        for i in range(root.bRepBodies.count):
-            body = root.bRepBodies.item(i)
-            try:
-                if body.isVisible:
-                    bodies.append(body)
-            except FUSION_API_ERRORS:
-                bodies.append(body)
-        occs = root.allOccurrences
-        for i in range(occs.count):
-            occ = occs.item(i)
-            try:
-                if not occ.isVisible:
-                    continue
-            except FUSION_API_ERRORS:
-                pass
-            comp = occ.component
-            for j in range(comp.bRepBodies.count):
-                try:
-                    body_proxy = occ.bRepBodies.item(j)
-                except FUSION_API_ERRORS:
-                    body_proxy = None
-                if body_proxy:
-                    try:
-                        if body_proxy.isVisible:
-                            bodies.append(body_proxy)
-                    except FUSION_API_ERRORS:
-                        bodies.append(body_proxy)
-    except FUSION_API_ERRORS:
-        pass
-    return bodies
-
-
-def apply_selection(appearance, scope='auto', selection=None, get_text=None):
-    """Apply an appearance to selected entities according to requested scope."""
+def apply_selection(appearance, scope='body', selection=None, get_text=None):
+    """Apply an appearance to selected entities using body or face scope."""
     app = adsk.core.Application.get()
     ui = app.userInterface
-    design = adsk.fusion.Design.cast(app.activeProduct)
     active_selection = selection or ui.activeSelections
+    active_scope = scope if scope in ('body', 'face') else 'body'
     count = 0
-
-    if scope == 'all_model':
-        for body in all_visible_bodies(design):
-            try:
-                body.appearance = appearance
-                count += 1
-            except FUSION_API_ERRORS:
-                pass
-        return (
-            get_text('apply_all_model_success', n=count)
-            if count
-            else get_text('apply_all_model_none')
-        )
 
     if active_selection.count == 0:
         return get_text('select_prompt')
@@ -215,11 +164,11 @@ def apply_selection(appearance, scope='auto', selection=None, get_text=None):
     for i in range(active_selection.count):
         entity = active_selection.item(i)
         try:
-            if scope == 'face':
+            if active_scope == 'face':
                 if isinstance(entity, adsk.fusion.BRepFace):
                     entity.appearance = appearance
                     count += 1
-            elif scope == 'body':
+            else:
                 if isinstance(entity, adsk.fusion.BRepBody):
                     entity.appearance = appearance
                     count += 1
@@ -229,70 +178,17 @@ def apply_selection(appearance, scope='auto', selection=None, get_text=None):
                         count += 1
                     except FUSION_API_ERRORS:
                         pass
-            elif scope == 'component':
-                if isinstance(entity, adsk.fusion.Occurrence):
-                    try:
-                        for j in range(entity.bRepBodies.count):
-                            entity.bRepBodies.item(j).appearance = appearance
-                            count += 1
-                    except FUSION_API_ERRORS:
-                        comp = entity.component
-                        for j in range(comp.bRepBodies.count):
-                            comp.bRepBodies.item(j).appearance = appearance
-                            count += 1
-                elif isinstance(entity, adsk.fusion.Component):
-                    for j in range(entity.bRepBodies.count):
-                        entity.bRepBodies.item(j).appearance = appearance
-                        count += 1
-                elif isinstance(entity, adsk.fusion.BRepBody):
-                    try:
-                        comp = entity.parentComponent
-                        for j in range(comp.bRepBodies.count):
-                            comp.bRepBodies.item(j).appearance = appearance
-                            count += 1
-                    except FUSION_API_ERRORS:
-                        entity.appearance = appearance
-                        count += 1
-            elif scope == 'selected_all':
-                if isinstance(entity, adsk.fusion.BRepFace):
-                    entity.appearance = appearance
-                    count += 1
-                elif isinstance(entity, adsk.fusion.BRepBody):
-                    entity.appearance = appearance
-                    count += 1
-                elif isinstance(entity, adsk.fusion.Occurrence):
-                    for j in range(entity.bRepBodies.count):
-                        entity.bRepBodies.item(j).appearance = appearance
-                        count += 1
-                elif isinstance(entity, adsk.fusion.Component):
-                    for j in range(entity.bRepBodies.count):
-                        entity.bRepBodies.item(j).appearance = appearance
-                        count += 1
-            else:
-                if isinstance(
-                    entity,
-                    (adsk.fusion.BRepBody, adsk.fusion.BRepFace, adsk.fusion.Occurrence),
-                ):
-                    entity.appearance = appearance
-                    count += 1
-                elif isinstance(entity, adsk.fusion.Component):
-                    for j in range(entity.bRepBodies.count):
-                        entity.bRepBodies.item(j).appearance = appearance
-                        count += 1
         except FUSION_API_ERRORS:
             pass
 
     labels = {
         'face': get_text('label_face'),
         'body': get_text('label_body'),
-        'component': get_text('label_component'),
-        'selected_all': get_text('label_selected_all'),
-        'auto': get_text('label_auto'),
     }
     if count:
         return get_text(
             'apply_scope_success',
             n=count,
-            label=labels.get(scope, get_text('label_auto')),
+            label=labels.get(active_scope, get_text('label_body')),
         )
     return get_text('selection_mode_mismatch')

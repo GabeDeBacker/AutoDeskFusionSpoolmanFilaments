@@ -16,7 +16,7 @@ Complément open source pour **Autodesk Fusion** permettant d'appliquer rapideme
 - Gestion des matériaux translucides
 - Gestion visuelle des gradients et multicolores
 - Apparences basées sur des apparences natives Autodesk
-- Application à une face, un corps, un composant, une sélection ou tout le modèle visible
+- Application à une face ou un corps
 - Commande Fusion dédiée
 - Raccourci clavier personnalisable, par exemple `⌘B` sur macOS
 - Export du modèle complet en `.f3d` et `.3mf`
@@ -51,7 +51,7 @@ Support pour PLA, Support pour PLA/PETG, Support pour ABS, Support pour PA/PET, 
 
 ## Utilisation
 
-1. Sélectionnez une face, un corps ou un composant.
+1. Sélectionnez une face ou un corps.
 2. Choisissez le niveau d'application dans le panneau.
 3. Recherchez un filament.
 4. Cliquez sur sa couleur.
@@ -68,9 +68,6 @@ SpoolmanDB Filament | Fabricant exemple | PLA Basic | Red | #C12E1F
 | --- | --- |
 | Face(s) | Applique uniquement aux faces sélectionnées |
 | Corps / objet | Applique au corps sélectionné |
-| Composant entier | Applique à tous les corps du composant |
-| Toute la sélection | Applique à tous les éléments sélectionnés |
-| Tout le modèle visible | Applique à tous les corps visibles |
 
 ## Raccourci clavier
 
@@ -223,7 +220,7 @@ Voir `LICENSE`.
 
 ## Auteur
 
-Créé et maintenu par **Gabriel Fourier** ([GAb0222](https://github.com/GAb0222)).
+Créé et maintenu par **Gabriel DeBacker** ([GAb0222](https://github.com/GAb0222)).
 
 ## Marques
 

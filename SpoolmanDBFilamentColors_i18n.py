@@ -18,14 +18,9 @@ FUSION_LANGUAGE_MAP = {
 
 I18N = {
     'en': {
-        'apply_all_model_success': 'Applied to {n} visible body(ies) in the model.',
-        'apply_all_model_none': 'No visible bodies found.',
-        'select_prompt': 'Select a face, body, or component first.',
+        'select_prompt': 'Select a face or body first.',
         'label_face': 'face(s)',
         'label_body': 'body/object(s)',
-        'label_component': 'component body(ies)',
-        'label_selected_all': 'selected item(s)',
-        'label_auto': 'item(s)',
         'apply_scope_success': 'Applied to {n} {label}.',
         'selection_mode_mismatch': 'Selection does not match the chosen mode.',
         'pick_folder_title': 'Choose export folder for the filament model',
@@ -60,14 +55,9 @@ I18N = {
         )
     },
     'fr': {
-        'apply_all_model_success': 'Appliqué à {n} corps visibles dans le modèle.',
-        'apply_all_model_none': 'Aucun corps visible trouvé.',
-        'select_prompt': 'Sélectionnez d’abord une face, un corps ou un composant.',
+        'select_prompt': 'Sélectionnez d’abord une face ou un corps.',
         'label_face': 'face(s)',
         'label_body': 'corps/objet(s)',
-        'label_component': 'corps de composant(s)',
-        'label_selected_all': 'élément(s) sélectionné(s)',
-        'label_auto': 'élément(s)',
         'apply_scope_success': 'Appliqué à {n} {label}.',
         'selection_mode_mismatch': 'La sélection ne correspond pas au mode choisi.',
         'pick_folder_title': 'Choisir le dossier d’export du modèle filament',
