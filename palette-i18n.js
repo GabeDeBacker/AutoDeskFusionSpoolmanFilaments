@@ -1,7 +1,7 @@
 const I18N = {
   en: {
     lang: 'en',
-    title: 'Filament Colors · NATIVE V10',
+    title: 'SpoolmanDB Filament Colors',
     palette_actions_title: 'Filament Export',
     palette_settings_title: 'Filament Settings',
     catalogSectionTitle: 'Catalog',
@@ -56,7 +56,7 @@ const I18N = {
     exportBoth: 'Export F3D + 3MF',
     debugMode: 'Debug mode',
     refreshCatalog: 'Update catalog',
-    idleStatus: 'NATIVE V10: apply colors and export the full model with its parent file.',
+    idleStatus: 'SpoolmanDB: apply colors and export the full model with its parent file.',
     loadingCatalog: 'Loading catalog (download on first run)...',
     refreshingCatalog: 'Refreshing catalog from remote source...',
     loadedCatalog: 'Catalog loaded.',
@@ -66,7 +66,7 @@ const I18N = {
   },
   fr: {
     lang: 'fr',
-    title: 'Couleurs de filaments · NATIVE V10',
+    title: 'Couleurs de filaments SpoolmanDB',
     palette_actions_title: 'Export des filaments',
     palette_settings_title: 'Paramètres des filaments',
     catalogSectionTitle: 'Catalogue',
@@ -121,7 +121,7 @@ const I18N = {
     exportBoth: 'Exporter F3D + 3MF',
     debugMode: 'Mode débogage',
     refreshCatalog: 'Mettre à jour le catalogue',
-    idleStatus: 'NATIVE V10 : applique les couleurs puis exporte le modèle complet avec son fichier parent.',
+    idleStatus: 'SpoolmanDB : applique les couleurs puis exporte le modèle complet avec son fichier parent.',
     loadingCatalog: 'Chargement du catalogue (téléchargement au premier lancement)...',
     refreshingCatalog: 'Mise à jour du catalogue depuis la source distante...',
     loadedCatalog: 'Catalogue chargé.',

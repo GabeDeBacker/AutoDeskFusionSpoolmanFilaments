@@ -1,10 +1,10 @@
 {
   "include": [
-    "BambuLabNativeV10.py"
+    "*.py"
   ],
   "typeCheckingMode": "off",
   "extraPaths": [
     "${env:APPDATA}/Autodesk/Autodesk Fusion 360/API/Python/defs"
   ],
-  "reportMissingImports": "warning"
+  "reportMissingImports": "none"
 }

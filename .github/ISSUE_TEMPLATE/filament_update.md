@@ -1,6 +1,6 @@
 ---
 name: Filament / color
-about: Add or fix a Bambu Lab filament / Ajouter ou corriger un filament Bambu Lab
+about: Add or fix a filament profile / Ajouter ou corriger un profil de filament
 title: "[FILAMENT] "
 labels: filament
 ---

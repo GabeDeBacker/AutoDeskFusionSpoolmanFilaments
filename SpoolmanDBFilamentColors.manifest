@@ -3,10 +3,10 @@
   "type": "addin",
   "author": "Gabriel Fourier",
   "description": {
-    "": "Bambu Native appearances with complete parent export to Fusion F3D and single-file 3MF."
+    "": "SpoolmanDB filament catalog add-in with complete parent export to Fusion F3D and single-file 3MF."
   },
   "supportedOS": "windows|mac",
   "editEnabled": true,
-  "version": "10.0.0",
+  "version": "1.0.0",
   "runOnStartup": true
 }

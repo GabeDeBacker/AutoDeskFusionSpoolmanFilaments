@@ -1,10 +1,10 @@
-# BambuLab Fusion Filament Colors
+# Fusion Filament Colors
 
 **Langues :** [English](README.md) · [Français](README.fr.md)
 
 Complément open source pour **Autodesk Fusion** permettant d'appliquer rapidement des couleurs de filaments à vos modèles 3D depuis un panneau visuel intégré.
 
-> Projet communautaire non officiel. Ce projet n'est ni affilié, ni approuvé, ni maintenu par Bambu Lab ou Autodesk.
+> Projet communautaire non officiel. Ce projet n'est affilié à aucun fabricant de filament ni à Autodesk.
 
 ## Fonctionnalités
 
@@ -46,7 +46,7 @@ Support pour PLA, Support pour PLA/PETG, Support pour ABS, Support pour PA/PET, 
 5. Choisissez `Script ou complément à partir de l'appareil`.
 6. Sélectionnez le dossier du complément.
 7. Ouvrez l'onglet **Compléments**.
-8. Sélectionnez **Bambu Lab Filaments**.
+8. Sélectionnez **Couleurs de filaments SpoolmanDB**.
 9. Cliquez sur **Exécuter**.
 
 ## Utilisation
@@ -59,7 +59,7 @@ Support pour PLA, Support pour PLA/PETG, Support pour ABS, Support pour PA/PET, 
 Les apparences créées utilisent un nom du type :
 
 ```text
-Bambu Native | PLA Basic | Red | #C12E1F
+SpoolmanDB Filament | Fabricant exemple | PLA Basic | Red | #C12E1F
 ```
 
 ## Niveau d'application
@@ -74,7 +74,7 @@ Bambu Native | PLA Basic | Red | #C12E1F
 
 ## Raccourci clavier
 
-Le complément crée une commande Fusion nommée `Bambu Lab Filaments`.
+Le complément crée une commande Fusion nommée `Couleurs de filaments SpoolmanDB`.
 
 Vous pouvez lui associer un raccourci, par exemple `⌘B` sur macOS.
 
@@ -120,9 +120,15 @@ Pour conserver davantage d'informations du modèle, privilégiez `.3mf` ou `.f3d
 ## Structure du projet
 
 ```text
-BambuLab-Fusion-Filament-Colors/
-├── BambuLabNativeV10.py
-├── BambuLabNativeV10.manifest
+Fusion-Filament-Colors/
+├── SpoolmanDBFilamentColors.py
+├── bl_common.py
+├── bl_ui_state.py
+├── bl_catalog.py
+├── bl_appearance.py
+├── bl_export.py
+├── bl_debug.py
+├── SpoolmanDBFilamentColors.manifest
 ├── palette.html
 ├── palette_actions.html
 ├── palette_settings.html
@@ -131,6 +137,8 @@ BambuLab-Fusion-Filament-Colors/
 ├── LICENSE
 └── .gitignore
 ```
+
+`SpoolmanDBFilamentColors.py` sert désormais de point d'entrée Fusion et de coordinateur d'événements, tandis que la logique catalogue, debug, état UI, apparences et export est répartie dans des modules dédiés pour simplifier la maintenance.
 
 ## Catalogue
 
@@ -144,7 +152,7 @@ Exemple :
 
 ```json
 {
-  "manufacturer": "Bambu Lab",
+  "manufacturer": "Fabricant exemple",
   "category": "PLA",
   "material": "PLA Basic",
   "color_name": "Red",
@@ -179,8 +187,8 @@ Le complément utilise désormais trois panneaux :
 Les contributions sont bienvenues : correction de couleurs, nouvelles gammes, améliorations UI, compatibilité Fusion, gestion des matériaux et exports.
 
 ```bash
-git clone https://github.com/GAb0222/BambuLab-Fusion-Filament-Colors.git
-cd BambuLab-Fusion-Filament-Colors
+git clone <url-de-votre-repo>.git
+cd Fusion-Filament-Colors
 git checkout -b feature/ma-modification
 ```
 
@@ -199,11 +207,11 @@ Indiquez si possible :
 ## Roadmap
 
 - amélioration des contrôles de mise à jour du catalogue distant ;
-- synchronisation avec les profils Bambu Studio ;
+- synchronisation avec les profils de slicer ;
 - favoris ;
 - historique des couleurs utilisées ;
 - rendu amélioré Silk / Sparkle / Galaxy ;
-- export avancé vers Bambu Studio ;
+- export avancé vers les slicers ;
 - palettes personnalisées ;
 - métadonnées enrichies spécifiques aux fabricants.
 
@@ -219,7 +227,7 @@ Créé et maintenu par **Gabriel Fourier** ([GAb0222](https://github.com/GAb0222
 
 ## Marques
 
-**Bambu Lab** est une marque de ses propriétaires respectifs.
+Les marques de filaments sont des marques déposées de leurs propriétaires respectifs.
 
 **Autodesk** et **Fusion** sont des marques d'Autodesk, Inc.
 
