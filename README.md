@@ -2,16 +2,16 @@
 
 **Languages:** [English](README.md) · [Français](README.fr.md)
 
-Open-source **Autodesk Fusion** add-in to quickly apply **Bambu Lab** filament colors to your 3D models from a built-in visual panel.
+Open-source **Autodesk Fusion** add-in to quickly apply filament colors to your 3D models from a built-in visual panel.
 
 > Unofficial community project. Not affiliated with, endorsed by, or maintained by Bambu Lab or Autodesk.
 
 ## Features
 
-- Visual Bambu Lab filament catalog
-- **270+** references across many product lines
+- Visual filament catalog powered by SpoolmanDB
+- **8000+** references across many manufacturers and product lines
 - Search by color name or material
-- Filters by family and product line
+- Filters by manufacturer and product line
 - Visual color preview
 - Translucent material handling
 - Visual handling of gradients and multi-colors
@@ -22,6 +22,8 @@ Open-source **Autodesk Fusion** add-in to quickly apply **Bambu Lab** filament c
 - Full model export to `.f3d` and `.3mf`
 
 ## Included product lines
+
+Catalog data is sourced from [SpoolmanDB by Donkie](https://donkie.github.io/SpoolmanDB/filaments.json), so available manufacturers and product lines are driven by that upstream dataset.
 
 ### PLA
 PLA Basic, PLA Lite, PLA Matte, PLA Basic Gradient, PLA Glow, PLA Marble, PLA Aero, PLA Sparkle, PLA Metal, PLA Translucent, PLA Silk+, PLA Silk Multi-Color, PLA Galaxy, PLA Wood, PLA-CF, PLA Tough, PLA Tough+, PLA Pure.
@@ -121,8 +123,9 @@ Prefer `.3mf` or `.f3d` to keep more model information.
 BambuLab-Fusion-Filament-Colors/
 ├── BambuLabNativeV10.py
 ├── BambuLabNativeV10.manifest
-├── bambulab_full_catalog.json
 ├── palette.html
+├── palette_actions.html
+├── palette_settings.html
 ├── README.md
 ├── README.fr.md
 ├── LICENSE
@@ -131,7 +134,11 @@ BambuLab-Fusion-Filament-Colors/
 
 ## Catalog
 
-Data lives in `bambulab_full_catalog.json`.
+On first run, the add-in downloads `https://donkie.github.io/SpoolmanDB/filaments.json`, normalizes it to the panel format, and stores a local cache file named `filament_catalog_cache.json`.
+
+The cache refreshes automatically at most once every 7 days. If refresh fails (offline/network error), the add-in keeps using the cached data.
+
+The add-in includes a dedicated **Filament Settings** palette with a manual **Update catalog** button to force a remote refresh on demand.
 
 Example:
 
@@ -148,18 +155,18 @@ Example:
   "opacity": 1.0,
   "roughness": 0.44,
   "hex_quality": "exact",
-  "category_i18n": { "en": "PLA", "fr": "PLA" },
-  "material_i18n": { "en": "PLA Basic", "fr": "PLA Basic" },
-  "color_name_i18n": { "en": "Red", "fr": "Red" },
-  "is_multi_color": false,
-  "ui_badges": [],
   "search_text": "pla pla basic red"
 }
 ```
 
 Some entries have an exact HEX value; others use a visual approximation when no reliable public value was available.
 
-UI-oriented fields are now explicit in the catalog (`*_i18n`, `is_multi_color`, `ui_badges`, `search_text`) so the palette can be generated directly from JSON without HTML-only duplication.
+The normalized cache payload keeps only fields needed to reconstruct the UI state, and derives presentation-only values in the palette to reduce memory overhead.
+
+The add-in now uses three palettes:
+- **Filament Colors**: catalog browsing and color application by clicking swatches, with sorting by name or color spectrum plus proximity-based color filtering, and the apply scope selector directly in the main palette.
+- **Filament Export**: export actions (opened from the Colors palette).
+- **Filament Settings**: catalog refresh and add-in-level controls (opened from the Colors palette).
 
 ## Compatibility
 
@@ -191,14 +198,14 @@ Please include when possible:
 
 ## Roadmap
 
-- automatic Bambu Lab catalog updates
+- improve remote catalog refresh controls
 - sync with Bambu Studio profiles
 - favorites
 - recently used colors
 - improved Silk / Sparkle / Galaxy rendering
 - advanced export to Bambu Studio
 - custom palettes
-- support for other manufacturers
+- richer manufacturer-specific metadata
 
 ## License
 
@@ -217,3 +224,11 @@ Created and maintained by **Gabriel Fourier** ([GAb0222](https://github.com/GAb0
 **Autodesk** and **Fusion** are trademarks of Autodesk, Inc.
 
 This is an independent, unofficial community project.
+
+## Data attribution
+
+Filament catalog data is provided by **SpoolmanDB** maintained by **Donkie**:
+- https://donkie.github.io/SpoolmanDB/
+- https://donkie.github.io/SpoolmanDB/filaments.json
+
+This add-in consumes, caches, and displays that upstream data; it does not claim authorship of the catalog dataset.

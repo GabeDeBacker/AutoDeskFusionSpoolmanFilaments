@@ -2,16 +2,16 @@
 
 **Langues :** [English](README.md) · [Français](README.fr.md)
 
-Complément open source pour **Autodesk Fusion** permettant d'appliquer rapidement des couleurs de filaments **Bambu Lab** à vos modèles 3D depuis un panneau visuel intégré.
+Complément open source pour **Autodesk Fusion** permettant d'appliquer rapidement des couleurs de filaments à vos modèles 3D depuis un panneau visuel intégré.
 
 > Projet communautaire non officiel. Ce projet n'est ni affilié, ni approuvé, ni maintenu par Bambu Lab ou Autodesk.
 
 ## Fonctionnalités
 
-- Catalogue visuel des filaments Bambu Lab
-- Plus de **270 références** réparties dans de nombreuses gammes
+- Catalogue visuel de filaments alimenté par SpoolmanDB
+- Plus de **8000 références** réparties entre de nombreux fabricants et gammes
 - Recherche par nom de couleur ou matière
-- Filtres par famille et gamme
+- Filtres par fabricant et gamme
 - Aperçu visuel des couleurs
 - Gestion des matériaux translucides
 - Gestion visuelle des gradients et multicolores
@@ -22,6 +22,8 @@ Complément open source pour **Autodesk Fusion** permettant d'appliquer rapideme
 - Export du modèle complet en `.f3d` et `.3mf`
 
 ## Gammes incluses
+
+Les données du catalogue proviennent de [SpoolmanDB par Donkie](https://donkie.github.io/SpoolmanDB/filaments.json). Les fabricants et gammes disponibles suivent donc ce jeu de données amont.
 
 ### PLA
 PLA Basic, PLA Lite, PLA Matte, PLA Basic Gradient, PLA Glow, PLA Marble, PLA Aero, PLA Sparkle, PLA Metal, PLA Translucent, PLA Silk+, PLA Silk Multi-Color, PLA Galaxy, PLA Wood, PLA-CF, PLA Tough, PLA Tough+, PLA Pure.
@@ -121,8 +123,9 @@ Pour conserver davantage d'informations du modèle, privilégiez `.3mf` ou `.f3d
 BambuLab-Fusion-Filament-Colors/
 ├── BambuLabNativeV10.py
 ├── BambuLabNativeV10.manifest
-├── bambulab_full_catalog.json
 ├── palette.html
+├── palette_actions.html
+├── palette_settings.html
 ├── README.md
 ├── README.fr.md
 ├── LICENSE
@@ -131,7 +134,11 @@ BambuLab-Fusion-Filament-Colors/
 
 ## Catalogue
 
-Les données sont stockées dans `bambulab_full_catalog.json`.
+Au premier lancement, le complément télécharge `https://donkie.github.io/SpoolmanDB/filaments.json`, normalise les données pour le panneau, puis les stocke localement dans `filament_catalog_cache.json`.
+
+Le cache est mis à jour automatiquement au maximum une fois tous les 7 jours. Si la mise à jour échoue (hors ligne/erreur réseau), le complément continue d'utiliser le cache existant.
+
+Le complément inclut un panneau dédié **Paramètres des filaments** avec un bouton **Mettre à jour le catalogue** pour forcer une mise à jour distante à la demande.
 
 Exemple :
 
@@ -148,18 +155,18 @@ Exemple :
   "opacity": 1.0,
   "roughness": 0.44,
   "hex_quality": "exact",
-  "category_i18n": { "en": "PLA", "fr": "PLA" },
-  "material_i18n": { "en": "PLA Basic", "fr": "PLA Basic" },
-  "color_name_i18n": { "en": "Red", "fr": "Red" },
-  "is_multi_color": false,
-  "ui_badges": [],
   "search_text": "pla pla basic red"
 }
 ```
 
 Certaines entrées disposent d'un HEX exact ; d'autres utilisent une approximation visuelle lorsqu'une valeur publique fiable n'était pas disponible.
 
-Les champs utiles à l'interface utilisateur sont maintenant explicitement définis dans le catalogue (`*_i18n`, `is_multi_color`, `ui_badges`, `search_text`) pour pouvoir générer le panneau depuis le JSON sans duplication HTML.
+La charge utile normalisée ne conserve que les champs nécessaires à la reconstruction de l'état UI ; les valeurs purement de présentation sont dérivées côté panneau afin de réduire l'empreinte mémoire.
+
+Le complément utilise désormais trois panneaux :
+- **Couleurs de filaments** : navigation dans le catalogue et application des couleurs en cliquant les pastilles, avec tri par nom ou spectre de couleur, filtrage par proximité chromatique et sélecteur de portée d'application directement dans le panneau principal.
+- **Export des filaments** : actions d'export (ouvert depuis le panneau Couleurs).
+- **Paramètres des filaments** : mise à jour du catalogue et contrôles globaux du complément (ouvert depuis le panneau Couleurs).
 
 ## Compatibilité
 
@@ -191,14 +198,14 @@ Indiquez si possible :
 
 ## Roadmap
 
-- mise à jour automatique du catalogue Bambu Lab ;
+- amélioration des contrôles de mise à jour du catalogue distant ;
 - synchronisation avec les profils Bambu Studio ;
 - favoris ;
 - historique des couleurs utilisées ;
 - rendu amélioré Silk / Sparkle / Galaxy ;
 - export avancé vers Bambu Studio ;
 - palettes personnalisées ;
-- support d'autres fabricants.
+- métadonnées enrichies spécifiques aux fabricants.
 
 ## Licence
 
@@ -217,3 +224,11 @@ Créé et maintenu par **Gabriel Fourier** ([GAb0222](https://github.com/GAb0222
 **Autodesk** et **Fusion** sont des marques d'Autodesk, Inc.
 
 Ce projet est communautaire, indépendant et non officiel.
+
+## Attribution des données
+
+Les données du catalogue de filaments sont fournies par **SpoolmanDB**, maintenu par **Donkie** :
+- https://donkie.github.io/SpoolmanDB/
+- https://donkie.github.io/SpoolmanDB/filaments.json
+
+Ce complément consomme, met en cache et affiche ces données amont ; il ne revendique pas la paternité du jeu de données du catalogue.

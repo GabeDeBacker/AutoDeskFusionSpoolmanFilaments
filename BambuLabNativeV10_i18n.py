@@ -30,6 +30,11 @@ I18N = {
         'export_done': 'Export succeeded: ',
         'export_failed': 'Failed: ',
         'export_folder': 'Folder: {folder}',
+        'catalog_update_success': 'Catalog update succeeded ({n} entries).',
+        'catalog_update_stale': 'Catalog update failed; using cached data ({n} entries).',
+        'catalog_update_failed': 'Catalog update failed and no usable data was returned.',
+        'catalog_empty': 'Catalog is empty. Check JSON schema or file availability.',
+        'catalog_update_request_failed': 'Catalog update request failed.',
         'export_readme': (
             "BAMBU LAB / FUSION - PARENT EXPORT\n\n"
             "Project: {base}\n\n"
@@ -40,9 +45,11 @@ I18N = {
         ),
         'appearance_create_failed': 'Could not create the appearance.',
         'native_tag': 'NATIVE',
-        'palette_title': 'Bambu Lab Filaments',
-        'command_name': 'Bambu Lab Filaments NATIVE',
-        'command_description': 'Bambu appearances cloned from the native Autodesk library. Suggested shortcut: Cmd+B.'
+        'palette_title': 'Filament Colors',
+        'palette_actions_title': 'Filament Export',
+        'palette_settings_title': 'Filament Settings',
+        'command_name': 'Filament Colors NATIVE',
+        'command_description': 'Filament appearances cloned from the native Autodesk library. Suggested shortcut: Cmd+B.'
     },
     'fr': {
         'apply_all_model_success': 'Appliqué à {n} corps visibles dans le modèle.',
@@ -61,6 +68,11 @@ I18N = {
         'export_done': 'Export réussi : ',
         'export_failed': 'Échec : ',
         'export_folder': 'Dossier : {folder}',
+        'catalog_update_success': 'Mise à jour du catalogue réussie ({n} entrées).',
+        'catalog_update_stale': 'Échec de la mise à jour ; utilisation du cache ({n} entrées).',
+        'catalog_update_failed': 'Échec de la mise à jour du catalogue et aucune donnée exploitable n’a été retournée.',
+        'catalog_empty': 'Le catalogue est vide. Vérifiez le schéma JSON et la disponibilité du fichier.',
+        'catalog_update_request_failed': 'La demande de mise à jour du catalogue a échoué.',
         'export_readme': (
             "BAMBU LAB / FUSION - EXPORT PARENT\n\n"
             "Projet : {base}\n\n"
@@ -71,9 +83,11 @@ I18N = {
         ),
         'appearance_create_failed': 'Impossible de créer l’apparence.',
         'native_tag': 'NATIVE',
-        'palette_title': 'Filaments Bambu Lab',
-        'command_name': 'Filaments Bambu Lab NATIVE',
-        'command_description': 'Apparences Bambu clonées depuis la bibliothèque native Autodesk. Raccourci conseillé : Cmd+B.'
+        'palette_title': 'Couleurs de filaments',
+        'palette_actions_title': 'Export des filaments',
+        'palette_settings_title': 'Paramètres des filaments',
+        'command_name': 'Couleurs de filaments NATIVE',
+        'command_description': 'Apparences de filaments clonées depuis la bibliothèque native Autodesk. Raccourci conseillé : Cmd+B.'
     }
 }
 

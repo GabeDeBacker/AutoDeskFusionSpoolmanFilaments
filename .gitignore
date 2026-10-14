@@ -21,3 +21,7 @@ __pycache__/
 
 # Local environment
 .env
+
+# Runtime cache
+filament_catalog_cache.json
+ui_state.json

@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="palette.css"><script src="palette-i18n.js"></script></head><body>
+<header><h1 id="title">Paramètres des filaments</h1></header>
+<div id="catalogAttribution" class="count"></div>
+<div class="parentbar">
+  <button id="refreshCatalog" class="parentbtn wide" onclick="refreshCatalog()"></button>
+</div>
+<div id="status"></div>
+<script>
+let currentLang='en';
+const CATALOG_CREDIT_URL='https://donkie.github.io/SpoolmanDB/';
+
+function updateCatalogAttribution(){
+  const t=I18N[currentLang]||I18N.en;
+  const el=document.getElementById('catalogAttribution');
+  el.innerHTML=`${t.dataSourceLabel}: <a href="${CATALOG_CREDIT_URL}" target="_blank" rel="noopener noreferrer">${t.dataSourceSpoolman}</a>`;
+}
+
+function setUiLanguage(lang){
+  currentLang=I18N[lang]?lang:'en';
+  const t=I18N[currentLang];
+  document.documentElement.lang=t.lang;
+  document.getElementById('title').textContent=t.palette_settings_title||'Filament Settings';
+  document.getElementById('refreshCatalog').textContent=t.refreshCatalog;
+  updateCatalogAttribution();
+  if(!document.getElementById('status').textContent){
+    document.getElementById('status').textContent=t.idleStatus;
+  }
+}
+
+function requestLanguage(){
+  try{
+    adsk.fusionSendData('request_lang','');
+    return true;
+  }catch(_){
+    return false;
+  }
+}
+
+function refreshCatalog(){
+  const t=I18N[currentLang]||I18N.en;
+  document.getElementById('status').textContent=t.refreshingCatalog;
+  try{
+    adsk.fusionSendData('request_catalog_force','');
+    return true;
+  }catch(_){
+    document.getElementById('status').textContent=(I18N[currentLang]||I18N.en).catalogUpdateRequestFailed;
+    return false;
+  }
+}
+
+window.fusionJavaScriptHandler={
+  handle:function(action,data){
+    if(action==='status') document.getElementById('status').textContent=data;
+    if(action==='setLang') setUiLanguage((data||'').toLowerCase());
+    return 'OK';
+  }
+};
+
+const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
+setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
+requestLanguage();
+</script></body></html>
