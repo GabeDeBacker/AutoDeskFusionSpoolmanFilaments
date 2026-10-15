@@ -1028,55 +1028,6 @@ async function fallbackLoadCatalog(){
   }
 }
 
-function scheduleCatalogRetries(){
-  if(catalogRetryTimer) return;
-  catalogRetryStartedAt=Date.now();
-  catalogRetryTimer=setInterval(()=>{
-    if(catalogLoaded){
-      clearInterval(catalogRetryTimer);
-      catalogRetryTimer=null;
-      return;
-    }
-    const elapsed=Date.now()-catalogRetryStartedAt;
-    if(elapsed>=CATALOG_RETRY_MAX_MS){
-      clearInterval(catalogRetryTimer);
-      catalogRetryTimer=null;
-      if(!catalogLoaded){
-        fallbackLoadCatalog();
-      }
-      return;
-    }
-    requestCatalog();
-  },CATALOG_RETRY_INTERVAL_MS);
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{
-      if(!catalogLoaded) requestCatalog();
-    },ms);
-  });
-}
-
-function scheduleLanguageRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{
-      if(typeof adsk !== 'undefined' && adsk && typeof adsk.fusionSendData === 'function') {
-        requestLanguage();
-      }
-    },ms);
-  });
-}
-
-function scheduleSavedFiltersRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestSavedFilters(); },ms);
-  });
-}
-
-function scheduleScopeRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestScope(); },ms);
-  });
-}
-
 window.fusionJavaScriptHandler={
   handle:function(action,data){
     if(action==='status') document.getElementById('status').textContent=data;
@@ -1140,13 +1091,9 @@ updateColorFilterUiState();
 updateColorDistanceLabel();
 updateColorRangePreview();
 requestLanguage();
-scheduleLanguageRetries();
 requestCatalog();
 requestSavedFilters();
 requestScope();
-scheduleSavedFiltersRetries();
-scheduleScopeRetries();
-scheduleCatalogRetries();
 setTimeout(()=>{ if(!catalogLoaded) fallbackLoadCatalog(); },500);
 setTimeout(()=>{
   if(catalogLoaded || startupForceTimerFired || !bridgeReady()) return;
