@@ -9,6 +9,9 @@ import importlib.util
 import adsk.core
 import adsk.fusion
 
+# Insert module path into the Python search path for imports.
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+
 from bl_common import addon_dir, json_text, make_file_url
 from bl_ui_state import (
     get_saved_filters,
@@ -23,7 +26,7 @@ from bl_catalog import build_catalog_payload, catalog_update_status_message
 from bl_appearance import apply_selection, get_or_create_appearance
 from bl_export import export_parent
 from bl_debug import DebugController
-from SpoolmanDBFilamentColors_i18n import _getText, _ensure_lang
+from spoolman_database_filament_colors_i18n import _getText, _ensure_lang
 
 FUSION_API_ERRORS = (RuntimeError, AttributeError, TypeError, ValueError, KeyError, IndexError)
 
@@ -35,7 +38,7 @@ def _load_i18n_symbols():
     except ImportError:
         pass
 
-    module_name = 'SpoolmanDBFilamentColors_i18n'
+    module_name = 'spoolman_database_filament_colors_i18n'
     module_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), module_name + '.py')
     module_dir = os.path.dirname(module_path)
     if module_dir and module_dir not in sys.path:
@@ -170,7 +173,7 @@ def _ensure_palette(ui, palette_id, title, file_name, width, height):
         True,
     )
     palette.dockingState = adsk.core.PaletteDockingStates.PaletteDockStateRight
-    handler = PH()
+    handler = HTMLEventHandler()
     palette.incomingFromHTML.add(handler)
     handlers.append(handler)
     return palette
@@ -405,7 +408,7 @@ ACTION_HANDLERS = {
     'response': handle_response,
 }
 
-class PH(adsk.core.HTMLEventHandler):
+class HTMLEventHandler(adsk.core.HTMLEventHandler):
     """Handle incoming HTML events for all add-in palettes."""
 
     def notify(self, eventArgs):
@@ -489,36 +492,45 @@ def run(_context):
     del _context
     app = adsk.core.Application.get()
     ui = app.userInterface
-    panel = ui.allToolbarPanels.itemById('SolidModifyPanel')
-    if panel:
-        existing_control = panel.controls.itemById(CMD_ID)
-        if existing_control:
-            existing_control.deleteMe()
-    command = ui.commandDefinitions.itemById(CMD_ID)
-    if command:
-        command.deleteMe()
+
+    # Create button definition
+    command_definition = ui.commandDefinitions.itemById(CMD_ID)
+    if command_definition:
+        command_definition.deleteMe()
     resource_dir = os.path.join(addon_dir(), 'resources', 'spool')
-    command = ui.commandDefinitions.addButtonDefinition(
+    command_definition = ui.commandDefinitions.addButtonDefinition(
         CMD_ID,
         _getText('command_name'),
         _getText('command_description'),
         resource_dir
     )
+
     command_handler = CommandHandler()
-    command.toolClipFilename = os.path.join(addon_dir(), 'resources', 'spool', '32x32@2.png')
-    command.commandCreated.add(command_handler)
+    command_definition.toolClipFilename = os.path.join(addon_dir(), 'resources', 'spool', '32x32@2.png')
+    command_definition.commandCreated.add(command_handler)
     handlers.append(command_handler)
 
-    if panel and not panel.controls.itemById(CMD_ID):
-        c = panel.controls.addCommand(command)
-        try:
-            c.isPromoted = True
-        except (RuntimeError, AttributeError, TypeError, ValueError):
-            pass
-        try:
-            c.isPromotedByDefault = True
-        except (RuntimeError, AttributeError, TypeError, ValueError):
-            pass
+    # Get the Solid workspace
+    solid_workspace = ui.workspaces.itemById('FusionSolidEnvironment')
+    if not solid_workspace:
+        return
+
+    solid_modify_panel = solid_workspace.toolbarPanels.itemById('SolidModifyPanel')
+    if not solid_modify_panel:
+        return
+
+    solid_modify_controls = solid_modify_panel.controls
+    if not solid_modify_controls:
+        return
+
+    appearance_control = solid_modify_controls.itemById('AppearanceCommand')
+
+    if appearance_control:
+        # Insert after Appearance
+        solid_modify_controls.addCommand(command_definition, 'AppearanceCommand', False)
+    else:
+        # Fallback: append at end
+        solid_modify_controls.addCommand(command_definition)
 
 def stop(_context):
     """Fusion add-in shutdown hook: remove palettes, controls, and command."""
