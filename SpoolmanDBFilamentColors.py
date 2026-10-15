@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Fusion add-in entrypoint that wires palettes, events, and module services."""
 
 import json
@@ -10,13 +9,28 @@ import importlib.util
 import adsk.core
 import adsk.fusion
 
+from bl_common import addon_dir, json_text, make_file_url
+from bl_ui_state import (
+    get_saved_filters,
+    load_saved_scope,
+    load_ui_state,
+    normalize_debug_flag,
+    save_filters,
+    save_scope,
+    save_ui_state,
+)
+from bl_catalog import build_catalog_payload, catalog_update_status_message
+from bl_appearance import apply_selection, get_or_create_appearance
+from bl_export import export_parent
+from bl_debug import DebugController
+from SpoolmanDBFilamentColors_i18n import _getText, _ensure_lang
+
 FUSION_API_ERRORS = (RuntimeError, AttributeError, TypeError, ValueError, KeyError, IndexError)
 
 
 def _load_i18n_symbols():
     """Load i18n helpers with fallback file-based module import."""
     try:
-        from SpoolmanDBFilamentColors_i18n import _getText, _ensure_lang
         return _getText, _ensure_lang
     except ImportError:
         pass
@@ -39,22 +53,6 @@ def _load_i18n_symbols():
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
-
-from bl_common import addon_dir, json_text, make_file_url
-from bl_ui_state import (
-    UI_STATE_FILE,
-    get_saved_filters,
-    load_saved_scope,
-    load_ui_state,
-    normalize_debug_flag,
-    save_filters,
-    save_scope,
-    save_ui_state,
-)
-from bl_catalog import build_catalog_payload, catalog_update_status_message
-from bl_appearance import apply_selection, get_or_create_appearance
-from bl_export import export_parent
-from bl_debug import DebugController
 
 
 _getText, _ensure_lang = _load_i18n_symbols()
@@ -446,6 +444,7 @@ class PH(adsk.core.HTMLEventHandler):
                 DEBUG.append_entry('palette event exception', tb, is_error=True)
 
 class ExecuteHandler(adsk.core.CommandEventHandler):
+    """Handle execution of the main command by toggling the main palette visibility."""
     def notify(self, _eventArgs):
         """Handles command execution by toggling the main palette visibility."""
         del _eventArgs
@@ -472,9 +471,8 @@ class ExecuteHandler(adsk.core.CommandEventHandler):
                 p_tools.isVisible = False
             if p_settings:
                 p_settings.isVisible = False
-        else:
-            if (DEBUG.get_mode()):
-                handle_open_debug_palette(ui, None)
+        elif DEBUG.get_mode():
+            handle_open_debug_palette(ui, None)
 
 class CommandHandler(adsk.core.CommandCreatedEventHandler):
     """Handle Fusion command invocation by toggling palette visibility."""
