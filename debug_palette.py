@@ -5,6 +5,7 @@ import os
 import time
 from app_helpers import get_user_interface
 from palette_helpers import ensure_palette, send_to_palette
+from text_i18n import get_i18n_text
 
 from ui_state import (
     load_ui_state,
@@ -108,8 +109,8 @@ class DebugController:
 
         palette = ensure_palette(
             DEBUG_PALETTE_ID,
-            'Filaments Debug',
-            'palette_debug.html',
+            get_i18n_text('palette_debug_title'),
+            'debug_palette.html',
             360,
             420,
             action_handlers

@@ -907,9 +907,6 @@ function setUiLanguage(lang){
   const t=I18N[currentLang];
   document.documentElement.lang=t.lang;
   document.getElementById('q').placeholder=t.searchPlaceholder;
-  document.getElementById('openActions').textContent='⤓';
-  document.getElementById('openActions').title=t.openActions;
-  document.getElementById('openActions').setAttribute('aria-label',t.openActions);
   document.getElementById('openSettings').textContent='⚙';
   document.getElementById('openSettings').title=t.openSettings;
   document.getElementById('openSettings').setAttribute('aria-label',t.openSettings);
@@ -956,8 +953,11 @@ function requestCatalog(){
   if(!bridgeReady()){
     return false;
   }
+  if (catalogLoaded) {
+    return true;
+  }
   try{
-    adsk.fusionSendData('request_catalog','');
+    adsk.fusionSendData('request_catalog','{"force":false}');
     requestAttempts+=1;
     return true;
   }catch(_){
@@ -1019,13 +1019,16 @@ async function fallbackLoadCatalog(){
 }
 
 window.fusionJavaScriptHandler={
+  handleFusionJavaScriptMessage: function (msg) {
+      console.log("Fusion → HTML:", msg);
+      return "OK";
+  },
+
   handle:function(action,data){
+    console.log('Received action:', action, 'with data:', data);
     if(action==='status') document.getElementById('status').textContent=data;
     if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
-      if(!catalogLoaded){
-        setTimeout(()=>{ requestCatalog(); },0);
-      }
     }
     if(action==='catalog'){
       try{
@@ -1056,16 +1059,29 @@ window.fusionJavaScriptHandler={
   }
 };
 
+
+// Wait for Fusion to inject the API
+function waitForAdsk() {
+    if (typeof adsk !== "undefined") {
+        console.log("adsk ready");
+        fusionReady();
+    } else {
+        setTimeout(waitForAdsk, 50);
+    }
+}
+
+function fusionReady() {
+  updateColorFilterUiState();
+  updateColorDistanceLabel();
+  updateColorRangePreview();
+  requestLanguage();
+  requestCatalog();
+  requestSavedFilters();
+  requestScope();
+}
+
+waitForAdsk();
+
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
-removeLegacyColorWheelUi();
-updateColorFilterUiState();
-updateColorDistanceLabel();
-updateColorRangePreview();
-requestLanguage();
-requestCatalog();
-requestSavedFilters();
-requestScope();
-setTimeout(()=>{ if(!catalogLoaded) fallbackLoadCatalog(); },500);
-window.addEventListener('focus',()=>{ if(!catalogLoaded) requestCatalog(); });
 </script></body></html>

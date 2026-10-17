@@ -34,6 +34,7 @@ I18N = {
         'appearance_create_failed': 'Could not create the appearance.',
         'native_tag': 'SPOOLMANDB',
         'palette_title': 'Filament Colors',
+        'palette_debug_title': 'Filament Debug',
         'palette_actions_title': 'Filament Export',
         'palette_settings_title': 'Filament Settings',
         'command_name': 'SpoolmanDB Filament Colors',
@@ -80,6 +81,7 @@ I18N = {
         'palette_title': 'Couleurs de filaments',
         'palette_actions_title': 'Export des filaments',
         'palette_settings_title': 'Paramètres des filaments',
+        'palette_debug_title': 'Debug des filaments',
         'command_name': 'Couleurs de filaments SpoolmanDB',
         'command_description': (
             'Apparences de filaments générées depuis le catalogue SpoolmanDB '

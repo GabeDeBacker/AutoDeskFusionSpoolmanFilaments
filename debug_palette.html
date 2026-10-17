@@ -79,5 +79,21 @@ window.fusionJavaScriptHandler={
 };
 
 document.getElementById('clearDebugBtn').addEventListener('click', clearDebugLog);
-requestSnapshot();
+
+function waitForAdsk() {
+    if (typeof adsk !== "undefined") {
+        console.log("adsk ready");
+        fusionReady();
+    } else {
+        setTimeout(waitForAdsk, 50);
+    }
+}
+
+function fusionReady() {
+  requestLanguage();
+  requestDebugMode();
+  requestDebugLogSnapshot();
+}
+waitForAdsk();
 </script></body></html>
+

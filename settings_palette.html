@@ -31,6 +31,7 @@
 let currentLang='en';
 const CATALOG_CREDIT_URL='https://donkie.github.io/SpoolmanDB/';
 let catalogMeta={version:'-',source:'none',entryCount:0};
+let catalogLoaded = false;
 
 function sourceCreditLabel(source){
   const t=I18N[currentLang]||I18N.en;
@@ -74,6 +75,7 @@ function applyCatalogPayload(rawPayload){
   catalogMeta=extracted.meta;
   setCatalogSummary(extracted.entries,extracted.meta);
   updateCatalogAttribution();
+  catalogLoaded = extracted.entries.length > 0;
 }
 
 function setUiLanguage(lang){
@@ -109,18 +111,22 @@ function requestDebugMode(){
 }
 
 function requestCatalog(){
+  if (catalogLoaded) {
+    return true;
+  }
   try{
-    adsk.fusionSendData('request_catalog','');
+    adsk.fusionSendData('request_catalog','{"force":false}');
     return true;
   }catch(_){
     return false;
   }
 }
 function refreshCatalog(){
+  catalogLoaded = false;
   const t=I18N[currentLang]||I18N.en;
   document.getElementById('status').textContent=t.refreshingCatalog;
   try{
-    adsk.fusionSendData('refresh_catalog','');
+    adsk.fusionSendData('request_catalog','{"force":true}');
     return true;
   }catch(_){
     document.getElementById('status').textContent=(I18N[currentLang]||I18N.en).catalogUpdateRequestFailed;
@@ -145,7 +151,6 @@ window.fusionJavaScriptHandler={
     if(action==='status') document.getElementById('status').textContent=data;
     if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
-      requestCatalog();
     }
     if(action==='catalog'){
       try{
@@ -166,8 +171,22 @@ window.fusionJavaScriptHandler={
 
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
-requestLanguage();
-requestDebugMode();
-requestCatalog();
-window.addEventListener('focus',()=>{ requestCatalog(); });
+
+function waitForAdsk() {
+    if (typeof adsk !== "undefined") {
+        console.log("adsk ready");
+        fusionReady();
+    } else {
+        setTimeout(waitForAdsk, 50);
+    }
+}
+
+function fusionReady() {
+  requestLanguage();
+  requestDebugMode();
+  requestCatalog();
+}
+
+waitForAdsk();
+
 </script></body></html>

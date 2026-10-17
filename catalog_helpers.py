@@ -9,7 +9,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from common import addon_dir, json_text, read_json_file, write_json_file
 from palette_helpers import send_to_palette
-from debug import debug as DEBUG
+from debug_palette import debug as DEBUG
 
 CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
 CATALOG_CACHE_FILE = 'filament_catalog_cache.json'
@@ -270,7 +270,8 @@ def handle_request_catalog_for_palette(palette_id, force):
     payload = build_catalog_payload(force)
     if not payload:
         payload = build_catalog_payload(force_refresh=True)
-    else:
+
+    if payload:
         send_to_palette(palette_id, 'catalog', json_text(payload))
     DEBUG.send(
         'request_catalog_settings',
