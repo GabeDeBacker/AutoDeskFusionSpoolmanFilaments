@@ -4,8 +4,7 @@ import json
 import os
 import re
 
-from bl_common import addon_dir, read_json_file, write_json_file
-
+from common import addon_dir, read_json_file, write_json_file
 
 HEX_RE = re.compile(r'^[0-9A-Fa-f]{6}$')
 MAX_COLOR_FILTER_TOLERANCE = 100

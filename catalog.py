@@ -7,20 +7,18 @@ import re
 import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-
-from bl_common import addon_dir, read_json_file, write_json_file
-
+from common import addon_dir, json_text, read_json_file, write_json_file
+from palette_helpers import send_to_palette
+from debug import debug as DEBUG
 
 CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
 CATALOG_CACHE_FILE = 'filament_catalog_cache.json'
 CATALOG_CACHE_TTL_SECONDS = 7 * 24 * 60 * 60
 HEX_RE = re.compile(r'^[0-9A-Fa-f]{6}$')
 
-
 def cache_catalog_path():
     """Return the on-disk cache file path for normalized catalog data."""
     return os.path.join(addon_dir(), CATALOG_CACHE_FILE)
-
 
 def normalize_hex(value):
     """Normalize a hex color string to ``#RRGGBB`` or return an empty string."""
@@ -30,7 +28,6 @@ def normalize_hex(value):
     if not HEX_RE.fullmatch(s):
         return ''
     return '#' + s.upper()
-
 
 def normalize_hexes(color_hex, color_hexes):
     """Build a normalized primary+secondary hex list from raw source values."""
@@ -46,7 +43,6 @@ def normalize_hexes(color_hex, color_hexes):
     if not values and first:
         values = [first]
     return values
-
 
 def map_finish(raw_finish, pattern, multi_color_direction, glow):
     """Map raw finish metadata into the UI finish taxonomy."""
@@ -65,12 +61,10 @@ def map_finish(raw_finish, pattern, multi_color_direction, glow):
         return 'silk'
     return 'standard'
 
-
 def build_search_text(manufacturer, material, color_name, finish, pattern):
     """Build a normalized searchable text blob for a catalog entry."""
     parts = [manufacturer, material, color_name, finish, pattern]
     return ' '.join([p.strip().lower() for p in parts if isinstance(p, str) and p.strip()])
-
 
 def spoolman_row_to_catalog_entry(row):
     """Convert one Spoolman row into the add-in catalog entry schema."""
@@ -270,3 +264,15 @@ def catalog_update_status_message(payload, get_text):
     if source.endswith('-stale'):
         return get_text('catalog_update_stale', n=n)
     return get_text('catalog_update_failed')
+
+def handle_request_catalog_for_palette(palette_id, force):
+    """Handle the request to fetch the catalog for a specific palette."""
+    payload = build_catalog_payload(force)
+    if not payload:
+        payload = build_catalog_payload(force_refresh=True)
+    else:
+        send_to_palette(palette_id, 'catalog', json_text(payload))
+    DEBUG.send(
+        'request_catalog_settings',
+        f"source={payload.get('source') or 'unknown'} entries={len(payload.get('entries') or [])}"
+    )

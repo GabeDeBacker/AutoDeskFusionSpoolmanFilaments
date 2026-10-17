@@ -99,32 +99,28 @@ function requestLanguage(){
   }
 }
 
-function requestCatalogMeta(){
+function requestDebugMode(){
   try{
-    adsk.fusionSendData('request_catalog_settings','');
+    adsk.fusionSendData('request_debug_mode','');
     return true;
   }catch(_){
     return false;
   }
 }
 
-function scheduleCatalogMetaRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestCatalogMeta(); },ms);
-  });
+function requestCatalog(){
+  try{
+    adsk.fusionSendData('request_catalog','');
+    return true;
+  }catch(_){
+    return false;
+  }
 }
-
-function scheduleLanguageRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestLanguage(); },ms);
-  });
-}
-
 function refreshCatalog(){
   const t=I18N[currentLang]||I18N.en;
   document.getElementById('status').textContent=t.refreshingCatalog;
   try{
-    adsk.fusionSendData('request_catalog_force_settings','');
+    adsk.fusionSendData('refresh_catalog','');
     return true;
   }catch(_){
     document.getElementById('status').textContent=(I18N[currentLang]||I18N.en).catalogUpdateRequestFailed;
@@ -149,7 +145,7 @@ window.fusionJavaScriptHandler={
     if(action==='status') document.getElementById('status').textContent=data;
     if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
-      requestCatalogMeta();
+      requestCatalog();
     }
     if(action==='catalog'){
       try{
@@ -171,8 +167,7 @@ window.fusionJavaScriptHandler={
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
 requestLanguage();
-scheduleLanguageRetries();
-requestCatalogMeta();
-scheduleCatalogMetaRetries();
-window.addEventListener('focus',()=>{ requestCatalogMeta(); });
+requestDebugMode();
+requestCatalog();
+window.addEventListener('focus',()=>{ requestCatalog(); });
 </script></body></html>

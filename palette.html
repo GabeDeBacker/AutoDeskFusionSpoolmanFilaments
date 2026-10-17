@@ -49,7 +49,6 @@
 <footer id="pager" class="pagerfooter">
   <div class="pagerrow pagerrow-bottom">
     <div class="headicons footer-icons">
-      <button id="openActions" class="iconbtn" onclick="openActionsPalette()"></button>
       <button id="openSettings" class="iconbtn" onclick="openSettingsPalette()"></button>
     </div>
     <div class="pager-controls">
@@ -894,15 +893,6 @@ function onColorHexInput(){
   onFilterChange({focusAnchor:true});
 }
 
-function openActionsPalette(){
-  try{
-    adsk.fusionSendData('open_actions_palette','');
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-
 function openSettingsPalette(){
   try{
     adsk.fusionSendData('open_settings_palette','');
@@ -1031,7 +1021,7 @@ async function fallbackLoadCatalog(){
 window.fusionJavaScriptHandler={
   handle:function(action,data){
     if(action==='status') document.getElementById('status').textContent=data;
-      if(action==='setLang'){
+    if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
       if(!catalogLoaded){
         setTimeout(()=>{ requestCatalog(); },0);
@@ -1043,24 +1033,6 @@ window.fusionJavaScriptHandler={
         const extracted=extractCatalogPayload(parsed);
         setCatalog(extracted.entries,extracted.meta,'fusion-bridge');
         const source=(extracted.meta&&extracted.meta.source?String(extracted.meta.source):'').toLowerCase();
-        const shouldForceRefresh=(
-          !catalogLoaded &&
-          !startupForceRefreshAttempted &&
-          (
-            source.includes('unavailable') ||
-            source.includes('startup-error') ||
-            source.includes('invalid') ||
-            source==='payload'
-          )
-        );
-        if(shouldForceRefresh){
-          startupForceRefreshAttempted=true;
-          try{
-            adsk.fusionSendData('request_catalog_force','');
-          }catch(_){
-            // Keep silent; periodic request loop will continue.
-          }
-        }
       }
       catch(_){ setCatalog([],null,'fusion-bridge'); }
     }
@@ -1095,14 +1067,5 @@ requestCatalog();
 requestSavedFilters();
 requestScope();
 setTimeout(()=>{ if(!catalogLoaded) fallbackLoadCatalog(); },500);
-setTimeout(()=>{
-  if(catalogLoaded || startupForceTimerFired || !bridgeReady()) return;
-  startupForceTimerFired=true;
-  try{
-    adsk.fusionSendData('request_catalog_force','');
-  }catch(_){
-    // Keep silent; persistent retry loop stays active.
-  }
-},2500);
 window.addEventListener('focus',()=>{ if(!catalogLoaded) requestCatalog(); });
 </script></body></html>
