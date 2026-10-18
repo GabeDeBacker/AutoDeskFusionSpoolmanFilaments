@@ -2,7 +2,6 @@
 
 import os
 import sys
-import traceback
 import adsk.core
 
 # Insert module path into the Python search path for imports.
@@ -13,7 +12,6 @@ from app_helpers import get_user_interface
 from text_i18n import get_i18n_text
 from settings_palette import settings_palette
 from catalog_palette import catalog_palette
-from debug_palette import debug as DEBUG
 
 CMD_ID = 'SpoolmanDBFilamentColors'
 handlers = []
@@ -23,7 +21,7 @@ class ExecuteHandler(adsk.core.CommandEventHandler):
     def notify(self, _eventArgs):
         """Handles command execution by toggling the main palette visibility."""
         del _eventArgs
-        catalog_palette.open_palette(False)
+        catalog_palette.open_palette(toggle=True, visible=False)
 
 class CommandHandler(adsk.core.CommandCreatedEventHandler):
     """Handle Fusion command invocation by toggling palette visibility."""
@@ -90,13 +88,9 @@ def run(_context):
 def stop(_context):
     """Fusion add-in shutdown hook: remove palettes, controls, and command."""
     del _context
-    try:
-        ui = get_user_interface()
-        catalog_palette.close_palette()
-        settings_palette.close_palette()
-        DEBUG.close_palette()
-        d = ui.commandDefinitions.itemById(CMD_ID)
-        if d:
-            d.deleteMe()
-    except (RuntimeError, AttributeError, TypeError, ValueError):
-        DEBUG.append_entry("Error during add-in shutdown", traceback.format_exc(), is_error=True)
+    ui = get_user_interface()
+    catalog_palette.close_palette()
+    settings_palette.close_palette()
+    d = ui.commandDefinitions.itemById(CMD_ID)
+    if d:
+        d.deleteMe()

@@ -17,19 +17,14 @@ def apply_selection(filament, scope='body', selection=None, get_text=None):
 
     for i in range(active_selection.count):
         entity = active_selection.item(i)
-        try:
-            if active_scope == 'face' and isinstance(entity, adsk.fusion.BRepFace):
-                if three_d_printing_material is not None:
-                    entity.material = three_d_printing_material
-                entity.appearance = appearance
-                count += 1
-            if active_scope == 'body' and isinstance(entity, adsk.fusion.BRepBody):
-                if three_d_printing_material is not None:
-                    entity.material = three_d_printing_material
-                entity.appearance = appearance
-                count += 1
-        except FUSION_API_ERRORS:
-            pass
+        if active_scope == 'face' and isinstance(entity, adsk.fusion.BRepFace):
+            if three_d_printing_material is not None:
+                entity.material = three_d_printing_material
+            entity.appearance = appearance
+            count += 1
+        if active_scope == 'body' and isinstance(entity, adsk.fusion.BRepBody):
+            entity.appearance = appearance
+            count += 1
 
     if count:
         labels = {

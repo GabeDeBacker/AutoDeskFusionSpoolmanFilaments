@@ -51,4 +51,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
                 raise ValueError(f"Unexpected response data: {response_data}")
             return
 
-        self.handlers[eventArgs.action](eventArgs.data)
+        if self.handlers is not None:
+            handler = self.handlers.get(eventArgs.action)
+            if handler:
+                handler(eventArgs.data)

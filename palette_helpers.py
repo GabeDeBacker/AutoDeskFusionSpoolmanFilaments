@@ -15,7 +15,6 @@ def get_palette(palette_id):
 
 def ensure_palette(palette_id, title, file_name, width, height, handlers, force_refresh=False):
     """Return existing palette or create/configure it with HTML event handler."""
-    palette = get_user_interface().palettes.itemById(palette_id)
     file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), file_name)
     palette_path = make_file_url(file_path)
 

@@ -6,7 +6,6 @@ from palette_helpers import ensure_palette, send_to_palette
 from text_i18n import get_i18n_text
 from app_helpers import get_user_interface
 from settings_palette import settings_palette
-from debug_palette import debug as DEBUG
 from ui_state import get_saved_filters, save_filters, save_scope, load_saved_scope
 from appearance import apply_selection
 
@@ -19,7 +18,6 @@ def handle_request_scope(data):
 
 def handle_set_scope(data):
     """Handle the request to set the current scope."""
-    del data
     scope = (data or '').strip()
     if scope in ('body', 'face'):
         save_scope(scope)
@@ -47,11 +45,6 @@ def handle_apply(data):
     send_to_palette(PALETTE_ID, 'status', status_message)
     get_user_interface().activeSelections.all = sel
 
-def handle_open_debug_palette(data):
-    """Handle the request to open the debug palette."""
-    del data
-    DEBUG.open_palette(True)
-
 def open_settings_palette(data):
     """Handle the request to open the settings palette."""
     del data
@@ -59,10 +52,8 @@ def open_settings_palette(data):
 
 class CatalogPalette:
     """Handle catalog palette interactions."""
-    def open_palette(self, visible = False):
-        """Handle the request to open the settings palette."""
-        ACTIVE_SCOPE = load_saved_scope()
-
+    def open_palette(self, toggle = False, visible = False):
+        """Handle the request to open the catalog palette."""
         action_handlers = {
             'request_scope': handle_request_scope,
             'set_scope': handle_set_scope,
@@ -70,7 +61,6 @@ class CatalogPalette:
             'save_filters': handle_save_filters,
             'apply': handle_apply,
             'open_settings_palette': open_settings_palette,
-            'open_debug_palette': handle_open_debug_palette
         }
 
         p_catalog = ensure_palette(
@@ -81,7 +71,11 @@ class CatalogPalette:
             720,
             action_handlers
         )
-        p_catalog.isVisible = not p_catalog.isVisible
+
+        if toggle:
+            p_catalog.isVisible = not p_catalog.isVisible
+        else:
+            p_catalog.isVisible = visible
 
     def close_palette(self):
         """Close the catalog palette by deleting it."""

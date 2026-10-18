@@ -52,15 +52,13 @@ def _detect_lang():
     if override.startswith('en'):
         return 'en'
 
-    try:
-        # This should never fail unless the user is using a REALLY old version
-        # of Fusion.
-        app = adsk.core.Application.get()
-        user_lang = app.preferences.generalPreferences.userLanguage
-        fused = _to_lang_key(user_lang)
+    # This should never fail unless the user is using a REALLY old version
+    # of Fusion.
+    app = adsk.core.Application.get()
+    user_lang = app.preferences.generalPreferences.userLanguage
+    fused = _to_lang_key(user_lang)
+    if fused:
         return fused
-    except:
-        pass
 
     # This is set on "some" platforms. so let's try this as a fallback.
     for env_key in ('LANG', 'LC_ALL', 'LC_CTYPE'):

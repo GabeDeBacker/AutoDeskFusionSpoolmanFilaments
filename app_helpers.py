@@ -1,6 +1,7 @@
 """Fusion 360 application and user interface helpers."""
 
 import adsk.core
+import adsk.fusion
 APPLICATION = None
 USER_INTERFACE = None
 DESIGN = None
