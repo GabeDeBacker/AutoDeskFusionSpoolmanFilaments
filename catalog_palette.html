@@ -877,6 +877,7 @@ function onFilterChange(options){
   populateFilters();
   filterCards({focusAnchor:!!opts.focusAnchor});
   persistFilters();
+  sendFilamentQuery();
 }
 
 function onColorFilterToggleChange(){
@@ -1059,6 +1060,22 @@ window.fusionJavaScriptHandler={
   }
 };
 
+function sendFilamentQuery() {
+  adsk.fusionSendData("query_filaments", JSON.stringify({
+    text: document.getElementById('q').value,
+    manufacturer: document.getElementById('cat').value,
+    finish: document.getElementById('finish').value,
+    colorRgb: document.getElementById('colorFilterHex').value,
+    hsvTolerance: {
+        h: document.getElementById('colorFilterHue').value/100,
+        s: document.getElementById('colorFilterSat').value/100,
+        v: document.getElementById('colorFilterVal').value/100,
+    },
+    sort: "color",
+    page: currentPage,
+    pageSize: getPageSize()
+  }));
+}
 
 // Wait for Fusion to inject the API
 function waitForAdsk() {

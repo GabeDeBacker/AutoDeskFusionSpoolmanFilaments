@@ -88,9 +88,8 @@ def run(_context):
 def stop(_context):
     """Fusion add-in shutdown hook: remove palettes, controls, and command."""
     del _context
-    ui = get_user_interface()
     catalog_palette.close_palette()
     settings_palette.close_palette()
-    d = ui.commandDefinitions.itemById(CMD_ID)
+    d = get_user_interface().commandDefinitions.itemById(CMD_ID)
     if d:
         d.deleteMe()

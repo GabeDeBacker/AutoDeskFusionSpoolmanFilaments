@@ -22,9 +22,16 @@ __pycache__/
 # Local environment
 .env
 
+# SQlite
+*.db-shm
+*.db-wal
+
 # Runtime cache
 filament_catalog_cache.json
+spoolman_filament_catalog_cache.json
 ui_state.json
+filament_catalog_cache.db
+
 
 # Fusion 360 3D Printing Material Library
 3d_printing.adsklib

@@ -1,7 +1,9 @@
 """Catalog palette management for the Fusion add-in."""
 
 import json
+from catalog_helpers import cache_catalog_database_path
 from common import json_text
+from catalog_import import query_filaments
 from palette_helpers import ensure_palette, send_to_palette
 from text_i18n import get_i18n_text
 from app_helpers import get_user_interface
@@ -50,6 +52,12 @@ def open_settings_palette(data):
     del data
     settings_palette.open_palette(True)
 
+def handle_query_filaments(data):
+    """Handle the request to query filaments."""
+    query = json.loads(data)
+    results = query_filaments(cache_catalog_database_path(), query)
+    send_to_palette(PALETTE_ID, 'filament_query_results', json_text(results))
+
 class CatalogPalette:
     """Handle catalog palette interactions."""
     def open_palette(self, toggle = False, visible = False):
@@ -61,6 +69,7 @@ class CatalogPalette:
             'save_filters': handle_save_filters,
             'apply': handle_apply,
             'open_settings_palette': open_settings_palette,
+            'query_filaments': handle_query_filaments
         }
 
         p_catalog = ensure_palette(

@@ -1,13 +1,13 @@
 """Filament catalog download, normalization, caching, and status helpers."""
 
-import io
 import json
 import os
 import re
+import shutil
 import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-from catalog_import import import_catalog
+from catalog_import import import_spoolman
 from common import addon_dir, read_json_file, write_json_file
 
 CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
@@ -18,6 +18,14 @@ HEX_RE = re.compile(r'^[0-9A-Fa-f]{6}$')
 def cache_catalog_path():
     """Return the on-disk cache file path for normalized catalog data."""
     return os.path.join(addon_dir(), CATALOG_CACHE_FILE)
+
+def cache_spoolman_catalog_path():
+    """Return the on-disk cache file path for the Spoolman catalog data."""
+    return os.path.join(addon_dir(), f"spoolman_{CATALOG_CACHE_FILE}")
+
+def cache_catalog_database_path():
+    """Return the on-disk cache file path for normalized catalog data."""
+    return os.path.join(addon_dir(), CATALOG_CACHE_FILE.replace('.json', '.db'))
 
 def normalize_hex(value):
     """Normalize a hex color string to ``#RRGGBB`` or return an empty string."""
@@ -141,35 +149,35 @@ def download_spoolman_entries():
         CATALOG_CACHE_URL,
         headers={'User-Agent': 'SpoolmanDBFilamentColors/1.0'},
     )
-    with urlopen(req, timeout=20) as resp:
-        status = getattr(resp, 'status', 200)
-        if status < 200 or status >= 300:
-            raise ValueError(f'Unexpected HTTP status: {status}')
-        charset = (resp.headers.get_content_charset() or 'utf-8')
-        cache_path = cache_catalog_path()
-        download_file = io.FileIO(cache_path, 'w')
-        import_catalog(
-            cache_path,
-            cache_path.replace('catalog.json', 'database.db'))
-        text_stream = io.TextIOWrapper(download_file, encoding=charset, errors='replace')
-        payload = json.load(text_stream)
-        if not isinstance(payload, list):
-            raise ValueError('Remote catalog payload is not a list')
-        return payload
 
+    spoolman_json_path = cache_spoolman_catalog_path()
+    with open(spoolman_json_path, 'wb') as out:
+        with urlopen(req, timeout=20) as resp:
+            status = getattr(resp, 'status', 200)
+            if status < 200 or status >= 300:
+                raise ValueError(f'Unexpected HTTP status: {status}')
+
+            # Stream in chunks (64KB is a good size)
+            while True:
+                chunk = resp.read(65536)
+                if not chunk:
+                    break
+                out.write(chunk)
+
+    # Now import into SQLite
+    import_spoolman(spoolman_json_path, cache_catalog_database_path())
+    shutil.copy(spoolman_json_path, cache_catalog_path())
+
+    # Now load JSON from file
+    with open(spoolman_json_path, 'r', encoding='utf-8') as f:
+        payload = json.load(f)
+    return payload
 
 def load_cache_payload():
     """Load cached payload from disk when schema shape is usable."""
-    try:
-        payload = read_json_file(cache_catalog_path())
-    except (OSError, json.JSONDecodeError):
+    if not os.path.exists(cache_catalog_path()):
         return None
-    if not isinstance(payload, dict):
-        return None
-    if not isinstance(payload.get('entries'), list):
-        return None
-    return payload
-
+    return read_json_file(cache_catalog_path())
 
 def is_supported_catalog_entry(entry):
     """Return whether a catalog row has required identity and color data."""
