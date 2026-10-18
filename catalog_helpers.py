@@ -7,9 +7,7 @@ import re
 import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-from common import addon_dir, json_text, read_json_file, write_json_file
-from palette_helpers import send_to_palette
-from debug_palette import debug as DEBUG
+from common import addon_dir, read_json_file, write_json_file
 
 CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
 CATALOG_CACHE_FILE = 'filament_catalog_cache.json'
@@ -264,16 +262,3 @@ def catalog_update_status_message(payload, get_text):
     if source.endswith('-stale'):
         return get_text('catalog_update_stale', n=n)
     return get_text('catalog_update_failed')
-
-def handle_request_catalog_for_palette(palette_id, force):
-    """Handle the request to fetch the catalog for a specific palette."""
-    payload = build_catalog_payload(force)
-    if not payload:
-        payload = build_catalog_payload(force_refresh=True)
-
-    if payload:
-        send_to_palette(palette_id, 'catalog', json_text(payload))
-    DEBUG.send(
-        'request_catalog_settings',
-        f"source={payload.get('source') or 'unknown'} entries={len(payload.get('entries') or [])}"
-    )

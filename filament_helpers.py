@@ -147,58 +147,21 @@ def get_appearance_name(filament):
             f"{filament['color_name']} | {filament['hex']}"
         )
 
-def get_or_create_material(design, filament, attempt_library_add = False):
+def get_or_create_material(design, filament):
     """Return an existing or newly created design material for a filament."""
     design = adsk.fusion.Design.cast(get_application().activeProduct)
+    material_libraries = get_application().materialLibraries
     filament_material_name = f"Plastic/{filament['material']}/{filament['color_name']}"
     three_d_printing_material = design.materials.itemByName(filament_material_name)
-    if three_d_printing_material:
-        return three_d_printing_material
-
-    material_libraries = get_application().materialLibraries
-    fusion_library = material_libraries.itemById('C1EEA57C-3F56-45FC-B8CB-A9EC46A9994C')
-    if not fusion_library:
-        return None
-
-    # General Plastic
-    plastic = fusion_library.materials.itemById('PrismMaterial-012')
-    if not plastic:
-        return None
-
-    three_d_printing_material = design.materials.addByCopy(
-        plastic,
-        filament_material_name)
+    if not three_d_printing_material:
+        fusion_library = material_libraries.itemById('C1EEA57C-3F56-45FC-B8CB-A9EC46A9994C')
+        if  fusion_library:
+            # General Plastic
+            plastic = fusion_library.materials.itemById('PrismMaterial-012')
+            three_d_printing_material = design.materials.addByCopy(
+            plastic,
+            filament_material_name)
 
     appearance = get_or_create_appearance(design, filament)
-    three_d_printing_material.appearance = appearance
 
-    if not attempt_library_add:
-        return three_d_printing_material
-
-    try:
-        library_name = get_i18n_text('filament_library')
-        three_d_printing_library = material_libraries.itemByName(library_name)
-        if three_d_printing_library is None:
-            resources_path = os.path.join(
-                os.path.dirname(
-                    os.path.realpath(__file__)),
-                    'resources')
-            three_d_printing_library_base_file = os.path.join(
-                resources_path,
-                'base_3d_printing.adsklib')
-            fusion_material_file = os.path.join(resources_path, library_name + '.adsklib')
-            shutil.copy(three_d_printing_library_base_file, fusion_material_file)
-            three_d_printing_library = material_libraries.load(fusion_material_file)
-            fusion_library = material_libraries.itemById('C1EEA57C-3F56-45FC-B8CB-A9EC46A9994C')
-            if fusion_library:
-                # General Plastic
-                plastic = fusion_library.materials.itemById('PrismMaterial-012')
-                if plastic is not None:
-                    three_d_printing_material = design.materials.addByCopy(
-                        plastic,
-                        filament_material_name)
-                    three_d_printing_material.appearance = appearance
-    except FUSION_API_ERRORS:
-        pass
-
-    return three_d_printing_material
+    return three_d_printing_material, appearance

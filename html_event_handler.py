@@ -1,11 +1,22 @@
 """HTML event handler for the add-in palettes."""
 
 import json
-from catalog import handle_request_catalog_for_palette
+import adsk.core
+
+from catalog_helpers import build_catalog_payload
+from common import json_text
 from lang import ensure_lang
 from app_helpers import get_user_interface
-import adsk.core
-from spoolman_database_filament_colors import PALETTE_ID
+
+def handle_request_catalog_for_palette(palette_id, force):
+    """Handle the request to fetch the catalog for a specific palette."""
+    payload = build_catalog_payload(force)
+    if not payload:
+        payload = build_catalog_payload(force_refresh=True)
+    if payload:
+        palette = get_user_interface().palettes.itemById(palette_id)
+        if palette:
+            palette.sendInfoToHTML('catalog', json_text(payload))
 
 class HTMLEventHandler(adsk.core.HTMLEventHandler):
     """Handle incoming HTML events for all add-in palettes."""

@@ -76,7 +76,7 @@ class CatalogPalette:
         p_catalog = ensure_palette(
             PALETTE_ID,
             get_i18n_text('palette_title'),
-            'palette.html',
+            'catalog_palette.html',
             520,
             720,
             action_handlers

@@ -76,6 +76,10 @@ def run(_context):
 
     appearance_control = solid_modify_controls.itemById('AppearanceCommand')
 
+    command_control = solid_modify_controls.itemById(CMD_ID)
+    if command_control:
+        command_control.deleteMe()
+
     if appearance_control:
         # Insert after Appearance
         solid_modify_controls.addCommand(command_definition, 'AppearanceCommand', False)
