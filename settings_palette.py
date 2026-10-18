@@ -1,6 +1,6 @@
 """Settings palette management for the Spoolman Fusion add-in."""
 
-from palette_helpers import ensure_palette, send_to_palette
+from palette_helpers import ensure_palette
 from text_i18n import get_i18n_text
 from app_helpers import get_user_interface
 
