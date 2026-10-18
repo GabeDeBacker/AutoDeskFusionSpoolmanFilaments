@@ -878,6 +878,7 @@ function onFilterChange(options){
   filterCards({focusAnchor:!!opts.focusAnchor});
   persistFilters();
   sendFilamentQuery();
+  sendFilterLists();
 }
 
 function onColorFilterToggleChange(){
@@ -1019,6 +1020,12 @@ async function fallbackLoadCatalog(){
   }
 }
 
+function setQueryResults(results) {
+}
+
+function setFilterLists(results) {
+}
+
 window.fusionJavaScriptHandler={
   handleFusionJavaScriptMessage: function (msg) {
       console.log("Fusion → HTML:", msg);
@@ -1056,22 +1063,41 @@ window.fusionJavaScriptHandler={
       const el=document.querySelector(`input[name="scope"][value="${currentScope}"]`);
       if(el) el.checked=true;
     }
-    return 'OK';
+    
+    if (action == 'filament_query_results') {
+      setQueryResults(JSON.parse(data||'{}'));
+    }
+
+    if (action == 'filter_lists_results') {
+      setFilterLists(JSON.parse(data||'{}'));
+    }
   }
 };
 
+function sendFilterLists() {
+  adsk.fusionSendData("get_filter_lists", JSON.stringify({
+    manufacturer: document.getElementById('cat').value,
+    finish: document.getElementById('finish').value,
+    material: document.getElementById('mat').value
+  }));
+}
+
 function sendFilamentQuery() {
+  const enabled=document.getElementById('colorFilterOn').checked;
+
   adsk.fusionSendData("query_filaments", JSON.stringify({
     text: document.getElementById('q').value,
     manufacturer: document.getElementById('cat').value,
     finish: document.getElementById('finish').value,
-    colorRgb: document.getElementById('colorFilterHex').value,
+    material: document.getElementById('mat').value,
+    colorFilterOn: enabled,
+    color: document.getElementById('colorFilterHex').value,
     hsvTolerance: {
         h: document.getElementById('colorFilterHue').value/100,
         s: document.getElementById('colorFilterSat').value/100,
         v: document.getElementById('colorFilterVal').value/100,
     },
-    sort: "color",
+    sort: document.getElementById('sort').value,
     page: currentPage,
     pageSize: getPageSize()
   }));
@@ -1095,6 +1121,8 @@ function fusionReady() {
   requestCatalog();
   requestSavedFilters();
   requestScope();
+  sendFilamentQuery();
+  sendFilterLists();
 }
 
 waitForAdsk();

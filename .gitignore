@@ -31,7 +31,7 @@ filament_catalog_cache.json
 spoolman_filament_catalog_cache.json
 ui_state.json
 filament_catalog_cache.db
-
+cache/*
 
 # Fusion 360 3D Printing Material Library
 3d_printing.adsklib

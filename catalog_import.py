@@ -1,302 +1,267 @@
-"""
-Module for importing filament catalog data from a JSON file into an SQLite database.
+"""Filament catalog download, normalization, caching, and status helpers."""
 
-Functions:
-- stream_json_entries(path): Streams entries from the JSON catalog file.
-- import_spoolman(json_path, db_path): Imports the Spoolman catalog into the specified SQLite database.
-"""
-
-import sqlite3
 import json
-import colorsys
+import os
+import re
+import shutil
 import time
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+from catalog_database import CatalogDatabase, get_catalog_database
+from common import read_json_file, write_json_file
 
-def hex_to_hsv(hex_color):
-    """Convert a hex color string to HSV values."""
-    hex_color = hex_color.lstrip('#')
-    # The value returned from rgb_to_hsv are values between 0 and 1, hence the division by 255.
-    r = int(hex_color[0:2], 16) / 255.0
-    g = int(hex_color[2:4], 16) / 255.0
-    b = int(hex_color[4:6], 16) / 255.0
-    h, s, v = colorsys.rgb_to_hsv(r, g, b)
-    return h, s, v
+CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
+CATALOG_CACHE_TTL_SECONDS = 7 * 24 * 60 * 60
+HEX_RE = re.compile(r'^[0-9A-Fa-f]{6}$')
 
-def stream_json_array(path):
-    """Stream objects from a JSON array in the file at the given path."""
-    decoder = json.JSONDecoder()
-    with open(path, "r", encoding="utf8") as f:
-        buffer = ""
-        # Skip initial '['
-        char = f.read(1)
-        if char != "[":
-            raise ValueError("Expected JSON array")
+def normalize_hex(value):
+    """Normalize a hex color string to ``#RRGGBB`` or return an empty string."""
+    if not isinstance(value, str):
+        return ''
+    s = value.strip().lstrip('#')
+    if not HEX_RE.fullmatch(s):
+        return ''
+    return '#' + s.upper()
 
-        while True:
-            chunk = f.read(64*1024)
-            if not chunk:
-                break
-            buffer += chunk
+def normalize_hexes(color_hex, color_hexes):
+    """Build a normalized primary+secondary hex list from raw source values."""
+    values = []
+    if isinstance(color_hexes, list):
+        for item in color_hexes:
+            hx = normalize_hex(item)
+            if hx:
+                values.append(hx)
+    first = normalize_hex(color_hex)
+    if first and first not in values:
+        values.insert(0, first)
+    if not values and first:
+        values = [first]
+    return values
 
-            while True:
-                buffer = buffer.lstrip()
-                if buffer.startswith("]"):
-                    return
+def map_finish(raw_finish, pattern, multi_color_direction, glow):
+    """Map raw finish metadata into the UI finish taxonomy."""
+    finish = (raw_finish or '').strip().lower()
+    pattern_name = (pattern or '').strip().lower()
+    has_multi = bool((multi_color_direction or '').strip())
+    if glow:
+        return 'glow'
+    if has_multi:
+        return 'multi'
+    if pattern_name == 'sparkle':
+        return 'sparkle'
+    if finish == 'matte':
+        return 'matte'
+    if finish in ('glossy', 'silk'):
+        return 'silk'
+    return 'standard'
 
-                try:
-                    obj, idx = decoder.raw_decode(buffer)
-                except json.JSONDecodeError:
-                    break
+def build_search_text(manufacturer, material, color_name, finish, pattern):
+    """Build a normalized searchable text blob for a catalog entry."""
+    parts = [manufacturer, material, color_name, finish, pattern]
+    return ' '.join([p.strip().lower() for p in parts if isinstance(p, str) and p.strip()])
 
-                yield obj
-                buffer = buffer[idx:].lstrip()
-                if buffer.startswith(","):
-                    buffer = buffer[1:]
+def spoolman_row_to_catalog_entry(row):
+    """Convert one Spoolman row into the add-in catalog entry schema."""
+    if not isinstance(row, dict):
+        return None
+    manufacturer = (row.get('manufacturer') or '').strip()
+    material = (row.get('material') or '').strip()
+    color_name = (row.get('name') or '').strip()
+    hexes = normalize_hexes(row.get('color_hex'), row.get('color_hexes'))
+    if not manufacturer or not material or not color_name or not hexes:
+        return None
 
-def set_metadata(cur, metadata):
-    # Drop and recreate table
-    cur.execute("DROP TABLE IF EXISTS catalog_metadata")
-    cur.execute("""
-        CREATE TABLE catalog_metadata (
-            schema_version INTEGER,
-            catalog_version TEXT,
-            generated_epoch INTEGER,
-            entry_count INTEGER,
-            source TEXT
-        );
-    """)
-
-    # Insert metadata row
-    cur.execute("""
-        INSERT INTO catalog_metadata (
-            schema_version,
-            catalog_version,
-            generated_epoch,
-            entry_count,
-            source
-        ) VALUES (?, ?, ?, ?, ?)
-    """, (
-        metadata["schema_version"],
-        metadata["catalog_version"],
-        metadata["generated_epoch"],
-        metadata["entry_count"],
-        metadata["source"]
-    ))
-
-def import_spoolman(json_path, db_path):
-    """Import the Spoolman filament catalog from a JSON file into an SQLite database."""
-    con = sqlite3.connect(db_path)
-    cur = con.cursor()
-    entry_count = 0
-
-    # Speed pragmas
-    cur.execute("PRAGMA journal_mode = WAL;")
-    cur.execute("PRAGMA synchronous = NORMAL;")
-    cur.execute("PRAGMA temp_store = MEMORY;")
-    cur.execute("PRAGMA mmap_size = 268435456;")
-
-    # Drop and recreate table
-    cur.execute("DROP TABLE IF EXISTS filaments")
-    cur.execute("""
-        CREATE TABLE filaments (
-            id TEXT PRIMARY KEY,
-            manufacturer TEXT,
-            name TEXT,
-            material TEXT,
-            density REAL,
-            weight REAL,
-            spool_weight REAL,
-            spool_type TEXT,
-            diameter REAL,
-            color_hex TEXT,
-            color_hexes TEXT,
-            extruder_temp REAL,
-            extruder_temp_range TEXT,
-            bed_temp REAL,
-            bed_temp_range TEXT,
-            finish TEXT,
-            multi_color_direction TEXT,
-            pattern TEXT,
-            translucent INTEGER,
-            glow INTEGER,
-            hue REAL,
-            saturation REAL,
-            value REAL
-        );
-    """)
-
-    con.commit()
-
-    # This is going to take a lot of memory temporarily, but otherwise the import will be much faster than inserting rows one by one.
-    rows = []
-    for entry in stream_json_array(json_path):        
-        entry_count += 1
-
-        # Convert first hex color to HSV
-        hex_color = entry["color_hex"] or (entry["color_hexes"][0] if entry["color_hexes"] else None)
-        h, s, v = hex_to_hsv(hex_color)
-
-        rows.append((
-            entry["id"],
-            entry["manufacturer"],
-            entry["name"],
-            entry["material"],
-            entry["density"],
-            entry["weight"],
-            entry["spool_weight"],
-            entry["spool_type"],
-            entry["diameter"],
-            entry["color_hex"],
-            json.dumps(entry["color_hexes"]),
-            entry["extruder_temp"],
-            json.dumps(entry["extruder_temp_range"]),
-            entry["bed_temp"],
-            json.dumps(entry["bed_temp_range"]),
-            entry["finish"],
-            entry["multi_color_direction"],
-            entry["pattern"],
-            int(entry["translucent"]),
-            int(entry["glow"]),
-            h, s, v
-        ))
-
-    cur.execute("BEGIN TRANSACTION;")
-    if rows:
-        cur.executemany("""
-            INSERT INTO filaments VALUES (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-            )
-        """, rows)
-
-    con.commit()
-
-    con.execute("""CREATE INDEX idx_filaments_id ON filaments(id);""")
-    con.execute("""CREATE INDEX idx_filaments_manufacturer ON filaments(manufacturer);""")
-    con.execute("""CREATE INDEX idx_filaments_material ON filaments(material);""")
-    con.execute("""CREATE INDEX idx_filaments_finish ON filaments(finish);""")
-    con.execute("""CREATE INDEX idx_filaments_translucent ON filaments(translucent);""")
-    con.execute("""CREATE INDEX idx_filaments_glow ON filaments(glow);""")
-    con.execute("""CREATE INDEX idx_filaments_hue ON filaments(hue);""")
-    con.execute("""CREATE INDEX idx_filaments_saturation ON filaments(saturation);""")
-    con.execute("""CREATE INDEX idx_filaments_value ON filaments(value);""")
-
-    #
-    # Compute metadata AFTER import
-    #
-    metadata = {
-        "schema_version": 1,                 # your choice
-        "catalog_version": "spoolman-json",  # your choice
-        "generated_epoch": int(time.time()), # now
-        "entry_count": entry_count,
-        "source": "spoolman-db"
-    }
-
-    set_metadata(con.cursor(), metadata)
-    con.commit()
-    con.close()
-
-FILAMENT_COLUMNS = [
-    "id",
-    "manufacturer",
-    "name",
-    "material",
-    "density",
-    "weight",
-    "spool_weight",
-    "spool_type",
-    "diameter",
-    "color_hex",
-    "color_hexes",
-    "extruder_temp",
-    "extruder_temp_range",
-    "bed_temp",
-    "bed_temp_range",
-    "finish",
-    "multi_color_direction",
-    "pattern",
-    "translucent",
-    "glow",
-    "hue",
-    "saturation",
-    "value"
-]
-
-def query_filaments(db_path, q):
-    """Query filaments from the database based on the given filters."""
-    where = []
-    params = []
-
-    # Text search
-    if q["text"]:
-        where.append("search_text LIKE ?")
-        params.append(f"%{q['text']}%")
-
-    # Manufacturer filter
-    if q["manufacturer"]:
-        where.append("manufacturer = ?")
-        params.append(q["manufacturer"])
-
-    # Finish filter
-    if q["finish"]:
-        where.append("finish = ?")
-        params.append(q["finish"])
-
-    # HSV proximity
-    if q["hsvTolerance"] and q["color"]:
-        color_h, color_s, color_v = hex_to_hsv(q["color"])
-        if (q["hsvTolerance"]["h"] and q["hsvTolerance"]["s"] and q["hsvTolerance"]["v"]):
-            where.append("WHERE ABS(hue - ?) <= ?"
-                         " AND ABS(saturation - ?) <= ?"
-                         " AND ABS(value - ?) <= ?")
-            params.append(color_h)
-            params.append(q["hsvTolerance"]["h"])
-            params.append(color_s)
-            params.append(q["hsvTolerance"]["s"])
-            params.append(color_v)
-            params.append(q["hsvTolerance"]["v"])
-
-    # Build WHERE clause
-    where_clause = "WHERE " + " AND ".join(where) if where else ""
-
-    # Sorting
-    if q["sort"] == "name":
-        order_clause = "ORDER BY name ASC"
-    elif q["sort"] == "color":
-        order_clause = "ORDER BY hue ASC, saturation ASC, value ASC"
-    else:
-        order_clause = ""
-
-    # Pagination
-    page = q["page"]
-    page_size = q["pageSize"]
-    offset = (page - 1) * page_size
-
-    limit_clause = "LIMIT ? OFFSET ?"
-    params.extend([page_size, offset])
-
-    # Count query
-    count_sql = f"SELECT COUNT(*) FROM filaments {where_clause}"
-    con = sqlite3.connect(db_path)
-    cur = con.cursor()
-    cur.execute(count_sql, params[:-2])  # exclude limit/offset
-    total = cur.fetchone()[0]
-
-    # Data query
-    sql = f"""
-        SELECT *
-        FROM filaments
-        {where_clause}
-        {order_clause}
-        {limit_clause}
-    """
-
-    cur.execute(sql, params)
-    rows = cur.fetchall()
-    con.close()
+    finish = map_finish(
+        row.get('finish'),
+        row.get('pattern'),
+        row.get('multi_color_direction'),
+        bool(row.get('glow')),
+    )
+    translucent = bool(row.get('translucent'))
+    pattern = (row.get('pattern') or '').strip()
 
     return {
-        "total": total,
-        "page": page,
-        "pageSize": page_size,
-        "pages": (total + page_size - 1) // page_size,
-        "results": [dict(zip(FILAMENT_COLUMNS, r)) for r in rows]
+        'manufacturer': manufacturer,
+        'material': material,
+        'color_name': color_name,
+        'hex': hexes[0],
+        'hexes': hexes,
+        'finish': finish,
+        'translucent': translucent,
+        'opacity': 0.45 if translucent else 1.0,
+        'roughness': 0.58 if finish == 'matte' else 0.44,
+        'hex_quality': 'spoolman-db',
+        'search_text': build_search_text(manufacturer, material, color_name, finish, pattern),
     }
+
+
+def normalize_spoolman_entries(rows):
+    """Normalize and deduplicate Spoolman rows into catalog entries."""
+    out = []
+    seen = set()
+    if not isinstance(rows, list):
+        return out
+    for row in rows:
+        entry = spoolman_row_to_catalog_entry(row)
+        if not entry:
+            continue
+        key = '|'.join([
+            entry.get('manufacturer', ''),
+            entry.get('material', ''),
+            entry.get('color_name', ''),
+            entry.get('hex', ''),
+        ])
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(entry)
+    return out
+
+
+def build_payload(entries, version, source):
+    """Build the versioned catalog payload persisted on disk and sent to UI."""
+    return {
+        'schema_version': 2,
+        'catalog_version': str(version),
+        'generated_epoch': int(time.time()),
+        'entry_count': len(entries),
+        'source': source,
+        'entries': entries,
+    }
+
+
+def download_spoolman_entries():
+    """Download raw filament rows from the upstream Spoolman catalog."""
+    req = Request(
+        CATALOG_CACHE_URL,
+        headers={'User-Agent': 'SpoolmanDBFilamentColors/1.0'},
+    )
+
+    os.makedirs(CatalogDatabase.cache_directory(), exist_ok=True)
+    spoolman_json_path =  CatalogDatabase.cache_spoolman_catalog_path()
+    with open(spoolman_json_path, 'wb') as out:
+        with urlopen(req, timeout=20) as resp:
+            status = getattr(resp, 'status', 200)
+            if status < 200 or status >= 300:
+                raise ValueError(f'Unexpected HTTP status: {status}')
+
+            # Stream in chunks (64KB is a good size)
+            while True:
+                chunk = resp.read(65536)
+                if not chunk:
+                    break
+                out.write(chunk)
+
+    # Now import into SQLite
+    get_catalog_database().import_spoolman(spoolman_json_path)
+    shutil.copy(spoolman_json_path, CatalogDatabase.cache_catalog_path())
+
+    # Now load JSON from file
+    with open(spoolman_json_path, 'r', encoding='utf-8') as f:
+        payload = json.load(f)
+    return payload
+
+def load_cache_payload():
+    """Load cached payload from disk when schema shape is usable."""
+    if not os.path.exists(CatalogDatabase.cache_catalog_path()):
+        return None
+    return read_json_file(CatalogDatabase.cache_catalog_path())
+
+def is_supported_catalog_entry(entry):
+    """Return whether a catalog row has required identity and color data."""
+    if not isinstance(entry, dict):
+        return False
+    manufacturer = (
+        entry.get('manufacturer') or entry.get('brand') or entry.get('maker') or ''
+    ).strip()
+    material = (entry.get('material') or entry.get('product_line') or '').strip()
+    color_name = (entry.get('color_name') or entry.get('color') or entry.get('name') or '').strip()
+    if not manufacturer or not material or not color_name:
+        return False
+    if isinstance(entry.get('hexes'), list):
+        for hx in entry.get('hexes'):
+            if normalize_hex(hx):
+                return True
+    if normalize_hex(entry.get('hex') or entry.get('primary_hex') or ''):
+        return True
+    return False
+
+
+def has_usable_entries(payload):
+    """Return whether a payload contains at least one supported entry."""
+    if not isinstance(payload, dict):
+        return False
+    entries = payload.get('entries')
+    if not isinstance(entries, list) or not entries:
+        return False
+    for entry in entries:
+        if is_supported_catalog_entry(entry):
+            return True
+    return False
+
+
+def cache_is_fresh(payload):
+    """Return whether cache age is within the configured TTL window."""
+    if not payload:
+        return False
+    try:
+        generated = int(payload.get('generated_epoch') or 0)
+    except (TypeError, ValueError):
+        return False
+    if generated <= 0:
+        return False
+    return (int(time.time()) - generated) < CATALOG_CACHE_TTL_SECONDS
+
+
+def refresh_cache_from_remote():
+    """Fetch remote rows, normalize them, and persist the refreshed cache."""
+    raw_rows = download_spoolman_entries()
+    entries = normalize_spoolman_entries(raw_rows)
+    if not entries:
+        raise ValueError('Remote catalog normalization produced zero entries')
+    version = f"spoolman-{int(time.time())}"
+    payload = build_payload(entries, version, 'spoolman-db')
+    write_json_file(CatalogDatabase.cache_catalog_path(), payload)
+    return payload
+
+
+def build_catalog_payload(force_refresh=False):
+    """Return best-effort catalog payload using remote data or cache fallback."""
+    if not force_refresh:
+        cache_payload = load_cache_payload()
+        cache_usable = has_usable_entries(cache_payload)
+        if cache_payload and cache_usable and cache_is_fresh(cache_payload):
+            return cache_payload
+
+    remote_error = None
+    try:
+        fresh = refresh_cache_from_remote()
+        return fresh
+    except (OSError, TimeoutError, ValueError, HTTPError, URLError, json.JSONDecodeError) as ex:
+        remote_error = str(ex)
+
+    if cache_payload and cache_usable:
+        stale = dict(cache_payload)
+        stale['source'] = f"{cache_payload.get('source', 'cache')}-stale"
+        stale['remote_error'] = remote_error
+        return stale
+
+    payload = build_payload([], f"unavailable-{int(time.time())}", 'remote-unavailable')
+    payload['remote_error'] = (
+        remote_error or 'Remote catalog unavailable and no usable cache is present.'
+    )
+    return payload
+
+
+def catalog_update_status_message(payload, get_text):
+    """Map catalog payload source state to a localized status message."""
+    if not isinstance(payload, dict):
+        return get_text('catalog_update_failed')
+    source = str(payload.get('source') or '')
+    entries = payload.get('entries') or []
+    n = len(entries) if isinstance(entries, list) else 0
+    if source == 'spoolman-db':
+        return get_text('catalog_update_success', n=n)
+    if source.endswith('-stale'):
+        return get_text('catalog_update_stale', n=n)
+    return get_text('catalog_update_failed')

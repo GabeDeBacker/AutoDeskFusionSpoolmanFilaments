@@ -8,6 +8,10 @@ def addon_dir():
     """Return the absolute path to the add-in directory."""
     return os.path.dirname(os.path.realpath(__file__))
 
+def path_from_add_on(*args):
+    """Return the absolute path to a file within the add-on directory."""
+    return os.path.join(addon_dir(), *args)
+
 def read_json_file(path):
     """Load and return JSON from ``path`` using UTF-8."""
     with open(path, 'r', encoding='utf-8') as f:
