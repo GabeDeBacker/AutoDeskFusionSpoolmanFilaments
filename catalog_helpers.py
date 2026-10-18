@@ -7,6 +7,7 @@ import re
 import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+from catalog_import import import_catalog
 from common import addon_dir, read_json_file, write_json_file
 
 CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
@@ -145,7 +146,12 @@ def download_spoolman_entries():
         if status < 200 or status >= 300:
             raise ValueError(f'Unexpected HTTP status: {status}')
         charset = (resp.headers.get_content_charset() or 'utf-8')
-        text_stream = io.TextIOWrapper(resp, encoding=charset, errors='replace')
+        cache_path = cache_catalog_path()
+        download_file = io.FileIO(cache_path, 'w')
+        import_catalog(
+            cache_path,
+            cache_path.replace('catalog.json', 'database.db'))
+        text_stream = io.TextIOWrapper(download_file, encoding=charset, errors='replace')
         payload = json.load(text_stream)
         if not isinstance(payload, list):
             raise ValueError('Remote catalog payload is not a list')
@@ -225,10 +231,11 @@ def refresh_cache_from_remote():
 
 def build_catalog_payload(force_refresh=False):
     """Return best-effort catalog payload using remote data or cache fallback."""
-    cache_payload = load_cache_payload()
-    cache_usable = has_usable_entries(cache_payload)
-    if (not force_refresh) and cache_payload and cache_usable and cache_is_fresh(cache_payload):
-        return cache_payload
+    if not force_refresh:
+        cache_payload = load_cache_payload()
+        cache_usable = has_usable_entries(cache_payload)
+        if cache_payload and cache_usable and cache_is_fresh(cache_payload):
+            return cache_payload
 
     remote_error = None
     try:

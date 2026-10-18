@@ -4,7 +4,8 @@ import json
 import adsk.core
 
 from catalog_helpers import build_catalog_payload
-from common import json_text
+from catalog_import import import_catalog
+from common import addon_dir, json_text
 from lang import ensure_lang
 from app_helpers import get_user_interface
 

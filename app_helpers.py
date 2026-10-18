@@ -8,10 +8,7 @@ DESIGN = None
 
 def get_design():
     """Return the current Fusion design instance."""
-    global DESIGN
-    if DESIGN is None:
-        DESIGN = adsk.fusion.Design.cast(get_application().activeProduct)
-    return DESIGN
+    return adsk.fusion.Design.cast(get_application().activeProduct)
 
 def get_application():
     """Return the current Fusion application instance."""
