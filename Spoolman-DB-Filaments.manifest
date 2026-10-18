@@ -1,0 +1,16 @@
+{
+  "autodeskProduct": "Fusion360",
+  "type": "addin",
+  "author": "Gabriel DeBacker",
+  "description": {
+    "": "SpoolmanDB filament catalog add-in with complete parent export to Fusion F3D and single-file 3MF.",
+    "1033": "SpoolmanDB filament catalog add-in with complete parent export to Fusion F3D and single-file 3MF.",
+    "1036": "Extension SpoolmanDB pour gérer le catalogue de filaments, avec export complet du modèle parent vers Fusion en F3D et en 3MF monofichier."
+  },
+  "supportedOS": "windows|mac",
+  "editEnabled": true,
+  "version": "1.0.1",
+  "runOnStartup": true,
+  "iconFilename": "resources/spool/16x16.svg",
+  "name": "Foo McBar"
+}

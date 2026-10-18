@@ -49,7 +49,6 @@
 <footer id="pager" class="pagerfooter">
   <div class="pagerrow pagerrow-bottom">
     <div class="headicons footer-icons">
-      <button id="openActions" class="iconbtn" onclick="openActionsPalette()"></button>
       <button id="openSettings" class="iconbtn" onclick="openSettingsPalette()"></button>
     </div>
     <div class="pager-controls">
@@ -894,15 +893,6 @@ function onColorHexInput(){
   onFilterChange({focusAnchor:true});
 }
 
-function openActionsPalette(){
-  try{
-    adsk.fusionSendData('open_actions_palette','');
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-
 function openSettingsPalette(){
   try{
     adsk.fusionSendData('open_settings_palette','');
@@ -917,9 +907,6 @@ function setUiLanguage(lang){
   const t=I18N[currentLang];
   document.documentElement.lang=t.lang;
   document.getElementById('q').placeholder=t.searchPlaceholder;
-  document.getElementById('openActions').textContent='⤓';
-  document.getElementById('openActions').title=t.openActions;
-  document.getElementById('openActions').setAttribute('aria-label',t.openActions);
   document.getElementById('openSettings').textContent='⚙';
   document.getElementById('openSettings').title=t.openSettings;
   document.getElementById('openSettings').setAttribute('aria-label',t.openSettings);
@@ -966,8 +953,11 @@ function requestCatalog(){
   if(!bridgeReady()){
     return false;
   }
+  if (catalogLoaded) {
+    return true;
+  }
   try{
-    adsk.fusionSendData('request_catalog','');
+    adsk.fusionSendData('request_catalog','{"force":false}');
     requestAttempts+=1;
     return true;
   }catch(_){
@@ -1028,63 +1018,17 @@ async function fallbackLoadCatalog(){
   }
 }
 
-function scheduleCatalogRetries(){
-  if(catalogRetryTimer) return;
-  catalogRetryStartedAt=Date.now();
-  catalogRetryTimer=setInterval(()=>{
-    if(catalogLoaded){
-      clearInterval(catalogRetryTimer);
-      catalogRetryTimer=null;
-      return;
-    }
-    const elapsed=Date.now()-catalogRetryStartedAt;
-    if(elapsed>=CATALOG_RETRY_MAX_MS){
-      clearInterval(catalogRetryTimer);
-      catalogRetryTimer=null;
-      if(!catalogLoaded){
-        fallbackLoadCatalog();
-      }
-      return;
-    }
-    requestCatalog();
-  },CATALOG_RETRY_INTERVAL_MS);
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{
-      if(!catalogLoaded) requestCatalog();
-    },ms);
-  });
-}
-
-function scheduleLanguageRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{
-      if(typeof adsk !== 'undefined' && adsk && typeof adsk.fusionSendData === 'function') {
-        requestLanguage();
-      }
-    },ms);
-  });
-}
-
-function scheduleSavedFiltersRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestSavedFilters(); },ms);
-  });
-}
-
-function scheduleScopeRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestScope(); },ms);
-  });
-}
-
 window.fusionJavaScriptHandler={
+  handleFusionJavaScriptMessage: function (msg) {
+      console.log("Fusion → HTML:", msg);
+      return "OK";
+  },
+
   handle:function(action,data){
+    console.log('Received action:', action, 'with data:', data);
     if(action==='status') document.getElementById('status').textContent=data;
-      if(action==='setLang'){
+    if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
-      if(!catalogLoaded){
-        setTimeout(()=>{ requestCatalog(); },0);
-      }
     }
     if(action==='catalog'){
       try{
@@ -1092,24 +1036,6 @@ window.fusionJavaScriptHandler={
         const extracted=extractCatalogPayload(parsed);
         setCatalog(extracted.entries,extracted.meta,'fusion-bridge');
         const source=(extracted.meta&&extracted.meta.source?String(extracted.meta.source):'').toLowerCase();
-        const shouldForceRefresh=(
-          !catalogLoaded &&
-          !startupForceRefreshAttempted &&
-          (
-            source.includes('unavailable') ||
-            source.includes('startup-error') ||
-            source.includes('invalid') ||
-            source==='payload'
-          )
-        );
-        if(shouldForceRefresh){
-          startupForceRefreshAttempted=true;
-          try{
-            adsk.fusionSendData('request_catalog_force','');
-          }catch(_){
-            // Keep silent; periodic request loop will continue.
-          }
-        }
       }
       catch(_){ setCatalog([],null,'fusion-bridge'); }
     }
@@ -1133,29 +1059,29 @@ window.fusionJavaScriptHandler={
   }
 };
 
+
+// Wait for Fusion to inject the API
+function waitForAdsk() {
+    if (typeof adsk !== "undefined") {
+        console.log("adsk ready");
+        fusionReady();
+    } else {
+        setTimeout(waitForAdsk, 50);
+    }
+}
+
+function fusionReady() {
+  updateColorFilterUiState();
+  updateColorDistanceLabel();
+  updateColorRangePreview();
+  requestLanguage();
+  requestCatalog();
+  requestSavedFilters();
+  requestScope();
+}
+
+waitForAdsk();
+
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
-removeLegacyColorWheelUi();
-updateColorFilterUiState();
-updateColorDistanceLabel();
-updateColorRangePreview();
-requestLanguage();
-scheduleLanguageRetries();
-requestCatalog();
-requestSavedFilters();
-requestScope();
-scheduleSavedFiltersRetries();
-scheduleScopeRetries();
-scheduleCatalogRetries();
-setTimeout(()=>{ if(!catalogLoaded) fallbackLoadCatalog(); },500);
-setTimeout(()=>{
-  if(catalogLoaded || startupForceTimerFired || !bridgeReady()) return;
-  startupForceTimerFired=true;
-  try{
-    adsk.fusionSendData('request_catalog_force','');
-  }catch(_){
-    // Keep silent; persistent retry loop stays active.
-  }
-},2500);
-window.addEventListener('focus',()=>{ if(!catalogLoaded) requestCatalog(); });
 </script></body></html>

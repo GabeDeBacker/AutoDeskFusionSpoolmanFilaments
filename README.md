@@ -84,6 +84,8 @@ Use `.3mf` or `.f3d` when you need to preserve more appearance/color context tha
 
 ## Screenshots
 
+![Example](docs/images/full-screenshot.png)
+![Modify Menu](docs/images/modify_menu.png)
 ![Main filament palette](docs/images/palette-main.png)
 ![Color proximity filtering controls](docs/images/color-proximity-filter.png)
 

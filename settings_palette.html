@@ -21,16 +21,11 @@
     <button id="refreshCatalog" class="parentbtn wide" onclick="refreshCatalog()"></button>
   </div>
 </section>
-<div class="setting-row">
-  <label class="setting-toggle" for="debugModeToggle">
-    <input id="debugModeToggle" type="checkbox" onchange="toggleDebugMode(this.checked)">
-    <span id="debugModeLabel">Debug mode</span>
-  </label>
-</div>
 <script>
 let currentLang='en';
 const CATALOG_CREDIT_URL='https://donkie.github.io/SpoolmanDB/';
 let catalogMeta={version:'-',source:'none',entryCount:0};
+let catalogLoaded = false;
 
 function sourceCreditLabel(source){
   const t=I18N[currentLang]||I18N.en;
@@ -74,6 +69,7 @@ function applyCatalogPayload(rawPayload){
   catalogMeta=extracted.meta;
   setCatalogSummary(extracted.entries,extracted.meta);
   updateCatalogAttribution();
+  catalogLoaded = extracted.entries.length > 0;
 }
 
 function setUiLanguage(lang){
@@ -85,7 +81,6 @@ function setUiLanguage(lang){
   document.getElementById('catalogRefsLabel').textContent=t.catalogReferencesLabel||'References';
   document.getElementById('catalogManufacturersLabel').textContent=t.catalogManufacturersLabel||'Manufacturers';
   document.getElementById('catalogLinesLabel').textContent=t.catalogLinesLabel||'Product lines';
-  document.getElementById('debugModeLabel').textContent=t.debugMode||'Debug mode';
   document.getElementById('refreshCatalog').textContent=t.refreshCatalog;
   updateCatalogAttribution();
 }
@@ -99,32 +94,23 @@ function requestLanguage(){
   }
 }
 
-function requestCatalogMeta(){
+function requestCatalog(){
+  if (catalogLoaded) {
+    return true;
+  }
   try{
-    adsk.fusionSendData('request_catalog_settings','');
+    adsk.fusionSendData('request_catalog','{"force":false}');
     return true;
   }catch(_){
     return false;
   }
 }
-
-function scheduleCatalogMetaRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestCatalogMeta(); },ms);
-  });
-}
-
-function scheduleLanguageRetries(){
-  [250,800,1600,3000].forEach((ms)=>{
-    setTimeout(()=>{ requestLanguage(); },ms);
-  });
-}
-
 function refreshCatalog(){
+  catalogLoaded = false;
   const t=I18N[currentLang]||I18N.en;
   document.getElementById('status').textContent=t.refreshingCatalog;
   try{
-    adsk.fusionSendData('request_catalog_force_settings','');
+    adsk.fusionSendData('request_catalog','{"force":true}');
     return true;
   }catch(_){
     document.getElementById('status').textContent=(I18N[currentLang]||I18N.en).catalogUpdateRequestFailed;
@@ -132,24 +118,12 @@ function refreshCatalog(){
   }
 }
 
-function toggleDebugMode(enabled){
-  try{
-    adsk.fusionSendData('set_debug_mode', enabled ? '1' : '0');
-    if(enabled){
-      adsk.fusionSendData('open_debug_palette','');
-    }
-    return true;
-  }catch(_){
-    return false;
-  }
-}
 
 window.fusionJavaScriptHandler={
   handle:function(action,data){
     if(action==='status') document.getElementById('status').textContent=data;
     if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
-      requestCatalogMeta();
     }
     if(action==='catalog'){
       try{
@@ -159,20 +133,27 @@ window.fusionJavaScriptHandler={
         // Ignore malformed payload and keep previous catalog snapshot.
       }
     }
-    if(action==='setDebugMode'){
-      const enabled = String(data||'').toLowerCase() === '1' || String(data||'').toLowerCase() === 'true';
-      const el = document.getElementById('debugModeToggle');
-      if(el) el.checked = enabled;
-    }
     return 'OK';
   }
 };
 
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
-requestLanguage();
-scheduleLanguageRetries();
-requestCatalogMeta();
-scheduleCatalogMetaRetries();
-window.addEventListener('focus',()=>{ requestCatalogMeta(); });
+
+function waitForAdsk() {
+    if (typeof adsk !== "undefined") {
+        console.log("adsk ready");
+        fusionReady();
+    } else {
+        setTimeout(waitForAdsk, 50);
+    }
+}
+
+function fusionReady() {
+  requestLanguage();
+  requestCatalog();
+}
+
+waitForAdsk();
+
 </script></body></html>

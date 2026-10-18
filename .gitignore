@@ -25,3 +25,6 @@ __pycache__/
 # Runtime cache
 filament_catalog_cache.json
 ui_state.json
+
+# Fusion 360 3D Printing Material Library
+3d_printing.adsklib

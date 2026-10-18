@@ -1,19 +1,19 @@
-"""Fusion appearance creation and scope-based application helpers."""
-
+"""Helper functions for managing filament appearances in Fusion 360."""
+import os
+import shutil
 import adsk.core
-import adsk.fusion
-
-FUSION_API_ERRORS = (RuntimeError, AttributeError, TypeError, ValueError, IndexError)
+from app_helpers import get_application
+from common import FUSION_API_ERRORS
+from text_i18n import get_i18n_text
 
 def color_from_hex(hex_value, alpha=255):
     """Create a Fusion ``Color`` from a ``#RRGGBB`` string."""
     h = hex_value.lstrip('#')
     return adsk.core.Color.create(int(h[:2], 16), int(h[2:4], 16), int(h[4:6], 16), alpha)
 
-
 def find_native_base(translucent=False):
     """Find a suitable native Autodesk base appearance for copy/recolor."""
-    app = adsk.core.Application.get()
+    app = get_application()
     libs = app.materialLibraries
     candidates = []
 
@@ -69,7 +69,6 @@ def find_native_base(translucent=False):
     candidates.sort(key=lambda x: (x[0], x[1]))
     return candidates[0][2]
 
-
 def set_native_copied_color(appearance, filament):
     """Apply filament color/roughness/transparency onto a copied appearance."""
     color = color_from_hex(filament['hex'])
@@ -116,19 +115,9 @@ def set_native_copied_color(appearance, filament):
                 pass
 
 
-def get_or_create_appearance(design, filament, get_text=None):
+def get_or_create_appearance(design, filament):
     """Return an existing or newly created design appearance for a filament."""
-    manufacturer = str(filament.get('manufacturer') or '').strip()
-    if manufacturer:
-        name = (
-            f"{manufacturer} | {filament['material']} | "
-            f"{filament['color_name']} | {filament['hex']}"
-        )
-    else:
-        name = (
-            f"{filament['material']} | "
-            f"{filament['color_name']} | {filament['hex']}"
-        )
+    name = get_appearance_name(filament)
     existing = design.appearances.itemByName(name)
     if existing:
         return existing
@@ -144,46 +133,35 @@ def get_or_create_appearance(design, filament, get_text=None):
     except FUSION_API_ERRORS:
         return None
 
-
-def apply_selection(appearance, scope='body', selection=None, get_text=None):
-    """Apply an appearance to selected entities using body or face scope."""
-    app = adsk.core.Application.get()
-    ui = app.userInterface
-    active_selection = selection or ui.activeSelections
-    active_scope = scope if scope in ('body', 'face') else 'body'
-    count = 0
-
-    if active_selection.count == 0:
-        return get_text('select_prompt')
-
-    for i in range(active_selection.count):
-        entity = active_selection.item(i)
-        try:
-            if active_scope == 'face':
-                if isinstance(entity, adsk.fusion.BRepFace):
-                    entity.appearance = appearance
-                    count += 1
-            else:
-                if isinstance(entity, adsk.fusion.BRepBody):
-                    entity.appearance = appearance
-                    count += 1
-                elif isinstance(entity, adsk.fusion.BRepFace):
-                    try:
-                        entity.body.appearance = appearance
-                        count += 1
-                    except FUSION_API_ERRORS:
-                        pass
-        except FUSION_API_ERRORS:
-            pass
-
-    labels = {
-        'face': get_text('label_face'),
-        'body': get_text('label_body'),
-    }
-    if count:
-        return get_text(
-            'apply_scope_success',
-            n=count,
-            label=labels.get(active_scope, get_text('label_body')),
+def get_appearance_name(filament):
+    """Generate a unique appearance name for a filament."""
+    manufacturer = str(filament.get('manufacturer') or '').strip()
+    if manufacturer:
+        return (
+            f"{manufacturer} | {filament['material']} | "
+            f"{filament['color_name']} | {filament['hex']}"
         )
-    return get_text('selection_mode_mismatch')
+    else:
+        return (
+            f"{filament['material']} | "
+            f"{filament['color_name']} | {filament['hex']}"
+        )
+
+def get_or_create_material(design, filament):
+    """Return an existing or newly created design material for a filament."""
+    design = adsk.fusion.Design.cast(get_application().activeProduct)
+    material_libraries = get_application().materialLibraries
+    filament_material_name = f"Plastic/{filament['material']}/{filament['color_name']}"
+    three_d_printing_material = design.materials.itemByName(filament_material_name)
+    if not three_d_printing_material:
+        fusion_library = material_libraries.itemById('C1EEA57C-3F56-45FC-B8CB-A9EC46A9994C')
+        if  fusion_library:
+            # General Plastic
+            plastic = fusion_library.materials.itemById('PrismMaterial-012')
+            three_d_printing_material = design.materials.addByCopy(
+            plastic,
+            filament_material_name)
+
+    appearance = get_or_create_appearance(design, filament)
+
+    return three_d_printing_material, appearance
