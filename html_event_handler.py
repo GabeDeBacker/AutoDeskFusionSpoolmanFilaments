@@ -53,7 +53,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
             if 'data' not in response_data:
                 raise ValueError(f"Missing 'data' in response: {response_data}")
             data = response_data['data']
-            if (data or '') != 'OK':
+            if (data or 'OK') != 'OK':
                 raise ValueError(f"Unexpected response data: {response_data}")
             return
 

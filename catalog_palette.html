@@ -224,11 +224,17 @@ function uniqueSorted(values){
 
 function fillSelect(select,firstLabel,values,labelFn){
   const prev=select.value||'';
+  // Clear previous options
   select.innerHTML='';
+
+  // Add the "All" option
   const any=document.createElement('option');
   any.value='';
   any.textContent=firstLabel;
   select.appendChild(any);
+
+  any.disabled = values.length == 0;
+
   values.forEach(v=>{
     const o=document.createElement('option');
     o.value=v;
@@ -754,83 +760,6 @@ function colorDistance(entry,target,settings){
   return Math.min(1.5,hueTerm+satTerm+lumTerm);
 }
 
-function entryMatchesFilters(entry,filters,ignoreKey){
-  if(!ignoreKey && filters.q && !entry.searchText.includes(filters.q)) return false;
-  if(ignoreKey!=='cat' && filters.cat && entry.manufacturer!==filters.cat) return false;
-  if(ignoreKey!=='mat' && filters.mat && entry.material!==filters.mat) return false;
-  if(ignoreKey!=='fin' && !finishMatch(entry,filters.fin)) return false;
-  if(filters.cOn==='1'){
-    const target=filters.cHsl||toHsl(filters.cHex||DEFAULT_COLOR_FILTER_HEX);
-    const tolerance={
-      hue:Number(filters.cHue||DEFAULT_HUE_TOLERANCE),
-      sat:Number(filters.cSat||DEFAULT_SAT_TOLERANCE),
-      val:Number(filters.cVal||DEFAULT_VAL_TOLERANCE)
-    };
-    if(colorDistance(entry,target,tolerance)>1.0) return false;
-  }
-  return true;
-}
-
-function computeFinishOptions(entries){
-  const finishSet=new Set();
-  const options=[];
-  let hasTranslucent=false;
-  let hasMulti=false;
-  entries.forEach(e=>{
-    finishSet.add(e.finish);
-    if(!hasTranslucent && e.badges.includes('TRANS')) hasTranslucent=true;
-    if(!hasMulti && e.badges.includes('MULTI')) hasMulti=true;
-  });
-  if(hasTranslucent) options.push('translucent');
-  if(hasMulti) options.push('multi');
-  FINISH_ORDER.forEach(f=>{
-    if(f==='translucent' || f==='multi') return;
-    if(finishSet.has(f)) options.push(f);
-  });
-  Array.from(finishSet).forEach(f=>{
-    if(!FINISH_ORDER.includes(f)) options.push(f);
-  });
-  return options;
-}
-
-function populateFilters(){
-  const t=I18N[currentLang];
-  const filters=getCurrentFilters();
-  const manufacturersSet=new Set();
-  const materialsSet=new Set();
-  const finishCandidates=[];
-  const manufacturerSampleByValue={};
-  const materialSampleByValue={};
-
-  catalog.forEach(e=>{
-    if(entryMatchesFilters(e,filters,'cat')){
-      manufacturersSet.add(e.manufacturer);
-      if(!manufacturerSampleByValue[e.manufacturer]) manufacturerSampleByValue[e.manufacturer]=e;
-    }
-    if(entryMatchesFilters(e,filters,'mat')){
-      materialsSet.add(e.material);
-      if(!materialSampleByValue[e.material]) materialSampleByValue[e.material]=e;
-    }
-    if(entryMatchesFilters(e,filters,'fin')){
-      finishCandidates.push(e);
-    }
-  });
-
-  const manufacturers=uniqueSorted(Array.from(manufacturersSet));
-  const materials=uniqueSorted(Array.from(materialsSet));
-  const finOptions=computeFinishOptions(finishCandidates);
-
-  fillSelect(document.getElementById('cat'),t.allManufacturers||t.allFamilies,manufacturers,m=>{
-    const sample=manufacturerSampleByValue[m];
-    return sample?displayManufacturer(sample):m;
-  });
-  fillSelect(document.getElementById('mat'),t.allLines,materials,m=>{
-    const sample=materialSampleByValue[m];
-    return sample?displayMaterial(sample):m;
-  });
-  fillSelect(document.getElementById('finish'),t.allFinishes,finOptions,f=>t.finishLabels[f]||f);
-}
-
 function filterCards(options){
   const opts=options||{};
   const filters=getCurrentFilters();
@@ -874,7 +803,6 @@ function onFilterChange(options){
   const filters=getCurrentFilters();
   updateColorDistanceLabel();
   updateColorRangePreview(filters);
-  populateFilters();
   filterCards({focusAnchor:!!opts.focusAnchor});
   persistFilters();
   sendFilamentQuery();
@@ -896,12 +824,7 @@ function onColorHexInput(){
 }
 
 function openSettingsPalette(){
-  try{
-    adsk.fusionSendData('open_settings_palette','');
-    return true;
-  }catch(_){
-    return false;
-  }
+  adsk.fusionSendData('open_settings_palette','');
 }
 
 function setUiLanguage(lang){
@@ -926,7 +849,6 @@ function setUiLanguage(lang){
   buildScopeOptions();
   updateColorDistanceLabel();
   updateColorRangePreview();
-  populateFilters();
   filterCards();
 }
 
@@ -943,10 +865,8 @@ function setCatalog(rawCatalog,meta,source){
     source:(meta && meta.source)?String(meta.source):(source||'unknown')
   };
   catalogLoaded=next.length>0;
-  populateFilters();
   if(persistedFilters){
     applySavedFilters(persistedFilters);
-    populateFilters();
   }
   filterCards();
 }
@@ -1023,17 +943,25 @@ async function fallbackLoadCatalog(){
 function setQueryResults(results) {
 }
 
-function setFilterLists(results) {
+function setFilterLists(data) {
+  const parsed=JSON.parse(data||'{}');
+
+  const manufacturers=parsed.manufacturers || [];
+  const materials=parsed.materials|| [];
+  const finishes=parsed.finishes|| [];
+
+  const allManufacturers=I18N[currentLang].allManufacturers;
+  fillSelect(document.getElementById('cat'),allManufacturers, manufacturers, m => m);
+
+  const allMaterials=I18N[currentLang].allLines;
+  fillSelect(document.getElementById('mat'),allMaterials, materials, m => m);
+
+  const allFinishes=I18N[currentLang].allFinishes;
+  fillSelect(document.getElementById('finish'), allFinishes, finishes, f => f);
 }
 
 window.fusionJavaScriptHandler={
-  handleFusionJavaScriptMessage: function (msg) {
-      console.log("Fusion → HTML:", msg);
-      return "OK";
-  },
-
   handle:function(action,data){
-    console.log('Received action:', action, 'with data:', data);
     if(action==='status') document.getElementById('status').textContent=data;
     if(action==='setLang'){
       setUiLanguage((data||'').toLowerCase());
@@ -1051,7 +979,6 @@ window.fusionJavaScriptHandler={
       try{
         const filters=JSON.parse(data||'{}');
         applySavedFilters(filters);
-        populateFilters();
         filterCards();
       }catch(_){
         // Ignore invalid state payload.
@@ -1069,17 +996,18 @@ window.fusionJavaScriptHandler={
     }
 
     if (action == 'filter_lists_results') {
-      setFilterLists(JSON.parse(data||'{}'));
+      setFilterLists(data);
     }
   }
 };
 
 function sendFilterLists() {
-  adsk.fusionSendData("get_filter_lists", JSON.stringify({
+  q = JSON.stringify({
     manufacturer: document.getElementById('cat').value,
     finish: document.getElementById('finish').value,
     material: document.getElementById('mat').value
-  }));
+  });
+  adsk.fusionSendData("get_filter_lists", q);
 }
 
 function sendFilamentQuery() {

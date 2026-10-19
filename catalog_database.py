@@ -407,25 +407,44 @@ class CatalogDatabase:
         wc, params = self.build_filter_universe_where(q, exclude="manufacturer")
         sql = f"SELECT DISTINCT manufacturer FROM filaments {wc} ORDER BY manufacturer"
         cur.execute(sql, params)
-        manufacturers = [r[0] for r in cur.fetchall()]
+        results = cur.fetchall()
+        if (len(results) == 0):
+            manufacturers = []
+        else:
+            manufacturers = [r[0] for r in results]
 
         # Material dropdown: filtered by manufacturer + finish
         wc, params = self.build_filter_universe_where(q, exclude="material")
         sql = f"SELECT DISTINCT material FROM filaments {wc} ORDER BY material"
         cur.execute(sql, params)
-        materials = [r[0] for r in cur.fetchall()]
+        results = cur.fetchall()
+        if (len(results) == 0):
+            materials = []
+        else:
+            materials = [r[0] for r in results]
 
         # Finish dropdown: filtered by manufacturer + material
         wc, params = self.build_filter_universe_where(q, exclude="finish")
         sql = f"SELECT DISTINCT finish FROM filaments {wc} ORDER BY finish"
         cur.execute(sql, params)
-        finishes = [r[0] for r in cur.fetchall()]
+        results = cur.fetchall()
+        if (len(results) == 0):
+            finishes = []
+        else:
+            finishes = [r[0] for r in results]
 
         return {
             "manufacturers": manufacturers,
             "materials": materials,
             "finishes": finishes
         }
+
+    def get_catalog_metadata(self) -> dict:
+        """Get the catalog metadata from the database."""
+        con = self.ensure_connection()
+        cur = con.cursor()
+        cur.execute("SELECT key, value FROM catalog_metadata")
+        return {row[0]: row[1] for row in cur.fetchall()}
 
 CATALOG_DATABASE = None
 def get_catalog_database() -> CatalogDatabase:

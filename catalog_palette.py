@@ -30,7 +30,8 @@ class CatalogPalette(PaletteBase):
                 'apply': self.handle_apply,
                 'open_settings_palette': self.open_settings_palette,
                 'query_filaments': self.handle_query_filaments,
-                'get_filter_lists': self.handle_get_filter_lists
+                'get_filter_lists': self.handle_get_filter_lists,
+                'get_catalog_metadata': self.handle_get_catalog_metadata
             }
         )
         self.database = get_catalog_database()
@@ -87,4 +88,10 @@ class CatalogPalette(PaletteBase):
         """Handle the request to get the filter lists."""
         query = json.loads(data)
         results = self.database.get_filter_lists(query)
-        self.send_to_palette('filter_lists_result', json_text(results))
+        self.send_to_palette('filter_lists_results', json_text(results))
+
+    def handle_get_catalog_metadata(self, data):
+        """Handle the request to get catalog metadata."""
+        del data
+        metadata = self.database.get_catalog_metadata()
+        self.send_to_palette('catalog_metadata', json_text(metadata))
