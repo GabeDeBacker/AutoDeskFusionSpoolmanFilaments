@@ -31,7 +31,8 @@ class CatalogPalette(PaletteBase):
                 'open_settings_palette': self.open_settings_palette,
                 'query_filaments': self.handle_query_filaments,
                 'get_filter_lists': self.handle_get_filter_lists,
-                'get_catalog_metadata': self.handle_get_catalog_metadata
+                'get_catalog_metadata': self.handle_get_catalog_metadata,
+                'refresh_catalog': self.handle_refresh_catalog
             }
         )
         self.database = get_catalog_database()
@@ -95,3 +96,12 @@ class CatalogPalette(PaletteBase):
         del data
         metadata = self.database.get_catalog_metadata()
         self.send_to_palette('catalog_metadata', json_text(metadata))
+
+    def handle_refresh_catalog(self, data):
+        """Handle the request to refresh the catalog."""
+        force_payload = json.loads(data)
+        force = False
+        if force_payload and force_payload['force']:
+            force = bool(force_payload['force'])
+        self.database.refresh_if_needed(Force=force)
+        self.send_to_palette('refresh_catalog_complete', 'OK')

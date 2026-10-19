@@ -129,9 +129,11 @@ class CatalogDatabase:
             metadata["entry_count"],
             metadata["source"]
         ))
+        con.commit()
 
-    def import_spoolman(self, json_path):
+    def import_spoolman(self):
         """Import the Spoolman filament catalog from a JSON file into an SQLite database."""
+        json_path = CatalogDatabase.cache_spoolman_catalog_path()
         con = self.ensure_connection()
         cur = con.cursor()
         entry_count = 0
@@ -376,16 +378,19 @@ class CatalogDatabase:
         # Manufacturer constraint (unless excluded)
         if q.get("manufacturer") not in (None, "", "all") and exclude != "manufacturer":
             where.append("manufacturer = ?")
+            where.append("manufacturer is not null")
             params.append(q["manufacturer"])
 
         # Material constraint (unless excluded)
         if q.get("material") not in (None, "", "all") and exclude != "material":
             where.append("material = ?")
+            where.append("material is not null")
             params.append(q["material"])
 
         # Finish constraint (unless excluded)
         if q.get("finish") not in (None, "", "all") and exclude != "finish":
             where.append("finish = ?")
+            where.append("finish is not null")
             params.append(q["finish"])
 
         clause = "WHERE " + " AND ".join(where) if where else ""
@@ -428,7 +433,7 @@ class CatalogDatabase:
         sql = f"SELECT DISTINCT finish FROM filaments {wc} ORDER BY finish"
         cur.execute(sql, params)
         results = cur.fetchall()
-        if (len(results) == 0):
+        if len(results) == 0:
             finishes = []
         else:
             finishes = [r[0] for r in results]
@@ -445,6 +450,24 @@ class CatalogDatabase:
         cur = con.cursor()
         cur.execute("SELECT key, value FROM catalog_metadata")
         return {row[0]: row[1] for row in cur.fetchall()}
+
+    def refresh_if_needed(self, Force = False):
+        """Refresh the catalog if it is outdated."""
+        if Force:
+            self.import_spoolman()
+            return
+        
+        metadata = self.get_catalog_metadata()
+        if metadata and metadata['generated_epoch']:
+            last_refresh = int(metadata['generated_epoch'])
+            if not last_refresh or self.is_catalog_outdated(last_refresh):
+                self.import_spoolman()
+
+    def is_catalog_outdated(self, last_refresh: int) -> bool:
+        """Check if the catalog is outdated based on the last refresh timestamp."""
+        current_time = int(time.time())
+        # Consider the catalog outdated if it was last refreshed more than 24 hours ago
+        return (current_time - last_refresh) > 7 * (24 * 60 * 60)
 
 CATALOG_DATABASE = None
 def get_catalog_database() -> CatalogDatabase:

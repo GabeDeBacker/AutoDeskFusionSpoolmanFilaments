@@ -1,4 +1,12 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="palette.css"><script src="palette-i18n.js"></script></head><body>
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="palette.css">
+    <script src="palette-i18n.js"></script>
+    <script src="fusion_helpers.js"></script>
+  </head>
+<body>
 <header>
 <div class="controls">
 <input id="q" placeholder="Search..." oninput="onFilterChange()">
@@ -82,13 +90,8 @@ const VIBRANT_SAT_THRESHOLD=0.4;
 let currentLang='en';
 let catalog=[];
 let activeKey='';
-let catalogMeta={version:'-',entryCount:0,source:'none'};
 let catalogLoaded=false;
 let requestAttempts=0;
-const MAX_REQUEST_ATTEMPTS=10;
-const CATALOG_FALLBACK_FILES=['./filament_catalog_cache.json'];
-const CATALOG_RETRY_INTERVAL_MS=2000;
-const CATALOG_RETRY_MAX_MS=120000;
 let restoringFilters=false;
 let persistedFilters=null;
 let filteredIndexes=[];
@@ -216,10 +219,6 @@ function swatchBackground(e){
     return `linear-gradient(${(e.hex||colors[0]||'#cccccc')}99, ${(e.hex||colors[0]||'#cccccc')}99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px`;
   }
   return gradient;
-}
-
-function uniqueSorted(values){
-  return Array.from(new Set(values)).sort((a,b)=>a.localeCompare(b));
 }
 
 function fillSelect(select,firstLabel,values,labelFn){
@@ -400,29 +399,6 @@ function setSelectedColorHex(hex){
   const value=sanitizeColorHex(hex);
   document.getElementById('colorFilterHex').value=value;
   onColorHexInput();
-}
-
-function removeLegacyColorWheelUi(){
-  try{
-    const details=document.getElementById('colorFilterDetails');
-    if(!details) return;
-    const wheels=details.querySelectorAll('.colorwheel');
-    for(let i=0;i<wheels.length;i+=1){
-      const wheel=wheels[i];
-      if(wheel && wheel.id!=='colorWheel' && wheel.parentNode){
-        wheel.parentNode.removeChild(wheel);
-      }
-    }
-    const legacy=details.querySelectorAll('.colorfilter-preview,.colorfilter-summary,#colorHueHint');
-    for(let i=0;i<legacy.length;i+=1){
-      const el=legacy[i];
-      if(el && el.parentNode){
-        el.parentNode.removeChild(el);
-      }
-    }
-  }catch(_){
-    // Keep startup resilient; catalog/language boot should continue even if cleanup fails.
-  }
 }
 
 function pickColorFromWheel(event){
@@ -693,36 +669,8 @@ function applySavedFilters(filters){
   updateColorFilterUiState();
   updateColorDistanceLabel();
   restoringFilters=false;
-}
-
-function compareByName(a,b){
-  const colorA=displayColor(a);
-  const colorB=displayColor(b);
-  const colorCmp=colorA.localeCompare(colorB,undefined,{sensitivity:'base'});
-  if(colorCmp!==0) return colorCmp;
-  const materialCmp=displayMaterial(a).localeCompare(displayMaterial(b),undefined,{sensitivity:'base'});
-  if(materialCmp!==0) return materialCmp;
-  return displayManufacturer(a).localeCompare(displayManufacturer(b),undefined,{sensitivity:'base'});
-}
-
-function compareByColor(a,b){
-  const satA=Number.isFinite(a.colorSat)?a.colorSat:0;
-  const satB=Number.isFinite(b.colorSat)?b.colorSat:0;
-  const grayA=satA<0.08;
-  const grayB=satB<0.08;
-  if(grayA!==grayB) return grayA?1:-1;
-  if(grayA && grayB){
-    const lumCmp=(a.colorLum||0)-(b.colorLum||0);
-    if(lumCmp!==0) return lumCmp;
-    return compareByName(a,b);
-  }
-  const hueCmp=(a.colorHue||0)-(b.colorHue||0);
-  if(hueCmp!==0) return hueCmp;
-  const satCmp=satB-satA;
-  if(satCmp!==0) return satCmp;
-  const lumCmp=(a.colorLum||0)-(b.colorLum||0);
-  if(lumCmp!==0) return lumCmp;
-  return compareByName(a,b);
+  sendFilamentQuery();
+  sendFilterLists();
 }
 
 function hueDistance(a,b){
@@ -760,41 +708,6 @@ function colorDistance(entry,target,settings){
   return Math.min(1.5,hueTerm+satTerm+lumTerm);
 }
 
-function filterCards(options){
-  const opts=options||{};
-  const filters=getCurrentFilters();
-  if(filters.cOn==='1'){
-    filters.cHsl=toHsl(filters.cHex||DEFAULT_COLOR_FILTER_HEX);
-  }
-  const nextIndexes=[];
-  for(let i=0;i<catalog.length;i+=1){
-    if(entryMatchesFilters(catalog[i],filters)){
-      nextIndexes.push(i);
-    }
-  }
-  if(filters.sort==='color'){
-    nextIndexes.sort((ai,bi)=>compareByColor(catalog[ai],catalog[bi]));
-  }else{
-    nextIndexes.sort((ai,bi)=>compareByName(catalog[ai],catalog[bi]));
-  }
-  filteredIndexes=nextIndexes;
-  if(opts.focusAnchor && filters.cOn==='1' && nextIndexes.length){
-    const target=filters.cHsl||toHsl(filters.cHex||DEFAULT_COLOR_FILTER_HEX);
-    let bestPos=0;
-    let bestScore=Number.POSITIVE_INFINITY;
-    for(let pos=0;pos<nextIndexes.length;pos+=1){
-      const score=colorDistance(catalog[nextIndexes[pos]],target);
-      if(score<bestScore){
-        bestScore=score;
-        bestPos=pos;
-      }
-    }
-    const pageSize=getPageSize();
-    currentPage=Math.floor(bestPos/pageSize)+1;
-  }
-  renderCards();
-}
-
 function onFilterChange(options){
   const opts=options||{};
   if(!opts.focusAnchor){
@@ -803,10 +716,12 @@ function onFilterChange(options){
   const filters=getCurrentFilters();
   updateColorDistanceLabel();
   updateColorRangePreview(filters);
-  filterCards({focusAnchor:!!opts.focusAnchor});
   persistFilters();
   sendFilamentQuery();
-  sendFilterLists();
+
+  if (!opts.focusAnchor) {
+    sendFilterLists();
+  }
 }
 
 function onColorFilterToggleChange(){
@@ -849,42 +764,9 @@ function setUiLanguage(lang){
   buildScopeOptions();
   updateColorDistanceLabel();
   updateColorRangePreview();
-  filterCards();
 }
 
-function setCatalog(rawCatalog,meta,source){
-  const next=(Array.isArray(rawCatalog)?rawCatalog:[])
-    .map(normalizeEntry)
-    .filter(Boolean);
-  catalog=next;
-  filteredIndexes=next.map((_,index)=>index);
-  currentPage=1;
-  catalogMeta={
-    version:(meta && meta.version)?String(meta.version):'unknown',
-    entryCount:(meta && Number.isFinite(meta.entryCount))?meta.entryCount:next.length,
-    source:(meta && meta.source)?String(meta.source):(source||'unknown')
-  };
-  catalogLoaded=next.length>0;
-  if(persistedFilters){
-    applySavedFilters(persistedFilters);
-  }
-  filterCards();
-}
-
-function requestCatalog(){
-  if(!bridgeReady()){
-    return false;
-  }
-  if (catalogLoaded) {
-    return true;
-  }
-  try{
-    adsk.fusionSendData('request_catalog','{"force":false}');
-    requestAttempts+=1;
-    return true;
-  }catch(_){
-    return false;
-  }
+function setCatalog(rawCatalog){
 }
 
 function requestSavedFilters(){
@@ -923,24 +805,8 @@ function requestScope(){
   }
 }
 
-async function fallbackLoadCatalog(){
-  for(const filePath of CATALOG_FALLBACK_FILES){
-    try{
-      const response=await fetch(filePath);
-      if(!response.ok) continue;
-      const data=await response.json();
-      const extracted=extractCatalogPayload(data);
-      if(catalog.length===0){
-        setCatalog(extracted.entries,extracted.meta,`file-fetch:${filePath}`);
-      }
-      return;
-    }catch(_){
-      // Keep silent; Fusion bridge is the primary source.
-    }
-  }
-}
-
 function setQueryResults(results) {
+  setCatalog(results);
 }
 
 function setFilterLists(data) {
@@ -979,7 +845,6 @@ window.fusionJavaScriptHandler={
       try{
         const filters=JSON.parse(data||'{}');
         applySavedFilters(filters);
-        filterCards();
       }catch(_){
         // Ignore invalid state payload.
       }
@@ -997,6 +862,10 @@ window.fusionJavaScriptHandler={
 
     if (action == 'filter_lists_results') {
       setFilterLists(data);
+    }
+
+    if (action == 'refresh_catalog_complete') {
+      handleRefreshCatalogComplete();
     }
   }
 };
@@ -1031,30 +900,27 @@ function sendFilamentQuery() {
   }));
 }
 
-// Wait for Fusion to inject the API
-function waitForAdsk() {
-    if (typeof adsk !== "undefined") {
-        console.log("adsk ready");
-        fusionReady();
-    } else {
-        setTimeout(waitForAdsk, 50);
-    }
+function handleRefreshCatalogComplete() {
+  sendFilterLists();
+  sendFilamentQuery();
+}
+
+function refreshCatalog() {
+  adsk.fusionSendData('refresh_catalog', JSON.stringify({force: false}));
 }
 
 function fusionReady() {
+  requestLanguage();
+  requestSavedFilters();
+  requestScope();
   updateColorFilterUiState();
   updateColorDistanceLabel();
   updateColorRangePreview();
-  requestLanguage();
-  requestCatalog();
-  requestSavedFilters();
-  requestScope();
-  sendFilamentQuery();
-  sendFilterLists();
+  refreshCatalog();
 }
-
-waitForAdsk();
 
 const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
 setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
+waitForAdsk(fusionReady);
+
 </script></body></html>
