@@ -6,14 +6,17 @@ Functions:
 - import_spoolman(json_path, db_path): Imports the Spoolman catalog into the specified SQLite database.
 """
 
+from math import ceil
 import os
 import sqlite3
 import json
 import colorsys
 import time
+from urllib.request import urlopen, Request
+from common import path_from_add_on
 
-from common import addon_dir, path_from_add_on
-
+CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
+CATALOG_CACHE_TTL_SECONDS = 7 * 24 * 60 * 60
 CATALOG_CACHE_FILE = 'filament_catalog_cache.json'
 
 class CatalogDatabase:
@@ -51,6 +54,7 @@ class CatalogDatabase:
 
     def ensure_connection(self):
         """Ensure that a connection to the SQLite database is established and return it."""
+        os.makedirs(path_from_add_on("cache"), exist_ok=True)
         if self.connection is not None:
             return self.connection
         self.connection = sqlite3.connect(self.db_path)
@@ -58,11 +62,18 @@ class CatalogDatabase:
 
     def hex_to_hsv(self, hex_color: str):
         """Convert a hex color string to HSV values."""
-        hex_color = hex_color.lstrip('#')
-        # The value returned from rgb_to_hsv are values between 0 and 1, hence the division by 255.
-        r = int(hex_color[0:2], 16) / 255.0
-        g = int(hex_color[2:4], 16) / 255.0
-        b = int(hex_color[4:6], 16) / 255.0
+        stripped_color = hex_color.lstrip('#')
+        r = g = b = 0.0
+        if (len(stripped_color)== 6):
+            # The value returned from rgb_to_hsv are values between 0 and 1, hence the division by 255.
+            r = int(stripped_color[0:2], 16) / 255.0
+            g = int(stripped_color[2:4], 16) / 255.0
+            b = int(stripped_color[4:6], 16) / 255.0
+        elif (len(stripped_color) == 8):
+            # The value returned from rgba_to_hsv are values between 0 and 1, hence the division by 255.
+            r = int(stripped_color[0:2], 16) / 255.0
+            g = int(stripped_color[2:4], 16) / 255.0
+            b = int(stripped_color[4:6], 16) / 255.0
         h, s, v = colorsys.rgb_to_hsv(r, g, b)
         return h, s, v
 
@@ -96,6 +107,27 @@ class CatalogDatabase:
                     buffer = buffer[idx:].lstrip()
                     if buffer.startswith(","):
                         buffer = buffer[1:]
+
+    def download_spoolman_entries(self):
+        """Download raw filament rows from the upstream Spoolman catalog."""
+        req = Request(
+            CATALOG_CACHE_URL,
+            headers={'User-Agent': 'SpoolmanDBFilamentColors/1.0'},
+        )
+
+        spoolman_json_path = self.cache_spoolman_catalog_path()
+        with open(spoolman_json_path, 'wb') as out:
+            with urlopen(req, timeout=20) as resp:
+                status = getattr(resp, 'status', 200)
+                if status < 200 or status >= 300:
+                    raise ValueError(f'Unexpected HTTP status: {status}')
+
+                # Stream in chunks (64KB is a good size)
+                while True:
+                    chunk = resp.read(65536)
+                    if not chunk:
+                        break
+                    out.write(chunk)
 
     def set_metadata(self, metadata):
         """Set the metadata for the filament catalog in the database."""
@@ -133,7 +165,8 @@ class CatalogDatabase:
 
     def import_spoolman(self):
         """Import the Spoolman filament catalog from a JSON file into an SQLite database."""
-        json_path = CatalogDatabase.cache_spoolman_catalog_path()
+        self.download_spoolman_entries()
+        json_path = self.cache_spoolman_catalog_path()
         con = self.ensure_connection()
         cur = con.cursor()
         entry_count = 0
@@ -196,11 +229,11 @@ class CatalogDatabase:
                 entry["spool_type"],
                 entry["diameter"],
                 entry["color_hex"],
-                json.dumps(entry["color_hexes"]),
+                json.dumps(entry["color_hexes"]) if entry["color_hexes"] is not None else None,
                 entry["extruder_temp"],
-                json.dumps(entry["extruder_temp_range"]),
+                json.dumps(entry["extruder_temp_range"]) if entry["extruder_temp_range"] is not None else None,
                 entry["bed_temp"],
-                json.dumps(entry["bed_temp_range"]),
+                json.dumps(entry["bed_temp_range"]) if entry["bed_temp_range"] is not None else None,
                 entry["finish"],
                 entry["multi_color_direction"],
                 entry["pattern"],
@@ -280,38 +313,38 @@ class CatalogDatabase:
         params = []
 
         # Text search
-        if q["text"]:
+        if hasattr(q, "text") and q.text:
             where.append("search_text LIKE ?")
-            params.append(f"%{q['text']}%")
+            params.append(f"%{q.text}%")
 
         # Manufacturer filter
-        if q["manufacturer"]:
+        if hasattr(q, "manufacturer") and q.manufacturer:
             where.append("manufacturer = ?")
-            params.append(q["manufacturer"])
+            params.append(q.manufacturer)
 
         # Finish filter
-        if q["finish"]:
+        if hasattr(q, "finish") and q.finish:
             where.append("finish = ?")
-            params.append(q["finish"])
+            params.append(q.finish)
 
         # Material filter
-        if q["material"]:
+        if hasattr(q, "material") and q.material:
             where.append("material = ?")
-            params.append(q["material"])
+            params.append(q.material)
 
         # HSV proximity
-        if q["colorFilterOn"] and q["hsvTolerance"] and q["color"]:
-            color_h, color_s, color_v = self.hex_to_hsv(q["color"])
-            if (q["hsvTolerance"]["h"] and q["hsvTolerance"]["s"] and q["hsvTolerance"]["v"]):
+        if hasattr(q, "colorFilterOn")and q.colorFilterOn and hasattr(q, "hsvTolerance") and q.hsvTolerance and hasattr(q, "color") and q.color:
+            color_h, color_s, color_v = self.hex_to_hsv(q.color)
+            if (q.hsvTolerance.h and q.hsvTolerance.s and q.hsvTolerance.v):
                 where.append("ABS(hue - ?) <= ?")
                 params.append(color_h)
-                params.append(q["hsvTolerance"]["h"])
+                params.append(q.hsvTolerance.h)
                 where.append("ABS(saturation - ?) <= ?")
                 params.append(color_s)
-                params.append(q["hsvTolerance"]["s"])
+                params.append(q.hsvTolerance.s)
                 where.append("ABS(value - ?) <= ?")
                 params.append(color_v)
-                params.append(q["hsvTolerance"]["v"])
+                params.append(q.hsvTolerance.v)
 
         # Build WHERE clause
         if len(where) != 0:
@@ -320,16 +353,16 @@ class CatalogDatabase:
             where_clause = ""
 
         # Sorting
-        if q["sort"] == "name":
+        if hasattr(q, "sort") and q.sort == "name":
             order_clause = "ORDER BY name ASC"
-        elif q["sort"] == "color":
+        elif hasattr(q, "sort") and q.sort == "color":
             order_clause = "ORDER BY hue ASC, saturation ASC, value ASC"
         else:
             order_clause = ""
 
         # Pagination
-        page = q["page"]
-        page_size = q["pageSize"]
+        page = q.page if hasattr(q, "page") else 1
+        page_size = q.pageSize if hasattr(q, "pageSize") else 40
         offset = (page - 1) * page_size
 
         limit_clause = "LIMIT ? OFFSET ?"
@@ -353,20 +386,29 @@ class CatalogDatabase:
 
         cur.execute(sql, params)
         rows = cur.fetchall()
+        result_rows = []
+
+        # Convert hexes to color_hexes for consistency with the frontend
+        for row in rows:
+            row_dict = dict(zip(filament_columns, row))
+            if row_dict["color_hexes"] is not None:
+                color_hexes = json.loads(row_dict.pop("color_hexes"))
+                row_dict["color_hexes"] = color_hexes
+            result_rows.append(row_dict)
 
         return {
             "total": total,
             "page": page,
             "pageSize": page_size,
-            "pages": (total + page_size - 1) // page_size,
-            "results": [dict(zip(filament_columns, r)) for r in rows]
+            "pages":   max(1, ceil(total / page_size)), 
+            "results": result_rows
         }
 
     def build_filter_universe_where(self, q, exclude=None):
         """Build the WHERE clause and parameters for filtering the filament catalog.
 
         Args:
-            q (dict): A dictionary containing query parameters such as manufacturer, finish, and material.
+            q (object): An object containing query parameters such as manufacturer, finish, and material.
             exclude (str, optional): A field to exclude from the filtering. Defaults to None.
 
         Returns:
@@ -375,32 +417,34 @@ class CatalogDatabase:
         where = []
         params = []
 
+        # We don't want to return null values for whatever is being excluded.
+        if exclude:
+            where.append("? is not null")
+            params.append(exclude)
+
         # Manufacturer constraint (unless excluded)
-        if q.get("manufacturer") not in (None, "", "all") and exclude != "manufacturer":
+        if hasattr(q, "manufacturer") and q.manufacturer not in (None, "", "all") and exclude != "manufacturer":
             where.append("manufacturer = ?")
-            where.append("manufacturer is not null")
-            params.append(q["manufacturer"])
+            params.append(q.manufacturer)
 
         # Material constraint (unless excluded)
-        if q.get("material") not in (None, "", "all") and exclude != "material":
+        if hasattr(q, "material") and q.material not in (None, "", "all") and exclude != "material":
             where.append("material = ?")
-            where.append("material is not null")
-            params.append(q["material"])
+            params.append(q.material)
 
         # Finish constraint (unless excluded)
-        if q.get("finish") not in (None, "", "all") and exclude != "finish":
+        if hasattr(q, "finish") and q.finish not in (None, "", "all") and exclude != "finish":
             where.append("finish = ?")
-            where.append("finish is not null")
-            params.append(q["finish"])
+            params.append(q.finish)
 
         clause = "WHERE " + " AND ".join(where) if where else ""
         return clause, params
 
-    def get_filter_lists(self, q):
+    def get_filter_lists(self, q) -> dict:
         """Get the lists of available manufacturers, materials, and finishes for the filter dropdowns.
 
         Args:
-            q (dict): A dictionary containing the current query parameters.
+            q (object): An object containing the current query parameters.
 
         Returns:
             dict: A dictionary containing lists of manufacturers, materials, and finishes.
@@ -413,7 +457,7 @@ class CatalogDatabase:
         sql = f"SELECT DISTINCT manufacturer FROM filaments {wc} ORDER BY manufacturer"
         cur.execute(sql, params)
         results = cur.fetchall()
-        if (len(results) == 0):
+        if len(results) == 0:
             manufacturers = []
         else:
             manufacturers = [r[0] for r in results]
@@ -423,7 +467,7 @@ class CatalogDatabase:
         sql = f"SELECT DISTINCT material FROM filaments {wc} ORDER BY material"
         cur.execute(sql, params)
         results = cur.fetchall()
-        if (len(results) == 0):
+        if len(results) == 0:
             materials = []
         else:
             materials = [r[0] for r in results]
@@ -448,17 +492,56 @@ class CatalogDatabase:
         """Get the catalog metadata from the database."""
         con = self.ensure_connection()
         cur = con.cursor()
-        cur.execute("SELECT key, value FROM catalog_metadata")
-        return {row[0]: row[1] for row in cur.fetchall()}
+        cur.execute("""
+            SELECT name FROM sqlite_master
+            WHERE type='table' AND name='filaments'
+        """)
 
-    def refresh_if_needed(self, Force = False):
+        exists = cur.fetchone() is not None
+        if not exists:
+            return {}
+
+        cur.execute("""
+            SELECT name FROM sqlite_master
+            WHERE type='table' AND name='catalog_metadata'
+        """)
+
+        exists = cur.fetchone() is not None
+        if not exists:
+            return {}
+
+        cur.execute("SELECT" \
+        " schema_version," \
+        " catalog_version," \
+        " generated_epoch," \
+        " entry_count," \
+        " source" \
+        " FROM catalog_metadata")
+
+        row = cur.fetchone()
+        if (row is None or len(row) == 0):
+            return {}
+
+        return {
+            "schema_version": row[0],
+            "catalog_version": row[1],
+            "generated_epoch": row[2],
+            "entry_count": row[3],
+            "source": row[4]
+        }
+
+    def refresh_if_needed(self, force = False):
         """Refresh the catalog if it is outdated."""
-        if Force:
+        if force:
             self.import_spoolman()
             return
-        
+
         metadata = self.get_catalog_metadata()
-        if metadata and metadata['generated_epoch']:
+        if (metadata is None or metadata.get('generated_epoch') is None):
+            self.import_spoolman()
+            return
+
+        if metadata and metadata.get('generated_epoch') is not None:
             last_refresh = int(metadata['generated_epoch'])
             if not last_refresh or self.is_catalog_outdated(last_refresh):
                 self.import_spoolman()
@@ -467,7 +550,7 @@ class CatalogDatabase:
         """Check if the catalog is outdated based on the last refresh timestamp."""
         current_time = int(time.time())
         # Consider the catalog outdated if it was last refreshed more than 24 hours ago
-        return (current_time - last_refresh) > 7 * (24 * 60 * 60)
+        return (current_time - last_refresh) > CATALOG_CACHE_TTL_SECONDS
 
 CATALOG_DATABASE = None
 def get_catalog_database() -> CatalogDatabase:

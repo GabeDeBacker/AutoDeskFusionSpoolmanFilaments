@@ -1,4 +1,36 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0; /* critical for Fusion */
+}
+
+#grid {
+  flex: 1 1 auto;     /* take remaining space */
+  overflow-y: auto;   /* scroll only inside the grid */
+  min-height: 0;      /* CRITICAL: allows flex child to shrink */
+}
+
+#content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
 :root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   color-scheme: dark;
   --bg: #3f495c;
   --panel: #364052;
@@ -61,6 +93,7 @@
 }
 
 body {
+  height: 100%;
   margin: 0;
   background: var(--bg);
   color: var(--text);
@@ -77,6 +110,7 @@ header {
 }
 
 h1 {
+  flex: 0 0 auto;
   font-size: 16px;
   margin: 0 0 4px;
 }
@@ -476,9 +510,9 @@ select {
 }
 
 .pagerfooter {
+  flex: 0 0 auto;
   position: sticky;
   bottom: 0;
-  z-index: 4;
   background: var(--bg);
   border-top: 1px solid var(--border);
   padding: 6px 9px 8px;

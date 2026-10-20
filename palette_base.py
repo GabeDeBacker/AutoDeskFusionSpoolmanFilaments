@@ -5,7 +5,7 @@ from app_helpers import get_user_interface
 from html_event_handler import HTMLEventHandler
 from lang import ensure_lang    
 from text_i18n import get_i18n_text
-from common import make_file_url
+from common import json_text, make_file_url
 
 kept_handlers = []
 
@@ -33,12 +33,14 @@ class PaletteBase:
 
     def close_palette(self):
         """Close the palette by deleting it."""
-        if self.palette:
+        if self.palette and not self.palette.isNative:
             self.palette.deleteMe()
             self.palette = None
+
         fusion_palette = get_user_interface().palettes.itemById(self.palette_id)
-        if fusion_palette:
+        if fusion_palette and not fusion_palette.isNative:
             fusion_palette.deleteMe()
+
         kept_handlers.remove(self.html_event_handler)
         self.html_event_handler = None
 
@@ -80,7 +82,7 @@ class PaletteBase:
         """Return the current palette instance."""
         return self.palette
 
-    def send_to_palette(self, action, data):
+    def send_to_palette(self, action, data = None):
         """Send an action payload to a palette when present."""
         if self.palette:
-            self.palette.sendInfoToHTML(action, data)
+            self.palette.sendInfoToHTML(action, json_text(data or {}))

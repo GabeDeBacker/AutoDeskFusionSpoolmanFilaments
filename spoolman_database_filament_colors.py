@@ -11,14 +11,27 @@ from catalog_palette import CatalogPalette
 CMD_ID = 'SpoolmanDBFilamentColors'
 handlers = []
 
+def get_solid_modify_panel_controls():
+    """Get the controls of the Solid Modify panel in the Fusion Solid workspace."""
+    # Get the Solid workspace
+    solid_workspace = get_user_interface().workspaces.itemById('FusionSolidEnvironment')
+    if not solid_workspace:
+        return None
+
+    solid_modify_panel = solid_workspace.toolbarPanels.itemById('SolidModifyPanel')
+    if not solid_modify_panel:
+        return None
+
+    return solid_modify_panel.controls
+
 class ExecuteHandler(adsk.core.CommandEventHandler):
     """Handle execution of the main command by toggling the main palette visibility."""
     def __init__(self):
         super().__init__()
         self.catalog_palette = CatalogPalette()
 
-    def __exit__(self, exc_type, exc, tb):
-        del exc_type, exc, tb
+    def deleteMe(self):
+        """Delete the execute handler and close the associated catalog palette."""
         self.catalog_palette.close_palette()
         self.catalog_palette = None
 
@@ -30,6 +43,13 @@ class ExecuteHandler(adsk.core.CommandEventHandler):
 class CommandHandler(adsk.core.CommandCreatedEventHandler):
     """Handle Fusion command invocation by toggling palette visibility."""
 
+    def deleteMe(self):
+        """Delete the command handler."""
+        ui = get_user_interface()
+        command_definition = ui.commandDefinitions.itemById(CMD_ID)
+        if command_definition:
+            command_definition.deleteMe()
+
     def notify(self, _eventArgs):
         """Handles command created event to attach the execute handler to the command."""
         cmd = _eventArgs.command
@@ -40,6 +60,9 @@ class CommandHandler(adsk.core.CommandCreatedEventHandler):
 def run(_context):
     """Fusion add-in startup hook: register command and open the main palette."""
     del _context
+    solid_modify_controls = get_solid_modify_panel_controls()
+    if not solid_modify_controls:
+        return
     ui = get_user_interface()
 
     # Create button definition
@@ -63,19 +86,6 @@ def run(_context):
     command_definition.commandCreated.add(command_handler)
     handlers.append(command_handler)
 
-    # Get the Solid workspace
-    solid_workspace = ui.workspaces.itemById('FusionSolidEnvironment')
-    if not solid_workspace:
-        return
-
-    solid_modify_panel = solid_workspace.toolbarPanels.itemById('SolidModifyPanel')
-    if not solid_modify_panel:
-        return
-
-    solid_modify_controls = solid_modify_panel.controls
-    if not solid_modify_controls:
-        return
-
     appearance_control = solid_modify_controls.itemById('AppearanceCommand')
 
     command_control = solid_modify_controls.itemById(CMD_ID)
@@ -84,15 +94,15 @@ def run(_context):
 
     if appearance_control:
         # Insert after Appearance
-        solid_modify_controls.addCommand(command_definition, 'AppearanceCommand', False)
+        handlers.append(solid_modify_controls.addCommand(command_definition, 'AppearanceCommand', False))
     else:
         # Fallback: append at end
-        solid_modify_controls.addCommand(command_definition)
+        handlers.append(solid_modify_controls.addCommand(command_definition))
 
 def stop(_context):
     """Fusion add-in shutdown hook: remove palettes, controls, and command."""
     del _context
-    d = get_user_interface().commandDefinitions.itemById(CMD_ID)
-    if d:
-        d.deleteMe()
+    for handler in handlers:
+        if hasattr(handler, 'deleteMe'):
+            handler.deleteMe()
     handlers.clear()

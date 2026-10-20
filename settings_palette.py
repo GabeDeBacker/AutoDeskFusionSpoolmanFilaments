@@ -22,10 +22,8 @@ class SettingsPalette(PaletteBase):
         )
 
     def handle_refresh_catalog(self, data):
-        """Handle the request to refresh the catalog."""
-        force = bool(data.get('force', False))
-        get_catalog_database().refresh_if_needed(Force=force)
-        self.send_to_palette('catalog_metadata_refreshed', 'OK')
+        get_catalog_database().refresh_if_needed(force=data.force)
+        self.send_to_palette('refresh_catalog_complete')
 
     def handle_request_catalog_metadata(self, data):
         """Handle the request for catalog metadata."""

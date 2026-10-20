@@ -1,926 +1,902 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="palette.css">
-    <script src="palette-i18n.js"></script>
-    <script src="fusion_helpers.js"></script>
-  </head>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="palette.css">
+  <script src="palette-i18n.js"></script>
+  <script src="fusion_helpers.js"></script>
+</head>
+
 <body>
-<header>
-<div class="controls">
-<input id="q" placeholder="Search..." oninput="onFilterChange()">
-<select id="cat" onchange="onFilterChange()"></select>
-<select id="mat" onchange="onFilterChange()"></select>
-<select id="finish" onchange="onFilterChange()"></select>
-<select id="sort" onchange="onFilterChange()"></select>
-<div id="scopeGroup" class="scope-radio-group" role="radiogroup" aria-label="Apply scope"></div>
-</div>
-<div class="colorfilter">
-  <label class="colorfilter-toggle">
-    <input id="colorFilterOn" type="checkbox" onchange="onColorFilterToggleChange()">
-    <span id="colorFilterLabel"></span>
-  </label>
-  <div id="colorFilterDetails">
-    <div class="colorfilter-row">
-      <div id="colorWheel" class="colorwheel" onclick="pickColorFromWheel(event)" aria-label="Color wheel" role="button" tabindex="0">
-        <span class="colorwheel-dim"></span>
-        <span id="colorWheelAllowedA" class="colorwheel-allowed"></span>
-        <span id="colorWheelAllowedB" class="colorwheel-allowed"></span>
-        <span id="colorWheelCenter" class="colorwheel-center" ondblclick="document.getElementById('colorFilterHex').click()" aria-label="Open color picker" role="button" tabindex="0"></span>
-      </div>
-      <div class="colorfilter-sliders">
-        <div class="colorfilter-label">Tolerances</div>
-        <div class="colorfilter-slider">
-          <label for="colorFilterHue">H</label>
-          <input id="colorFilterHue" type="range" min="0" max="100" step="1" value="10" oninput="onColorToleranceInput()">
-          <span id="colorFilterHueValue" class="count">10%</span>
+  <header>
+    <div id="app">
+      <div id="content">
+        <div class="controls">
+          <input id="q" placeholder="Search..." oninput="onFilterChange()">
+          <select id="cat" onchange="onFilterChange()"></select>
+          <select id="mat" onchange="onFilterChange()"></select>
+          <select id="finish" onchange="onFilterChange()"></select>
+          <select id="sort" onchange="onFilterChange()"></select>
+          <div id="scopeGroup" class="scope-radio-group" role="radiogroup" aria-label="Apply scope"></div>
         </div>
-        <div class="colorfilter-slider">
-          <label for="colorFilterSat">S</label>
-          <input id="colorFilterSat" type="range" min="0" max="100" step="1" value="10" oninput="onColorToleranceInput()">
-          <span id="colorFilterSatValue" class="count">10%</span>
+        <div class="colorfilter">
+          <label class="colorfilter-toggle">
+            <input id="colorFilterOn" type="checkbox" onchange="onColorFilterToggleChange()">
+            <span id="colorFilterLabel"></span>
+          </label>
+          <div id="colorFilterDetails">
+            <div class="colorfilter-row">
+              <div id="colorWheel" class="colorwheel" onclick="pickColorFromWheel(event)" aria-label="Color wheel"
+                role="button" tabindex="0">
+                <span class="colorwheel-dim"></span>
+                <span id="colorWheelAllowedA" class="colorwheel-allowed"></span>
+                <span id="colorWheelAllowedB" class="colorwheel-allowed"></span>
+                <span id="colorWheelCenter" class="colorwheel-center"
+                  ondblclick="document.getElementById('colorFilterHex').click()" aria-label="Open color picker"
+                  role="button" tabindex="0"></span>
+              </div>
+              <div class="colorfilter-sliders">
+                <div class="colorfilter-label">Tolerances</div>
+                <div class="colorfilter-slider">
+                  <label for="colorFilterHue">H</label>
+                  <input id="colorFilterHue" type="range" min="0" max="100" step="1" value="10"
+                    oninput="onColorToleranceInput()">
+                  <span id="colorFilterHueValue" class="count">10%</span>
+                </div>
+                <div class="colorfilter-slider">
+                  <label for="colorFilterSat">S</label>
+                  <input id="colorFilterSat" type="range" min="0" max="100" step="1" value="10"
+                    oninput="onColorToleranceInput()">
+                  <span id="colorFilterSatValue" class="count">10%</span>
+                </div>
+                <div class="colorfilter-slider">
+                  <label for="colorFilterVal">V</label>
+                  <input id="colorFilterVal" type="range" min="0" max="100" step="1" value="10"
+                    oninput="onColorToleranceInput()">
+                  <span id="colorFilterValValue" class="count">10%</span>
+                </div>
+              </div>
+              <input id="colorFilterHex" type="color" value="#4f8cff" oninput="onColorHexInput()"
+                style="display:none; position:absolute; opacity:0; pointer-events:none;">
+            </div>
+          </div>
         </div>
-        <div class="colorfilter-slider">
-          <label for="colorFilterVal">V</label>
-          <input id="colorFilterVal" type="range" min="0" max="100" step="1" value="10" oninput="onColorToleranceInput()">
-          <span id="colorFilterValValue" class="count">10%</span>
-        </div>
-      </div>
-      <input id="colorFilterHex" type="color" value="#4f8cff" oninput="onColorHexInput()" style="display:none; position:absolute; opacity:0; pointer-events:none;">
-    </div>
+      </div> <!-- end of #content -->
+  </header>
   </div>
-</div>
-<div id="status"></div>
-</header>
-<div id="grid" class="grid"></div>
-<footer id="pager" class="pagerfooter">
-  <div class="pagerrow pagerrow-bottom">
-    <div class="headicons footer-icons">
-      <button id="openSettings" class="iconbtn" onclick="openSettingsPalette()"></button>
+  <div id="grid" class="grid"></div>
+  <footer id="pager" class="pagerfooter">
+    <div id="status"></div>
+    <div class="pagerrow pagerrow-bottom">
+      <div class="headicons footer-icons">
+        <button id="openSettings" class="iconbtn" onclick="openSettingsPalette()"></button>
+      </div>
+      <div class="pager-controls">
+        <button id="firstPageBtn" class="pagerbtn" onclick="firstPage()"></button>
+        <button id="prevPageBtn" class="pagerbtn" onclick="prevPage()"></button>
+        <span id="pageIndicator" class="pageindicator"></span>
+        <button id="nextPageBtn" class="pagerbtn" onclick="nextPage()"></button>
+        <button id="lastPageBtn" class="pagerbtn" onclick="lastPage()"></button>
+      </div>
+      <select id="pageSizeSelect" onchange="onPageSizeChange()"></select>
     </div>
-    <div class="pager-controls">
-      <button id="firstPageBtn" class="pagerbtn" onclick="firstPage()"></button>
-      <button id="prevPageBtn" class="pagerbtn" onclick="prevPage()"></button>
-      <span id="pageIndicator" class="pageindicator"></span>
-      <button id="nextPageBtn" class="pagerbtn" onclick="nextPage()"></button>
-      <button id="lastPageBtn" class="pagerbtn" onclick="lastPage()"></button>
-    </div>
-    <select id="pageSizeSelect" onchange="onPageSizeChange()"></select>
-  </div>
-</footer>
-<script>
-const FINISH_ORDER=['translucent','multi','glow','sparkle','metallic','wood','fiber','standard','matte','silk'];
-const FINISH_BADGE={glow:'GLOW',sparkle:'SPARKLE',metallic:'METALLIC',wood:'WOOD',fiber:'FIBER'};
-const SCOPE_OPTIONS=['body','face'];
-const PAGE_SIZE_OPTIONS=[20,40,80,120,200];
-const DEFAULT_PAGE_SIZE=40;
-const DEFAULT_COLOR_FILTER_HEX='#4F8CFF';
-const MAX_COLOR_FILTER_TOLERANCE=100;
-const DEFAULT_COLOR_FILTER_DISTANCE=10;
-const DEFAULT_HUE_TOLERANCE=10;
-const DEFAULT_SAT_TOLERANCE=10;
-const DEFAULT_VAL_TOLERANCE=10;
-const COLOR_DISTANCE_HUE_WEIGHT=0.9;
-const COLOR_DISTANCE_SAT_WEIGHT=0.07;
-const COLOR_DISTANCE_LUM_WEIGHT=0.03;
-const NEUTRAL_SAT_THRESHOLD=0.12;
-const VIBRANT_SAT_THRESHOLD=0.4;
+  </footer>
+  <script>
+    const FINISH_ORDER = ['translucent', 'multi', 'glow', 'sparkle', 'metallic', 'wood', 'fiber', 'standard', 'matte', 'silk'];
+    const FINISH_BADGE = { glow: 'GLOW', sparkle: 'SPARKLE', metallic: 'METALLIC', wood: 'WOOD', fiber: 'FIBER' };
+    const SCOPE_OPTIONS = ['body', 'face'];
+    const PAGE_SIZE_OPTIONS = [20, 40, 80, 120, 200];
+    const DEFAULT_PAGE_SIZE = 40;
+    const DEFAULT_COLOR_FILTER_HEX = '#FF4F8CFF';
+    const MAX_COLOR_FILTER_TOLERANCE = 100;
+    const DEFAULT_COLOR_FILTER_DISTANCE = 10;
+    const DEFAULT_HUE_TOLERANCE = 10;
+    const DEFAULT_SAT_TOLERANCE = 10;
+    const DEFAULT_VAL_TOLERANCE = 10;
+    const COLOR_DISTANCE_HUE_WEIGHT = 0.9;
+    const COLOR_DISTANCE_SAT_WEIGHT = 0.07;
+    const COLOR_DISTANCE_LUM_WEIGHT = 0.03;
+    const NEUTRAL_SAT_THRESHOLD = 0.12;
+    const VIBRANT_SAT_THRESHOLD = 0.4;
 
-let currentLang='en';
-let catalog=[];
-let activeKey='';
-let catalogLoaded=false;
-let requestAttempts=0;
-let restoringFilters=false;
-let persistedFilters=null;
-let filteredIndexes=[];
-let currentPage=1;
-let currentScope='body';
-let catalogRetryTimer=null;
-let catalogRetryStartedAt=0;
-let startupForceRefreshAttempted=false;
-let startupForceTimerFired=false;
-
-function bridgeReady(){
-  return typeof adsk !== 'undefined' && adsk && typeof adsk.fusionSendData === 'function';
-}
-
-function toHsl(hex){
-  const clean=(hex||'').replace('#','');
-  if(clean.length!==6) return {h:0,s:0,l:0};
-  const r=parseInt(clean.slice(0,2),16)/255;
-  const g=parseInt(clean.slice(2,4),16)/255;
-  const b=parseInt(clean.slice(4,6),16)/255;
-  const max=Math.max(r,g,b);
-  const min=Math.min(r,g,b);
-  const l=(max+min)/2;
-  const d=max-min;
-  if(d===0) return {h:0,s:0,l};
-  const s=l>0.5?d/(2-max-min):d/(max+min);
-  let h=0;
-  if(max===r) h=((g-b)/d+(g<b?6:0))/6;
-  else if(max===g) h=((b-r)/d+2)/6;
-  else h=((r-g)/d+4)/6;
-  return {h,s,l};
-}
-
-function sanitizeColorHex(hex){
-  if(typeof hex!=='string') return DEFAULT_COLOR_FILTER_HEX;
-  const s=hex.trim();
-  if(!/^#[0-9A-Fa-f]{6}$/.test(s)) return DEFAULT_COLOR_FILTER_HEX;
-  return s.toUpperCase();
-}
-
-function normalizeHexValue(value){
-  if(typeof value!=='string') return '';
-  const s=value.trim();
-  const clean=s.startsWith('#')?s.slice(1):s;
-  if(!/^[0-9A-Fa-f]{6}$/.test(clean)) return '';
-  return `#${clean.toUpperCase()}`;
-}
-
-function textFor(entry,key){
-  const obj=entry[key];
-  if(obj && typeof obj==='object') return obj[currentLang]||obj.en||'';
-  return '';
-}
-
-function normalizeEntry(raw){
-  try{
-    if(!raw || typeof raw!=='object') return null;
-    const manufacturer=String(raw.manufacturer||raw.brand||raw.maker||'').trim();
-    const category=String(raw.category||raw.family||manufacturer||'').trim();
-    const material=String(raw.material||raw.product_line||'').trim();
-    const colorName=String(raw.color_name||raw.color||raw.name||'').trim();
-    const primaryHex=normalizeHexValue(raw.hex||raw.primary_hex||'');
-    const hexesRaw=Array.isArray(raw.hexes)?raw.hexes:[primaryHex];
-    const hexes=hexesRaw.map(normalizeHexValue).filter(Boolean);
-    if(primaryHex && !hexes.includes(primaryHex)) hexes.unshift(primaryHex);
-    const firstHex=hexes[0]||primaryHex;
-    if(!manufacturer || !material || !colorName || !firstHex) return null;
-    const translucent=!!raw.translucent;
-    const multi=raw.is_multi_color===true || hexes.length>1;
-    const finish=String(raw.finish||'standard').toLowerCase();
-    const badges=Array.isArray(raw.ui_badges)?raw.ui_badges.filter(v=>typeof v==='string'&&v.trim()):[];
-    if(badges.length===0){
-      if(translucent) badges.push('TRANS');
-      if(multi) badges.push('MULTI');
-      if(FINISH_BADGE[finish]) badges.push(FINISH_BADGE[finish]);
+    let currentLang = 'en';
+    let catalog = {
+      total: 0,
+      page: 1,
+      pageSize: DEFAULT_PAGE_SIZE,
+      pages: 1,
+      results: []
+    };
+    let activeKey = '';
+    let catalogLoaded = false;
+    let requestAttempts = 0;
+    let restoringFilters = false;
+    let persistedFilters = null;
+    let currentPage = 1;
+    let currentScope = 'body';
+    
+    function toHsl(hex) {
+      const clean = (hex || '').replace('#', '');
+      if (clean.length === 8) {
+        // RGBA format, skip the alpha channel
+        clean = clean.slice(0, 6);
+      }
+      if (clean.length !== 6) {
+        return { h: 0, s: 0, l: 0 };
+      } 
+      const r = parseInt(clean.slice(0, 2), 16) / 255;
+      const g = parseInt(clean.slice(2, 4), 16) / 255;
+      const b = parseInt(clean.slice(4, 6), 16) / 255;
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
+      const l = (max + min) / 2;
+      const d = max - min;
+      if (d === 0) return { h: 0, s: 0, l };
+      const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      let h = 0;
+      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      else if (max === g) h = ((b - r) / d + 2) / 6;
+      else h = ((r - g) / d + 4) / 6;
+      return { h, s, l };
     }
-    raw.manufacturer=manufacturer;
-    raw.category=category;
-    raw.material=material;
-    raw.color_name=colorName;
-    raw.hex=firstHex;
-    raw.hexes=hexes.length?hexes:[firstHex];
-    raw.translucent=translucent;
-    raw.opacity=Number(raw.opacity||1);
-    raw.roughness=Number(raw.roughness||0.44);
-    raw.finish=finish;
-    const searchTextRaw=typeof raw.search_text==='string' ? raw.search_text : `${category} ${material} ${colorName}`;
-    raw.searchText=searchTextRaw.toLowerCase();
-    raw.badges=badges;
-    const hsl=toHsl(firstHex);
-    raw.colorHue=hsl.h;
-    raw.colorSat=hsl.s;
-    raw.colorLum=hsl.l;
-    return raw;
-  }catch(_){
-    return null;
-  }
-}
 
-function extractCatalogPayload(rawPayload){
-  if(Array.isArray(rawPayload)){
-    return {entries:rawPayload,meta:{version:'legacy-array',entryCount:rawPayload.length,source:'legacy-array'}};
-  }
-  if(!rawPayload || typeof rawPayload!=='object'){
-    return {entries:[],meta:{version:'invalid',entryCount:0,source:'invalid'}};
-  }
-  const entries=
-    Array.isArray(rawPayload.entries)?rawPayload.entries:
-    (Array.isArray(rawPayload.items)?rawPayload.items:
-    (Array.isArray(rawPayload.data)?rawPayload.data:[]));
-  const version=String(rawPayload.catalog_version||rawPayload.version||rawPayload.generated_epoch||'unknown');
-  const entryCount=Number(rawPayload.entry_count||entries.length||0);
-  const source=String(rawPayload.source||'payload');
-  return {entries:entries,meta:{version:version,entryCount:entryCount,schema:rawPayload.schema_version||'n/a',source:source}};
-}
+    function sanitizeColorHex(hex) {
+      if (typeof hex !== 'string') {
+        return DEFAULT_COLOR_FILTER_HEX;
+      }
 
-function colorKey(e){
-  return [e.material,e.color_name,e.hex].join('|');
-}
+      const s = hex.trim();
+      // ARGB
+      if (/^#[0-9A-Fa-f]{8}$/.test(s)) {
+        return s.toUpperCase();
+      }
 
-function swatchBackground(e){
-  const colors=e.hexes.filter(Boolean);
-  const gradient=colors.length>1?`linear-gradient(90deg, ${colors.join(', ')})`:(colors[0]||e.hex||'#999999');
-  if(e.translucent){
-    return `linear-gradient(${(e.hex||colors[0]||'#cccccc')}99, ${(e.hex||colors[0]||'#cccccc')}99), repeating-conic-gradient(#e5e5e5 0 25%,#777 0 50%) 50%/10px 10px`;
-  }
-  return gradient;
-}
-
-function fillSelect(select,firstLabel,values,labelFn){
-  const prev=select.value||'';
-  // Clear previous options
-  select.innerHTML='';
-
-  // Add the "All" option
-  const any=document.createElement('option');
-  any.value='';
-  any.textContent=firstLabel;
-  select.appendChild(any);
-
-  any.disabled = values.length == 0;
-
-  values.forEach(v=>{
-    const o=document.createElement('option');
-    o.value=v;
-    o.textContent=labelFn?labelFn(v):v;
-    select.appendChild(o);
-  });
-  select.value=values.includes(prev)?prev:'';
-}
-
-function updatePageSizeControl(){
-  const t=I18N[currentLang]||I18N.en;
-  const select=document.getElementById('pageSizeSelect');
-  const prev=select.value||String(DEFAULT_PAGE_SIZE);
-  select.innerHTML='';
-  PAGE_SIZE_OPTIONS.forEach(v=>{
-    const o=document.createElement('option');
-    o.value=String(v);
-    o.textContent=`${t.perPageLabel} ${v}`;
-    select.appendChild(o);
-  });
-  select.value=PAGE_SIZE_OPTIONS.map(String).includes(prev)?prev:String(DEFAULT_PAGE_SIZE);
-}
-
-function updateSortControl(){
-  const t=I18N[currentLang]||I18N.en;
-  const select=document.getElementById('sort');
-  const prev=select.value||'name';
-  select.innerHTML='';
-  const options=[
-    {value:'name',label:t.sortByName},
-    {value:'color',label:t.sortByColor}
-  ];
-  options.forEach(opt=>{
-    const o=document.createElement('option');
-    o.value=opt.value;
-    o.textContent=opt.label;
-    select.appendChild(o);
-  });
-  select.value=options.some(opt=>opt.value===prev)?prev:'name';
-}
-
-function buildScopeOptions(){
-  const t=I18N[currentLang]||I18N.en;
-  const labels={
-    body:t.scopeBody,
-    face:t.scopeFace
-  };
-  const scopeGroup=document.getElementById('scopeGroup');
-  const prev=currentScope||'body';
-  scopeGroup.innerHTML='';
-  const title=document.createElement('span');
-  title.id='scopeLabel';
-  title.className='scope-radio-title';
-  title.textContent=t.scopeLabel;
-  scopeGroup.appendChild(title);
-  SCOPE_OPTIONS.forEach((k)=>{
-    const id=`scope-${k}`;
-    const label=document.createElement('label');
-    label.className='scope-radio-option';
-    label.htmlFor=id;
-
-    const input=document.createElement('input');
-    input.type='radio';
-    input.name='scope';
-    input.id=id;
-    input.value=k;
-    input.checked=k===prev;
-    input.addEventListener('change',()=>setScopeFromUi(k));
-
-    const text=document.createElement('span');
-    text.textContent=labels[k]||k;
-
-    label.appendChild(input);
-    label.appendChild(text);
-    scopeGroup.appendChild(label);
-  });
-  currentScope=SCOPE_OPTIONS.includes(prev)?prev:'body';
-  const active=document.querySelector(`input[name="scope"][value="${currentScope}"]`);
-  if(active) active.checked=true;
-}
-
-function setScopeFromUi(nextScope){
-  const selected=typeof nextScope==='string'
-    ? nextScope
-    : ((document.querySelector('input[name="scope"]:checked')||{}).value||'body');
-  currentScope=SCOPE_OPTIONS.includes(selected)?selected:'body';
-  try{
-    adsk.fusionSendData('set_scope',currentScope);
-  }catch(_){
-    // Ignore bridge errors while panel initializes.
-  }
-}
-
-function clampTolerance(value, fallback, maxValue=MAX_COLOR_FILTER_TOLERANCE){
-  const numeric=Number(value);
-  if(!Number.isFinite(numeric)) return fallback;
-  return Math.max(0,Math.min(maxValue,Math.round(numeric)));
-}
-
-function getColorToleranceSettings(){
-  return {
-    hue: clampTolerance(document.getElementById('colorFilterHue').value, DEFAULT_HUE_TOLERANCE),
-    sat: clampTolerance(document.getElementById('colorFilterSat').value, DEFAULT_SAT_TOLERANCE),
-    val: clampTolerance(document.getElementById('colorFilterVal').value, DEFAULT_VAL_TOLERANCE)
-  };
-}
-
-function updateColorFilterUiState(){
-  const enabled=document.getElementById('colorFilterOn').checked;
-  document.getElementById('colorFilterHex').disabled=!enabled;
-  document.getElementById('colorFilterHue').disabled=!enabled;
-  document.getElementById('colorFilterSat').disabled=!enabled;
-  document.getElementById('colorFilterVal').disabled=!enabled;
-  document.getElementById('colorFilterDetails').classList.toggle('hidden',!enabled);
-  document.getElementById('colorWheel').classList.toggle('disabled',!enabled);
-}
-
-function updateColorDistanceLabel(){
-  const tolerance=getColorToleranceSettings();
-  document.getElementById('colorFilterHueValue').textContent=`${tolerance.hue}%`;
-  document.getElementById('colorFilterSatValue').textContent=`${tolerance.sat}%`;
-  document.getElementById('colorFilterValValue').textContent=`${tolerance.val}%`;
-}
-
-function hueDistanceRadius(targetHsl,threshold){
-  const hueWeight=targetHsl.s<0.08?0.2:1.0;
-  const effectiveHueWeight=Math.max(0.01,COLOR_DISTANCE_HUE_WEIGHT*hueWeight);
-  const maxHueDiff=Math.min(0.5,threshold/effectiveHueWeight);
-  return maxHueDiff;
-}
-
-function setWheelArc(el,startDeg,endDeg){
-  const span=Math.max(0,endDeg-startDeg);
-  if(span<=0){
-    el.style.display='none';
-    el.style.background='none';
-    return;
-  }
-  el.style.display='block';
-  el.style.background=`conic-gradient(from ${startDeg-90}deg, rgba(255,255,255,.62) 0deg, rgba(255,255,255,.62) ${span}deg, transparent ${span}deg, transparent 360deg)`;
-}
-
-function rgbToHex(r, g, b){
-  const toHex=(v)=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0');
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
-}
-
-function hslToRgb(h, s, l){
-  const c=(1 - Math.abs(2*l - 1)) * s;
-  const x=c * (1 - Math.abs((h/60) % 2 - 1));
-  const m=l - c / 2;
-  let r=0,g=0,b=0;
-  if(h>=0 && h<60){r=c; g=x; b=0;}
-  else if(h>=60 && h<120){r=x; g=c; b=0;}
-  else if(h>=120 && h<180){r=0; g=c; b=x;}
-  else if(h>=180 && h<240){r=0; g=x; b=c;}
-  else if(h>=240 && h<300){r=x; g=0; b=c;}
-  else {r=c; g=0; b=x;}
-  return {r:r*255 + m*255, g:g*255 + m*255, b:b*255 + m*255};
-}
-
-function setSelectedColorHex(hex){
-  const value=sanitizeColorHex(hex);
-  document.getElementById('colorFilterHex').value=value;
-  onColorHexInput();
-}
-
-function pickColorFromWheel(event){
-  const wheel=document.getElementById('colorWheel');
-  if(!wheel) return;
-  const rect=wheel.getBoundingClientRect();
-  const cx=rect.left + rect.width / 2;
-  const cy=rect.top + rect.height / 2;
-  const dx=(event.clientX || cx) - cx;
-  const dy=(event.clientY || cy) - cy;
-  const distance=Math.sqrt(dx*dx + dy*dy);
-  const radius=Math.min(rect.width,rect.height) / 2;
-  if(distance > radius) return;
-  const wheelAngle=(Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
-  const angle=(wheelAngle + 180) % 360;
-  const sat=Math.min(1, distance / radius);
-  const rgb=hslToRgb(angle, sat, 0.5);
-  setSelectedColorHex(rgbToHex(rgb.r, rgb.g, rgb.b));
-}
-
-function updateColorRangePreview(filters){
-  const safeFilters=filters||getCurrentFilters();
-  const target=toHsl(safeFilters.cHex||DEFAULT_COLOR_FILTER_HEX);
-  const hueTolerance=Number(safeFilters.cHue||DEFAULT_HUE_TOLERANCE)/100;
-  const threshold=Math.max(0.05,Math.min(0.5,hueTolerance*0.5));
-  const radius=hueDistanceRadius(target,threshold);
-  const start=target.h-radius;
-  const end=target.h+radius;
-  const rangeA=document.getElementById('colorWheelAllowedA');
-  const rangeB=document.getElementById('colorWheelAllowedB');
-  const center=document.getElementById('colorWheelCenter');
-  center.style.background=safeFilters.cHex||DEFAULT_COLOR_FILTER_HEX;
-
-  if(radius>=0.5){
-    setWheelArc(rangeA,0,360);
-    setWheelArc(rangeB,0,0);
-  }else{
-    const startNorm=((start%1)+1)%1;
-    const endNorm=((end%1)+1)%1;
-    const startDeg=startNorm*360;
-    const endDeg=endNorm*360;
-    if(startNorm<=endNorm){
-      setWheelArc(rangeA,startDeg,endDeg);
-      setWheelArc(rangeB,0,0);
-    }else{
-      setWheelArc(rangeA,0,endDeg);
-      setWheelArc(rangeB,startDeg,360);
+      // RGB
+      if (/^#[0-9A-Fa-f]{6}$/.test(s)) {
+        return s.toUpperCase();
+      }
+      return DEFAULT_COLOR_FILTER_HEX;
     }
-  }
 
-  const deg=Math.round(radius*360);
-  if(document.getElementById('colorHueHint')) {
-    document.getElementById('colorHueHint').textContent='';
-  }
-}
+    function normalizeHex(hex, fallbackAlpha) {
+      if (!hex) {
+        return null;
+      }
 
-function displayManufacturer(entry){
-  return textFor(entry,'manufacturer_i18n')||entry.manufacturer;
-}
+      hex = hex.replace(/^#/, "").trim();
 
-function displayMaterial(entry){
-  return textFor(entry,'material_i18n')||entry.material;
-}
+      // Accept ONLY 6 or 8 hex digits
+      if (!/^[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/.test(hex)) {
+        console.error("Invalid hex string:", hex);
+        return null;
+      }
 
-function displayColor(entry){
-  return textFor(entry,'color_name_i18n')||entry.color_name;
-}
+      // 6-digit RGB → append fallback alpha
+      if (hex.length === 6) {
+        return `#${hex}${fallbackAlpha}`;
+      }
 
-function renderCardsWindow(indexes){
-  const grid=document.getElementById('grid');
-  grid.innerHTML='';
-  const frag=document.createDocumentFragment();
+      // 8-digit RGBA → preserve existing alpha
+      if (hex.length === 8) {
+        return `#${hex}`;
+      }
 
-  indexes.forEach((index)=>{
-    const e=catalog[index];
-    const btn=document.createElement('button');
-    btn.className='card';
-    const key=colorKey(e);
-    if(activeKey===key) btn.classList.add('active');
-    btn.dataset.cat=e.category;
-    btn.dataset.material=e.material;
-    btn.dataset.search=e.searchText;
+      // Should never reach here due to regex
+      return null;
+    }
 
-    const sw=document.createElement('span');
-    sw.className='swatch';
-    sw.style.background=swatchBackground(e);
+    function textFor(entry, key) {
+      const obj = entry[key];
+      if (obj && typeof obj === 'object') return obj[currentLang] || obj.en || '';
+      return '';
+    }
 
-    const txt=document.createElement('span');
-    txt.className='txt';
-    const b=document.createElement('b');
-    b.textContent=displayColor(e);
-    const sm=document.createElement('small');
-    sm.textContent=`${displayManufacturer(e)} · ${displayMaterial(e)} · ${e.hex}`;
-    txt.appendChild(b);
-    txt.appendChild(sm);
+    function colorKey(e) {
+      if (e.color_hex) {
+        return [e.material, e.name, e.color_hex].join('|');
+      }
 
-    btn.appendChild(sw);
-    btn.appendChild(txt);
+      if (e.color_hexes && e.color_hexes.length > 0) {
+        return [e.material, e.name, e.color_hexes.join(',')].join('|');
+      }
+      return [e.material, e.name].join('|');
+    }
 
-    e.badges.forEach(label=>{
-      const badge=document.createElement('span');
-      badge.className='badge';
-      badge.textContent=label;
-      btn.appendChild(badge);
+    function swatchBackground(e) {
+      const colors = e.color_hexes;
+      let defaultStart = '#cccccc88';
+      let defaultEnd = "#ccccccff";
+      let gradientTrailer = "repeating-conic-gradient(#e5e5e5 0 25%, #777 0 50%) 50%/10px 10px";
+      let gradient = '';
+      let translucentStart = e.translucent ? '25' : 'FF';
+      let translucentEnd = 'FF';
+
+      if ((!colors || colors.length === 0) && e.color_hex) {
+        const start = normalizeHex(e.color_hex, translucentStart);
+        const end = normalizeHex(e.color_hex, translucentEnd);
+        gradient = `linear-gradient(${start}, ${end}), ${gradientTrailer}`;
+      } else if (colors && colors.length > 0) {
+        if (colors.length === 1) {
+          const start = normalizeHex(colors[0], translucentStart);
+          const end = normalizeHex(colors[0], translucentEnd);
+          gradient = `linear-gradient(${start}, ${end}), ${gradientTrailer}`;
+        } else {
+          const starts = colors.map((c) => normalizeHex(c, translucentStart));
+          const ends = colors.map((c) => normalizeHex(c, translucentEnd));
+          gradient = `linear-gradient(90deg, ${starts.join(", ")}, ${ends.join(
+            ", "
+          )}), ${gradientTrailer}`;
+        }
+      }
+
+      if (!gradient) {
+        const start = normalizeHex(defaultStart, translucentStart);
+        const end = normalizeHex(defaultEnd, translucentEnd);
+        gradient = `linear-gradient(${start}, ${end}), ${gradientTrailer}`;
+      }
+      return gradient;
+    }
+
+    function fillSelect(select, firstLabel, values, labelFn) {
+      const prev = select.value || '';
+      // Clear previous options
+      select.innerHTML = '';
+
+      // Add the "All" option
+      const any = document.createElement('option');
+      any.value = '';
+      any.textContent = firstLabel;
+      select.appendChild(any);
+
+      any.disabled = values.length == 0;
+
+      values.forEach(v => {
+        const o = document.createElement('option');
+        o.value = v;
+        o.textContent = labelFn ? labelFn(v) : v;
+        select.appendChild(o);
+      });
+      select.value = values.includes(prev) ? prev : '';
+    }
+
+    function updatePageSizeControl() {
+      const t = I18N[currentLang] || I18N.en;
+      const select = document.getElementById('pageSizeSelect');
+      const prev = select.value || DEFAULT_PAGE_SIZE;
+      select.innerHTML = '';
+      PAGE_SIZE_OPTIONS.forEach(v => {
+        const o = document.createElement('option');
+        o.value = v;
+        o.textContent = `${t.perPageLabel} ${v}`;
+        select.appendChild(o);
+      });
+      select.value = PAGE_SIZE_OPTIONS.includes(prev) ? prev : DEFAULT_PAGE_SIZE;
+    }
+
+    function updateSortControl() {
+      const t = I18N[currentLang] || I18N.en;
+      const select = document.getElementById('sort');
+      const prev = select.value || 'name';
+      select.innerHTML = '';
+      const options = [
+        { value: 'name', label: t.sortByName },
+        { value: 'color', label: t.sortByColor }
+      ];
+      options.forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.label;
+        select.appendChild(o);
+      });
+      select.value = options.some(opt => opt.value === prev) ? prev : 'name';
+    }
+
+    function buildScopeOptions() {
+      const t = I18N[currentLang] || I18N.en;
+      const labels = {
+        body: t.scopeBody,
+        face: t.scopeFace
+      };
+      const scopeGroup = document.getElementById('scopeGroup');
+      const prev = currentScope || 'body';
+      scopeGroup.innerHTML = '';
+      const title = document.createElement('span');
+      title.id = 'scopeLabel';
+      title.className = 'scope-radio-title';
+      title.textContent = t.scopeLabel;
+      scopeGroup.appendChild(title);
+      SCOPE_OPTIONS.forEach((k) => {
+        const id = `scope-${k}`;
+        const label = document.createElement('label');
+        label.className = 'scope-radio-option';
+        label.htmlFor = id;
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'scope';
+        input.id = id;
+        input.value = k;
+        input.checked = k === prev;
+        input.addEventListener('change', () => setScopeFromUi(k));
+
+        const text = document.createElement('span');
+        text.textContent = labels[k] || k;
+
+        label.appendChild(input);
+        label.appendChild(text);
+        scopeGroup.appendChild(label);
+      });
+      currentScope = SCOPE_OPTIONS.includes(prev) ? prev : 'body';
+      const active = document.querySelector(`input[name="scope"][value="${currentScope}"]`);
+      if (active) active.checked = true;
+    }
+
+    function setScopeFromUi(nextScope) {
+      const selected = typeof nextScope === 'string'
+        ? nextScope
+        : ((document.querySelector('input[name="scope"]:checked') || {}).value || 'body');
+      currentScope = SCOPE_OPTIONS.includes(selected) ? selected : 'body';
+      try {
+        sendToFusion('set_scope', { scope: currentScope });
+      } catch (_) {
+        // Ignore bridge errors while panel initializes.
+      }
+    }
+
+    function clampTolerance(value, fallback, maxValue = MAX_COLOR_FILTER_TOLERANCE) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return fallback;
+      return Math.max(0, Math.min(maxValue, Math.round(numeric)));
+    }
+
+    function getColorToleranceSettings() {
+      return {
+        hue: clampTolerance(document.getElementById('colorFilterHue').value, DEFAULT_HUE_TOLERANCE),
+        sat: clampTolerance(document.getElementById('colorFilterSat').value, DEFAULT_SAT_TOLERANCE),
+        val: clampTolerance(document.getElementById('colorFilterVal').value, DEFAULT_VAL_TOLERANCE)
+      };
+    }
+
+    function updateColorFilterUiState() {
+      const enabled = document.getElementById('colorFilterOn').checked;
+      document.getElementById('colorFilterHex').disabled = !enabled;
+      document.getElementById('colorFilterHue').disabled = !enabled;
+      document.getElementById('colorFilterSat').disabled = !enabled;
+      document.getElementById('colorFilterVal').disabled = !enabled;
+      document.getElementById('colorFilterDetails').classList.toggle('hidden', !enabled);
+      document.getElementById('colorWheel').classList.toggle('disabled', !enabled);
+    }
+
+    function updateColorDistanceLabel() {
+      const tolerance = getColorToleranceSettings();
+      document.getElementById('colorFilterHueValue').textContent = `${tolerance.hue}%`;
+      document.getElementById('colorFilterSatValue').textContent = `${tolerance.sat}%`;
+      document.getElementById('colorFilterValValue').textContent = `${tolerance.val}%`;
+    }
+
+    function hueDistanceRadius(targetHsl, threshold) {
+      const hueWeight = targetHsl.s < 0.08 ? 0.2 : 1.0;
+      const effectiveHueWeight = Math.max(0.01, COLOR_DISTANCE_HUE_WEIGHT * hueWeight);
+      const maxHueDiff = Math.min(0.5, threshold / effectiveHueWeight);
+      return maxHueDiff;
+    }
+
+    function setWheelArc(el, startDeg, endDeg) {
+      const span = Math.max(0, endDeg - startDeg);
+      if (span <= 0) {
+        el.style.display = 'none';
+        el.style.background = 'none';
+        return;
+      }
+      el.style.display = 'block';
+      el.style.background = `conic-gradient(from ${startDeg - 90}deg, rgba(255,255,255,.62) 0deg, rgba(255,255,255,.62) ${span}deg, transparent ${span}deg, transparent 360deg)`;
+    }
+
+    function rgbToHex(r, g, b) {
+      const toHex = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0');
+      return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+    }
+
+    function hslToRgb(h, s, l) {
+      const c = (1 - Math.abs(2 * l - 1)) * s;
+      const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+      const m = l - c / 2;
+      let r = 0, g = 0, b = 0;
+      if (h >= 0 && h < 60) { r = c; g = x; b = 0; }
+      else if (h >= 60 && h < 120) { r = x; g = c; b = 0; }
+      else if (h >= 120 && h < 180) { r = 0; g = c; b = x; }
+      else if (h >= 180 && h < 240) { r = 0; g = x; b = c; }
+      else if (h >= 240 && h < 300) { r = x; g = 0; b = c; }
+      else { r = c; g = 0; b = x; }
+      return { r: r * 255 + m * 255, g: g * 255 + m * 255, b: b * 255 + m * 255 };
+    }
+
+    function setSelectedColorHex(hex) {
+      const value = sanitizeColorHex(hex);
+      document.getElementById('colorFilterHex').value = value;
+      onColorHexInput();
+    }
+
+    function pickColorFromWheel(event) {
+      const wheel = document.getElementById('colorWheel');
+      if (!wheel) return;
+      const rect = wheel.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (event.clientX || cx) - cx;
+      const dy = (event.clientY || cy) - cy;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const radius = Math.min(rect.width, rect.height) / 2;
+      if (distance > radius) return;
+      const wheelAngle = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
+      const angle = (wheelAngle + 180) % 360;
+      const sat = Math.min(1, distance / radius);
+      const rgb = hslToRgb(angle, sat, 0.5);
+      setSelectedColorHex(rgbToHex(rgb.r, rgb.g, rgb.b));
+    }
+
+    function updateColorRangePreview(filters) {
+      const safeFilters = filters || getCurrentFilters();
+      const target = toHsl(safeFilters.cHex || DEFAULT_COLOR_FILTER_HEX);
+      const hueTolerance = Number(safeFilters.cHue || DEFAULT_HUE_TOLERANCE) / 100;
+      const threshold = Math.max(0.05, Math.min(0.5, hueTolerance * 0.5));
+      const radius = hueDistanceRadius(target, threshold);
+      const start = target.h - radius;
+      const end = target.h + radius;
+      const rangeA = document.getElementById('colorWheelAllowedA');
+      const rangeB = document.getElementById('colorWheelAllowedB');
+      const center = document.getElementById('colorWheelCenter');
+      center.style.background = safeFilters.cHex || DEFAULT_COLOR_FILTER_HEX;
+
+      if (radius >= 0.5) {
+        setWheelArc(rangeA, 0, 360);
+        setWheelArc(rangeB, 0, 0);
+      } else {
+        const startNorm = ((start % 1) + 1) % 1;
+        const endNorm = ((end % 1) + 1) % 1;
+        const startDeg = startNorm * 360;
+        const endDeg = endNorm * 360;
+        if (startNorm <= endNorm) {
+          setWheelArc(rangeA, startDeg, endDeg);
+          setWheelArc(rangeB, 0, 0);
+        } else {
+          setWheelArc(rangeA, 0, endDeg);
+          setWheelArc(rangeB, startDeg, 360);
+        }
+      }
+
+      const deg = Math.round(radius * 360);
+      if (document.getElementById('colorHueHint')) {
+        document.getElementById('colorHueHint').textContent = '';
+      }
+    }
+
+    function displayManufacturer(entry) {
+      return textFor(entry, 'manufacturer_i18n') || entry.manufacturer;
+    }
+
+    function displayMaterial(entry) {
+      return textFor(entry, 'material_i18n') || entry.material;
+    }
+
+    function displayColor(entry) {
+      return textFor(entry, 'color_name_i18n') || entry.name;
+    }
+
+    function renderCatalog(rawCatalog) {
+      catalog = rawCatalog;
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      const frag = document.createDocumentFragment();
+
+      rawCatalog.results.forEach((e) => {
+        const btn = document.createElement('button');
+        btn.className = 'card';
+        const key = colorKey(e);
+        if (activeKey === key) btn.classList.add('active');
+        btn.dataset.cat = e.category;
+        btn.dataset.material = e.material;
+        btn.dataset.search=e.name;
+
+        const sw = document.createElement('span');
+        sw.className = 'swatch';
+        sw.style.background = swatchBackground(e);
+
+        const txt = document.createElement('span');
+        txt.className = 'txt';
+        const b = document.createElement('b');
+        b.textContent = displayColor(e);
+        const sm = document.createElement('small');
+        color = e.color_hex ? e.color_hex : (e.color_hexes && e.color_hexes.length > 0 ? e.color_hexes[0] : '');
+        sm.textContent = `${displayManufacturer(e)} · ${displayMaterial(e)} · ${color}`;
+        txt.appendChild(b);
+        txt.appendChild(sm);
+
+        btn.appendChild(sw);
+        btn.appendChild(txt);
+
+        /*
+        e.badges.forEach(label => {
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = label;
+          btn.appendChild(badge);
+        });
+        */
+
+        btn.addEventListener('click', () => applyColor(e, btn));
+        frag.appendChild(btn);
+      });
+
+      grid.appendChild(frag);
+    }
+
+    function updatePager(rawCatalog) {
+      const t = I18N[currentLang] || I18N.en;
+      const pageSize = rawCatalog.pageSize;
+      const totalPages = Math.max(1, Math.ceil(rawCatalog.total/rawCatalog.pageSize));
+      currentPage = Math.min(Math.max(1, rawCatalog.page), totalPages);
+      document.getElementById('pageIndicator').textContent = `${t.pageLabel} ${currentPage}/${totalPages}`;
+
+      document.getElementById('firstPageBtn').disabled = currentPage <= 1;
+      document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+      document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
+      document.getElementById('lastPageBtn').disabled = currentPage >= totalPages;
+    }
+
+    function prevPage() {
+      currentPage = Math.max(1, currentPage - 1);
+      sendFilamentQuery();
+    }
+
+    function firstPage() {
+      currentPage = 1;
+      sendFilamentQuery();
+    }
+
+    function nextPage() {
+      const pageSize = catalog.pageSize;
+      const totalPages = Math.max(1, Math.ceil(catalog.total / pageSize));
+      currentPage = Math.min(totalPages, currentPage + 1);
+      sendFilamentQuery();
+    }
+
+    function lastPage() {
+      const pageSize = catalog.pageSize;
+      currentPage = Math.max(1, Math.ceil(catalog.total / pageSize));
+      sendFilamentQuery();
+    }
+
+    function onPageSizeChange() {
+      currentPage = 1;
+      persistFilters();
+      sendFilamentQuery();
+    }
+
+    function applyColor(e, btn) {
+      document.querySelectorAll('.card').forEach(x => x.classList.remove('active'));
+      btn.classList.add('active');
+      activeKey = colorKey(e);
+      document.getElementById('status').textContent = I18N[currentLang].applying + displayMaterial(e) + ' · ' + displayColor(e);
+      const payload = {
+        manufacturer: e.manufacturer,
+        material: e.material,
+        color_name: e.color_name,
+        hex: e.hex,
+        hexes: e.hexes,
+        translucent: e.translucent,
+        opacity: e.opacity,
+        roughness: e.roughness,
+        finish: e.finish
+      };
+      adsk.fusionSendData('apply', { filament: e });
+    }
+
+    function finishMatch(entry, finishFilter) {
+      if (!finishFilter) return true;
+      if (finishFilter === 'multi') return entry.badges.includes('MULTI');
+      if (finishFilter === 'translucent') return entry.badges.includes('TRANS');
+      return entry.finish === finishFilter;
+    }
+
+    function getCurrentFilters() {
+      const cOn = document.getElementById('colorFilterOn').checked;
+      const cHex = sanitizeColorHex(document.getElementById('colorFilterHex').value);
+      const tolerance = getColorToleranceSettings();
+      return {
+        q: document.getElementById('q').value.toLowerCase(),
+        cat: document.getElementById('cat').value,
+        mat: document.getElementById('mat').value,
+        fin: document.getElementById('finish').value,
+        sort: document.getElementById('sort').value,
+        cOn: cOn ? '1' : '0',
+        cHex: cHex,
+        cHue: String(tolerance.hue),
+        cSat: String(tolerance.sat),
+        cVal: String(tolerance.val),
+        cDist: String(Math.round((tolerance.hue + tolerance.sat + tolerance.val) / 3)),
+        pageSize: document.getElementById('pageSizeSelect').value
+      };
+    }
+
+    function sanitizeFilters(filters) {
+      if (!filters || typeof filters !== 'object') {
+        return {
+          q: '',
+          cat: '',
+          mat: '',
+          fin: '',
+          sort: 'name',
+          cOn: '0',
+          cHex: DEFAULT_COLOR_FILTER_HEX,
+          cHue: DEFAULT_HUE_TOLERANCE,
+          cSat: DEFAULT_SAT_TOLERANCE,
+          cVal: DEFAULT_VAL_TOLERANCE,
+          cDist: DEFAULT_COLOR_FILTER_DISTANCE,
+          pageSize: DEFAULT_PAGE_SIZE
+        };
+      }
+      const pageSizeRaw = Number(filters.pageSize || DEFAULT_PAGE_SIZE);
+      const pageSize = PAGE_SIZE_OPTIONS.includes(pageSizeRaw) ? pageSizeRaw : DEFAULT_PAGE_SIZE;
+      const sort = filters.sort === 'color' ? 'color' : 'name';
+      const cOn = filters.cOn === '1' ? '1' : '0';
+      const cHex = sanitizeColorHex(filters.cHex || DEFAULT_COLOR_FILTER_HEX);
+      const hue = clampTolerance(filters.cHue, DEFAULT_HUE_TOLERANCE);
+      const sat = clampTolerance(filters.cSat, DEFAULT_SAT_TOLERANCE);
+      const val = clampTolerance(filters.cVal, DEFAULT_VAL_TOLERANCE);
+      const cDist = clampTolerance(filters.cDist, DEFAULT_COLOR_FILTER_DISTANCE);
+      return {
+        q: typeof filters.q === 'string' ? filters.q : '',
+        cat: typeof filters.cat === 'string' ? filters.cat : '',
+        mat: typeof filters.mat === 'string' ? filters.mat : '',
+        fin: typeof filters.fin === 'string' ? filters.fin : '',
+        sort: sort,
+        cOn: cOn,
+        cHex: cHex,
+        cHue: hue,
+        cSat: sat,
+        cVal: val,
+        cDist: cDist,
+        pageSize: pageSize
+      };
+    }
+
+    function persistFilters() {
+      if (restoringFilters) return;
+      try {
+        adsk.fusionSendData('save_filters', { filters: getCurrentFilters() });
+      } catch (_) {
+        // Ignore bridge errors; persistence is best-effort.
+      }
+    }
+
+    function applySavedFilters(filters) {
+      persistedFilters = sanitizeFilters(filters);
+      document.getElementById('pageSizeSelect').value = persistedFilters.pageSize;
+      currentPage = 1;
+      if (!catalog.length) return;
+      restoringFilters = true;
+      document.getElementById('q').value = persistedFilters.q;
+      document.getElementById('cat').value = persistedFilters.cat;
+      document.getElementById('mat').value = persistedFilters.mat;
+      document.getElementById('finish').value = persistedFilters.fin;
+      document.getElementById('sort').value = persistedFilters.sort;
+      document.getElementById('colorFilterOn').checked = persistedFilters.cOn === '1';
+      document.getElementById('colorFilterHex').value = persistedFilters.cHex;
+      document.getElementById('colorFilterHue').value = persistedFilters.cHue || DEFAULT_HUE_TOLERANCE;
+      document.getElementById('colorFilterSat').value = persistedFilters.cSat || DEFAULT_SAT_TOLERANCE;
+      document.getElementById('colorFilterVal').value = persistedFilters.cVal || DEFAULT_VAL_TOLERANCE;
+      updateColorFilterUiState();
+      updateColorDistanceLabel();
+      restoringFilters = false;
+      sendFilamentQuery();
+      sendFilterLists();
+    }
+
+    function hueDistance(a, b) {
+      const delta = Math.abs((a || 0) - (b || 0));
+      return Math.min(delta, 1 - delta);
+    }
+
+    function colorDistance(entry, target, settings) {
+      const tolerance = settings || {
+        hue: Number(DEFAULT_HUE_TOLERANCE),
+        sat: Number(DEFAULT_SAT_TOLERANCE),
+        val: Number(DEFAULT_VAL_TOLERANCE)
+      };
+      const entrySat = (entry.colorSat || 0);
+      const targetSat = (target.s || 0);
+      const targetIsNeutral = targetSat < NEUTRAL_SAT_THRESHOLD;
+      const entryIsNeutral = entrySat < NEUTRAL_SAT_THRESHOLD;
+      const hueTolerance = Math.max(5, Number(tolerance.hue || DEFAULT_HUE_TOLERANCE)) / 100;
+      const satTolerance = Math.max(5, Number(tolerance.sat || DEFAULT_SAT_TOLERANCE)) / 100;
+      const valTolerance = Math.max(5, Number(tolerance.val || DEFAULT_VAL_TOLERANCE)) / 100;
+
+      if (!targetIsNeutral && entryIsNeutral && entrySat < Math.max(0.08, targetSat * 0.35)) {
+        return 1.5;
+      }
+      if (targetIsNeutral && entrySat > VIBRANT_SAT_THRESHOLD && !entryIsNeutral) {
+        return 1.5;
+      }
+
+      const dh = hueDistance(entry.colorHue, target.h);
+      const ds = Math.abs(entrySat - targetSat);
+      const dl = Math.abs((entry.colorLum || 0) - target.l);
+      const hueTerm = (dh / Math.max(0.01, hueTolerance * 0.5)) * 0.55;
+      const satTerm = (ds / Math.max(0.01, satTolerance)) * 0.30;
+      const lumTerm = (dl / Math.max(0.01, valTolerance)) * 0.15;
+      return Math.min(1.5, hueTerm + satTerm + lumTerm);
+    }
+
+    function onFilterChange(options) {
+      const opts = options || {};
+      if (!opts.focusAnchor) {
+        currentPage = 1;
+      }
+      const filters = getCurrentFilters();
+      updateColorDistanceLabel();
+      updateColorRangePreview(filters);
+      persistFilters();
+      if (!opts.focusAnchor) {
+        sendFilterLists();
+      }
+      sendFilamentQuery();
+    }
+
+    function onColorFilterToggleChange() {
+      updateColorFilterUiState();
+      onFilterChange({ focusAnchor: document.getElementById('colorFilterOn').checked });
+    }
+
+    function onColorToleranceInput() {
+      updateColorDistanceLabel();
+      onFilterChange({ focusAnchor: true });
+    }
+
+    function onColorHexInput() {
+      onFilterChange({ focusAnchor: true });
+    }
+
+    function openSettingsPalette() {
+      adsk.fusionSendData('open_settings_palette', '');
+    }
+
+    function setUiLanguage(lang) {
+      currentLang = I18N[lang.lang] ? lang.lang : 'en';
+      const t = I18N[currentLang];
+      document.documentElement.lang = t.lang;
+      document.getElementById('q').placeholder = t.searchPlaceholder;
+      document.getElementById('openSettings').textContent = '⚙';
+      document.getElementById('openSettings').title = t.openSettings;
+      document.getElementById('openSettings').setAttribute('aria-label', t.openSettings);
+      document.getElementById('colorFilterLabel').textContent = t.colorProximityLabel;
+      document.getElementById('firstPageBtn').textContent = '◀◀';
+      document.getElementById('prevPageBtn').textContent = '◀';
+      document.getElementById('nextPageBtn').textContent = '▶';
+      document.getElementById('lastPageBtn').textContent = '▶▶';
+      document.getElementById('firstPageBtn').title = t.firstPage;
+      document.getElementById('prevPageBtn').title = t.prevPage;
+      document.getElementById('nextPageBtn').title = t.nextPage;
+      document.getElementById('lastPageBtn').title = t.lastPage;
+      updatePageSizeControl();
+      updateSortControl();
+      buildScopeOptions();
+      updateColorDistanceLabel();
+      updateColorRangePreview();
+    }
+
+    function setCatalog(rawCatalog) {
+      renderCatalog(rawCatalog);
+      updatePager(rawCatalog);
+    }
+
+    function requestSavedFilters() {
+      adsk.fusionSendData('request_filters', '');
+    }
+
+    function requestLanguage() {
+      adsk.fusionSendData('request_lang', '');
+    }
+
+    function requestScope() {
+      adsk.fusionSendData('request_scope', '');
+    }
+
+    function setQueryResults(results) {
+      setCatalog(results);
+    }
+
+    function setFilterLists(data) {
+      const manufacturers = data.manufacturers || [];
+      const materials = data.materials || [];
+      const finishes = data.finishes || [];
+
+      const allManufacturers = I18N[currentLang].allManufacturers;
+      fillSelect(document.getElementById('cat'), allManufacturers, manufacturers, m => m);
+
+      const allMaterials = I18N[currentLang].allLines;
+      fillSelect(document.getElementById('mat'), allMaterials, materials, m => m);
+
+      const allFinishes = I18N[currentLang].allFinishes;
+      fillSelect(document.getElementById('finish'), allFinishes, finishes, f => f);
+    }
+
+    function setScope(data) {
+      currentScope = SCOPE_OPTIONS.includes(data.scope) ? data.Array : 'body';
+      const el = document.querySelector(`input[name="scope"][value="${currentScope}"]`);
+      if (el) {
+        el.checked = true;
+      }
+    }
+
+    function sendFilterLists() {
+      q = {
+        manufacturer: document.getElementById('cat').value,
+        finish: document.getElementById('finish').value,
+        material: document.getElementById('mat').value
+      };
+      sendToFusion("get_filter_lists", q);
+    }
+
+    function sendFilamentQuery() {
+      const enabled = document.getElementById('colorFilterOn').checked;
+
+      sendToFusion("query_filaments", {
+        text: document.getElementById('q').value,
+        manufacturer: document.getElementById('cat').value,
+        finish: document.getElementById('finish').value,
+        material: document.getElementById('mat').value,
+        colorFilterOn: enabled,
+        color: document.getElementById('colorFilterHex').value,
+        hsvTolerance: {
+          h: parseInt(document.getElementById('colorFilterHue').value) / 100,
+          s: parseInt(document.getElementById('colorFilterSat').value) / 100,
+          v: parseInt(document.getElementById('colorFilterVal').value) / 100,
+        },
+        sort: document.getElementById('sort').value,
+        page: parseInt(currentPage),
+        pageSize: parseInt(document.getElementById('pageSizeSelect').value)
+      });
+    }
+
+    function handleRefreshCatalogComplete() {
+      sendFilterLists();
+      sendFilamentQuery();
+    }
+
+    function refreshCatalog() {
+      sendToFusion('refresh_catalog', { force: false });
+    }
+
+    function fusionReady() {
+      requestLanguage();
+      requestSavedFilters();
+      requestScope();
+      updateColorFilterUiState();
+      updateColorDistanceLabel();
+      updateColorRangePreview();
+      refreshCatalog();
+    }
+
+    setHandlers({
+      'status': function (data) {
+        document.getElementById('status').textContent = data;
+      },
+      'setLang': setUiLanguage,
+      'setFilters': applySavedFilters,
+      'setScope': setScope,
+      'filament_query_results': setQueryResults,
+      'filter_lists_results': setFilterLists,
+      'refresh_catalog_complete': handleRefreshCatalogComplete
     });
 
-    btn.addEventListener('click',()=>applyColor(e,btn));
-    frag.appendChild(btn);
-  });
+    const browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    setUiLanguage(browserLang.startsWith('fr') ? 'fr' : 'en');
+    waitForAdsk(fusionReady);
 
-  grid.appendChild(frag);
-}
+  </script>
+</body>
 
-function getPageSize(){
-  const raw=Number(document.getElementById('pageSizeSelect').value||DEFAULT_PAGE_SIZE);
-  if(!Number.isFinite(raw) || raw<=0) return DEFAULT_PAGE_SIZE;
-  return raw;
-}
-
-function updatePager(total){
-  const t=I18N[currentLang]||I18N.en;
-  const pageSize=getPageSize();
-  const totalPages=Math.max(1,Math.ceil(total/pageSize));
-  currentPage=Math.min(Math.max(1,currentPage),totalPages);
-  document.getElementById('pageIndicator').textContent=`${t.pageLabel} ${currentPage}/${totalPages}`;
-
-  document.getElementById('firstPageBtn').disabled=currentPage<=1;
-  document.getElementById('prevPageBtn').disabled=currentPage<=1;
-  document.getElementById('nextPageBtn').disabled=currentPage>=totalPages;
-  document.getElementById('lastPageBtn').disabled=currentPage>=totalPages;
-  return {pageSize,totalPages};
-}
-
-function renderCards(){
-  const {pageSize,totalPages}=updatePager(filteredIndexes.length);
-  const start=(currentPage-1)*pageSize;
-  const pageIndexes=filteredIndexes.slice(start,start+pageSize);
-  renderCardsWindow(pageIndexes);
-}
-
-function prevPage(){
-  currentPage=Math.max(1,currentPage-1);
-  renderCards();
-}
-
-function firstPage(){
-  currentPage=1;
-  renderCards();
-}
-
-function nextPage(){
-  const pageSize=getPageSize();
-  const totalPages=Math.max(1,Math.ceil(filteredIndexes.length/pageSize));
-  currentPage=Math.min(totalPages,currentPage+1);
-  renderCards();
-}
-
-function lastPage(){
-  const pageSize=getPageSize();
-  currentPage=Math.max(1,Math.ceil(filteredIndexes.length/pageSize));
-  renderCards();
-}
-
-function onPageSizeChange(){
-  currentPage=1;
-  renderCards();
-  persistFilters();
-}
-
-function applyColor(e,btn){
-  document.querySelectorAll('.card').forEach(x=>x.classList.remove('active'));
-  btn.classList.add('active');
-  activeKey=colorKey(e);
-  document.getElementById('status').textContent=I18N[currentLang].applying+displayMaterial(e)+' · '+displayColor(e);
-  const payload={
-    manufacturer:e.manufacturer,
-    material:e.material,
-    color_name:e.color_name,
-    hex:e.hex,
-    hexes:e.hexes,
-    translucent:e.translucent,
-    opacity:e.opacity,
-    roughness:e.roughness,
-    finish:e.finish
-  };
-  adsk.fusionSendData('apply',JSON.stringify(payload));
-}
-
-function finishMatch(entry,finishFilter){
-  if(!finishFilter) return true;
-  if(finishFilter==='multi') return entry.badges.includes('MULTI');
-  if(finishFilter==='translucent') return entry.badges.includes('TRANS');
-  return entry.finish===finishFilter;
-}
-
-function getCurrentFilters(){
-  const cOn=document.getElementById('colorFilterOn').checked;
-  const cHex=sanitizeColorHex(document.getElementById('colorFilterHex').value);
-  const tolerance=getColorToleranceSettings();
-  return {
-    q:document.getElementById('q').value.toLowerCase(),
-    cat:document.getElementById('cat').value,
-    mat:document.getElementById('mat').value,
-    fin:document.getElementById('finish').value,
-    sort:document.getElementById('sort').value,
-    cOn:cOn?'1':'0',
-    cHex:cHex,
-    cHue:String(tolerance.hue),
-    cSat:String(tolerance.sat),
-    cVal:String(tolerance.val),
-    cDist:String(Math.round((tolerance.hue+tolerance.sat+tolerance.val)/3)),
-    pageSize:String(getPageSize())
-  };
-}
-
-function sanitizeFilters(filters){
-  if(!filters || typeof filters!=='object') return {q:'',cat:'',mat:'',fin:'',sort:'name',cOn:'0',cHex:DEFAULT_COLOR_FILTER_HEX,cHue:String(DEFAULT_HUE_TOLERANCE),cSat:String(DEFAULT_SAT_TOLERANCE),cVal:String(DEFAULT_VAL_TOLERANCE),cDist:String(DEFAULT_COLOR_FILTER_DISTANCE),pageSize:String(DEFAULT_PAGE_SIZE)};
-  const pageSizeRaw=Number(filters.pageSize||DEFAULT_PAGE_SIZE);
-  const pageSize=PAGE_SIZE_OPTIONS.includes(pageSizeRaw)?pageSizeRaw:DEFAULT_PAGE_SIZE;
-  const sort=filters.sort==='color'?'color':'name';
-  const cOn=filters.cOn==='1'?'1':'0';
-  const cHex=sanitizeColorHex(filters.cHex||DEFAULT_COLOR_FILTER_HEX);
-  const hue=clampTolerance(filters.cHue, DEFAULT_HUE_TOLERANCE);
-  const sat=clampTolerance(filters.cSat, DEFAULT_SAT_TOLERANCE);
-  const val=clampTolerance(filters.cVal, DEFAULT_VAL_TOLERANCE);
-  const cDist=clampTolerance(filters.cDist, DEFAULT_COLOR_FILTER_DISTANCE);
-  return {
-    q:typeof filters.q==='string'?filters.q:'',
-    cat:typeof filters.cat==='string'?filters.cat:'',
-    mat:typeof filters.mat==='string'?filters.mat:'',
-    fin:typeof filters.fin==='string'?filters.fin:'',
-    sort:sort,
-    cOn:cOn,
-    cHex:cHex,
-    cHue:String(hue),
-    cSat:String(sat),
-    cVal:String(val),
-    cDist:String(cDist),
-    pageSize:String(pageSize)
-  };
-}
-
-function persistFilters(){
-  if(restoringFilters) return;
-  try{
-    adsk.fusionSendData('save_filters',JSON.stringify(getCurrentFilters()));
-  }catch(_){
-    // Ignore bridge errors; persistence is best-effort.
-  }
-}
-
-function applySavedFilters(filters){
-  persistedFilters=sanitizeFilters(filters);
-  document.getElementById('pageSizeSelect').value=persistedFilters.pageSize;
-  currentPage=1;
-  if(!catalog.length) return;
-  restoringFilters=true;
-  document.getElementById('q').value=persistedFilters.q;
-  document.getElementById('cat').value=persistedFilters.cat;
-  document.getElementById('mat').value=persistedFilters.mat;
-  document.getElementById('finish').value=persistedFilters.fin;
-  document.getElementById('sort').value=persistedFilters.sort;
-  document.getElementById('colorFilterOn').checked=persistedFilters.cOn==='1';
-  document.getElementById('colorFilterHex').value=persistedFilters.cHex;
-  document.getElementById('colorFilterHue').value=persistedFilters.cHue||String(DEFAULT_HUE_TOLERANCE);
-  document.getElementById('colorFilterSat').value=persistedFilters.cSat||String(DEFAULT_SAT_TOLERANCE);
-  document.getElementById('colorFilterVal').value=persistedFilters.cVal||String(DEFAULT_VAL_TOLERANCE);
-  updateColorFilterUiState();
-  updateColorDistanceLabel();
-  restoringFilters=false;
-  sendFilamentQuery();
-  sendFilterLists();
-}
-
-function hueDistance(a,b){
-  const delta=Math.abs((a||0)-(b||0));
-  return Math.min(delta,1-delta);
-}
-
-function colorDistance(entry,target,settings){
-  const tolerance=settings||{
-    hue: Number(DEFAULT_HUE_TOLERANCE),
-    sat: Number(DEFAULT_SAT_TOLERANCE),
-    val: Number(DEFAULT_VAL_TOLERANCE)
-  };
-  const entrySat=(entry.colorSat||0);
-  const targetSat=(target.s||0);
-  const targetIsNeutral=targetSat<NEUTRAL_SAT_THRESHOLD;
-  const entryIsNeutral=entrySat<NEUTRAL_SAT_THRESHOLD;
-  const hueTolerance=Math.max(5,Number(tolerance.hue||DEFAULT_HUE_TOLERANCE))/100;
-  const satTolerance=Math.max(5,Number(tolerance.sat||DEFAULT_SAT_TOLERANCE))/100;
-  const valTolerance=Math.max(5,Number(tolerance.val||DEFAULT_VAL_TOLERANCE))/100;
-
-  if(!targetIsNeutral && entryIsNeutral && entrySat < Math.max(0.08, targetSat*0.35)){
-    return 1.5;
-  }
-  if(targetIsNeutral && entrySat>VIBRANT_SAT_THRESHOLD && !entryIsNeutral){
-    return 1.5;
-  }
-
-  const dh=hueDistance(entry.colorHue,target.h);
-  const ds=Math.abs(entrySat-targetSat);
-  const dl=Math.abs((entry.colorLum||0)-target.l);
-  const hueTerm=(dh/Math.max(0.01,hueTolerance*0.5))*0.55;
-  const satTerm=(ds/Math.max(0.01,satTolerance))*0.30;
-  const lumTerm=(dl/Math.max(0.01,valTolerance))*0.15;
-  return Math.min(1.5,hueTerm+satTerm+lumTerm);
-}
-
-function onFilterChange(options){
-  const opts=options||{};
-  if(!opts.focusAnchor){
-    currentPage=1;
-  }
-  const filters=getCurrentFilters();
-  updateColorDistanceLabel();
-  updateColorRangePreview(filters);
-  persistFilters();
-  sendFilamentQuery();
-
-  if (!opts.focusAnchor) {
-    sendFilterLists();
-  }
-}
-
-function onColorFilterToggleChange(){
-  updateColorFilterUiState();
-  onFilterChange({focusAnchor:document.getElementById('colorFilterOn').checked});
-}
-
-function onColorToleranceInput(){
-  updateColorDistanceLabel();
-  onFilterChange({focusAnchor:true});
-}
-
-function onColorHexInput(){
-  onFilterChange({focusAnchor:true});
-}
-
-function openSettingsPalette(){
-  adsk.fusionSendData('open_settings_palette','');
-}
-
-function setUiLanguage(lang){
-  currentLang=I18N[lang]?lang:'en';
-  const t=I18N[currentLang];
-  document.documentElement.lang=t.lang;
-  document.getElementById('q').placeholder=t.searchPlaceholder;
-  document.getElementById('openSettings').textContent='⚙';
-  document.getElementById('openSettings').title=t.openSettings;
-  document.getElementById('openSettings').setAttribute('aria-label',t.openSettings);
-  document.getElementById('colorFilterLabel').textContent=t.colorProximityLabel;
-  document.getElementById('firstPageBtn').textContent='◀◀';
-  document.getElementById('prevPageBtn').textContent='◀';
-  document.getElementById('nextPageBtn').textContent='▶';
-  document.getElementById('lastPageBtn').textContent='▶▶';
-  document.getElementById('firstPageBtn').title=t.firstPage;
-  document.getElementById('prevPageBtn').title=t.prevPage;
-  document.getElementById('nextPageBtn').title=t.nextPage;
-  document.getElementById('lastPageBtn').title=t.lastPage;
-  updatePageSizeControl();
-  updateSortControl();
-  buildScopeOptions();
-  updateColorDistanceLabel();
-  updateColorRangePreview();
-}
-
-function setCatalog(rawCatalog){
-}
-
-function requestSavedFilters(){
-  if(!bridgeReady()){
-    return false;
-  }
-  try{
-    adsk.fusionSendData('request_filters','');
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-
-function requestLanguage(){
-  if(!bridgeReady()){
-    return false;
-  }
-  try{
-    adsk.fusionSendData('request_lang','');
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-
-function requestScope(){
-  if(!bridgeReady()){
-    return false;
-  }
-  try{
-    adsk.fusionSendData('request_scope','');
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-
-function setQueryResults(results) {
-  setCatalog(results);
-}
-
-function setFilterLists(data) {
-  const parsed=JSON.parse(data||'{}');
-
-  const manufacturers=parsed.manufacturers || [];
-  const materials=parsed.materials|| [];
-  const finishes=parsed.finishes|| [];
-
-  const allManufacturers=I18N[currentLang].allManufacturers;
-  fillSelect(document.getElementById('cat'),allManufacturers, manufacturers, m => m);
-
-  const allMaterials=I18N[currentLang].allLines;
-  fillSelect(document.getElementById('mat'),allMaterials, materials, m => m);
-
-  const allFinishes=I18N[currentLang].allFinishes;
-  fillSelect(document.getElementById('finish'), allFinishes, finishes, f => f);
-}
-
-window.fusionJavaScriptHandler={
-  handle:function(action,data){
-    if(action==='status') document.getElementById('status').textContent=data;
-    if(action==='setLang'){
-      setUiLanguage((data||'').toLowerCase());
-    }
-    if(action==='catalog'){
-      try{
-        const parsed=JSON.parse(data||'[]');
-        const extracted=extractCatalogPayload(parsed);
-        setCatalog(extracted.entries,extracted.meta,'fusion-bridge');
-        const source=(extracted.meta&&extracted.meta.source?String(extracted.meta.source):'').toLowerCase();
-      }
-      catch(_){ setCatalog([],null,'fusion-bridge'); }
-    }
-    if(action==='setFilters'){
-      try{
-        const filters=JSON.parse(data||'{}');
-        applySavedFilters(filters);
-      }catch(_){
-        // Ignore invalid state payload.
-      }
-    }
-    if(action==='setScope'){
-      const scope=(data||'').toString();
-      currentScope=SCOPE_OPTIONS.includes(scope)?scope:'body';
-      const el=document.querySelector(`input[name="scope"][value="${currentScope}"]`);
-      if(el) el.checked=true;
-    }
-    
-    if (action == 'filament_query_results') {
-      setQueryResults(JSON.parse(data||'{}'));
-    }
-
-    if (action == 'filter_lists_results') {
-      setFilterLists(data);
-    }
-
-    if (action == 'refresh_catalog_complete') {
-      handleRefreshCatalogComplete();
-    }
-  }
-};
-
-function sendFilterLists() {
-  q = JSON.stringify({
-    manufacturer: document.getElementById('cat').value,
-    finish: document.getElementById('finish').value,
-    material: document.getElementById('mat').value
-  });
-  adsk.fusionSendData("get_filter_lists", q);
-}
-
-function sendFilamentQuery() {
-  const enabled=document.getElementById('colorFilterOn').checked;
-
-  adsk.fusionSendData("query_filaments", JSON.stringify({
-    text: document.getElementById('q').value,
-    manufacturer: document.getElementById('cat').value,
-    finish: document.getElementById('finish').value,
-    material: document.getElementById('mat').value,
-    colorFilterOn: enabled,
-    color: document.getElementById('colorFilterHex').value,
-    hsvTolerance: {
-        h: document.getElementById('colorFilterHue').value/100,
-        s: document.getElementById('colorFilterSat').value/100,
-        v: document.getElementById('colorFilterVal').value/100,
-    },
-    sort: document.getElementById('sort').value,
-    page: currentPage,
-    pageSize: getPageSize()
-  }));
-}
-
-function handleRefreshCatalogComplete() {
-  sendFilterLists();
-  sendFilamentQuery();
-}
-
-function refreshCatalog() {
-  adsk.fusionSendData('refresh_catalog', JSON.stringify({force: false}));
-}
-
-function fusionReady() {
-  requestLanguage();
-  requestSavedFilters();
-  requestScope();
-  updateColorFilterUiState();
-  updateColorDistanceLabel();
-  updateColorRangePreview();
-  refreshCatalog();
-}
-
-const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
-setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
-waitForAdsk(fusionReady);
-
-</script></body></html>
+</html>
