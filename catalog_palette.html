@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="palette.css">
   <script src="palette-i18n.js"></script>
   <script src="fusion_helpers.js"></script>
+  <script src="color_helpers.js"></script>
 </head>
 
 <body>
@@ -100,7 +101,6 @@
     const COLOR_DISTANCE_LUM_WEIGHT = 0.03;
     const NEUTRAL_SAT_THRESHOLD = 0.12;
     const VIBRANT_SAT_THRESHOLD = 0.4;
-
     let currentLang = 'en';
     let catalog = {
       total: 0,
@@ -110,82 +110,11 @@
       results: []
     };
     let activeKey = '';
-    let catalogLoaded = false;
-    let requestAttempts = 0;
-    let restoringFilters = false;
-    let persistedFilters = null;
-    let currentPage = 1;
     let currentScope = 'body';
-    
-    function toHsl(hex) {
-      const clean = (hex || '').replace('#', '');
-      if (clean.length === 8) {
-        // RGBA format, skip the alpha channel
-        clean = clean.slice(0, 6);
-      }
-      if (clean.length !== 6) {
-        return { h: 0, s: 0, l: 0 };
-      } 
-      const r = parseInt(clean.slice(0, 2), 16) / 255;
-      const g = parseInt(clean.slice(2, 4), 16) / 255;
-      const b = parseInt(clean.slice(4, 6), 16) / 255;
-      const max = Math.max(r, g, b);
-      const min = Math.min(r, g, b);
-      const l = (max + min) / 2;
-      const d = max - min;
-      if (d === 0) return { h: 0, s: 0, l };
-      const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      let h = 0;
-      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-      else if (max === g) h = ((b - r) / d + 2) / 6;
-      else h = ((r - g) / d + 4) / 6;
-      return { h, s, l };
-    }
 
-    function sanitizeColorHex(hex) {
-      if (typeof hex !== 'string') {
-        return DEFAULT_COLOR_FILTER_HEX;
-      }
-
-      const s = hex.trim();
-      // ARGB
-      if (/^#[0-9A-Fa-f]{8}$/.test(s)) {
-        return s.toUpperCase();
-      }
-
-      // RGB
-      if (/^#[0-9A-Fa-f]{6}$/.test(s)) {
-        return s.toUpperCase();
-      }
-      return DEFAULT_COLOR_FILTER_HEX;
-    }
-
-    function normalizeHex(hex, fallbackAlpha) {
-      if (!hex) {
-        return null;
-      }
-
-      hex = hex.replace(/^#/, "").trim();
-
-      // Accept ONLY 6 or 8 hex digits
-      if (!/^[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/.test(hex)) {
-        console.error("Invalid hex string:", hex);
-        return null;
-      }
-
-      // 6-digit RGB → append fallback alpha
-      if (hex.length === 6) {
-        return `#${hex}${fallbackAlpha}`;
-      }
-
-      // 8-digit RGBA → preserve existing alpha
-      if (hex.length === 8) {
-        return `#${hex}`;
-      }
-
-      // Should never reach here due to regex
-      return null;
-    }
+    const ALL_MANUFACTURERS_VALUE = 'allManufacturers';
+    const ALL_MATERIALS_VALUE = 'allMaterials';
+    const ALL_FINISHES_VALUE = 'allFinishes';
 
     function textFor(entry, key) {
       const obj = entry[key];
@@ -208,49 +137,51 @@
       const colors = e.color_hexes;
       let defaultStart = '#cccccc88';
       let defaultEnd = "#ccccccff";
-      let gradientTrailer = "repeating-conic-gradient(#e5e5e5 0 25%, #777 0 50%) 50%/10px 10px";
-      let gradient = '';
+      let gradientType = 'linear-gradient(90deg, ';
       let translucentStart = e.translucent ? '25' : 'FF';
       let translucentEnd = 'FF';
+      if (e.multi_color_direction  === 'coaxial') {
+        gradientType = 'radial-gradient(circle, ';
+      }
 
       if ((!colors || colors.length === 0) && e.color_hex) {
         const start = normalizeHex(e.color_hex, translucentStart);
         const end = normalizeHex(e.color_hex, translucentEnd);
-        gradient = `linear-gradient(${start}, ${end}), ${gradientTrailer}`;
+        gradient = `${gradientType}${start}, ${end})`;
       } else if (colors && colors.length > 0) {
         if (colors.length === 1) {
           const start = normalizeHex(colors[0], translucentStart);
           const end = normalizeHex(colors[0], translucentEnd);
-          gradient = `linear-gradient(${start}, ${end}), ${gradientTrailer}`;
+          gradient = `${gradientType}${start}, ${end})`;
         } else {
           const starts = colors.map((c) => normalizeHex(c, translucentStart));
           const ends = colors.map((c) => normalizeHex(c, translucentEnd));
-          gradient = `linear-gradient(90deg, ${starts.join(", ")}, ${ends.join(
+          gradient = `${gradientType}${starts.join(", ")}, ${ends.join(
             ", "
-          )}), ${gradientTrailer}`;
+          )})`;
         }
       }
 
       if (!gradient) {
         const start = normalizeHex(defaultStart, translucentStart);
         const end = normalizeHex(defaultEnd, translucentEnd);
-        gradient = `linear-gradient(${start}, ${end}), ${gradientTrailer}`;
+        gradient = `${gradientType}${start}, ${end})`;
       }
       return gradient;
     }
 
-    function fillSelect(select, firstLabel, values, labelFn) {
+    function fillSelect(select, allLabel, allValue, values, labelFn) {
       const prev = select.value || '';
       // Clear previous options
       select.innerHTML = '';
 
       // Add the "All" option
       const any = document.createElement('option');
-      any.value = '';
-      any.textContent = firstLabel;
+      any.value = allValue;;
+      any.textContent = allLabel;
       select.appendChild(any);
 
-      any.disabled = values.length == 0;
+      select.disabled = values.length == 0;
 
       values.forEach(v => {
         const o = document.createElement('option');
@@ -258,13 +189,13 @@
         o.textContent = labelFn ? labelFn(v) : v;
         select.appendChild(o);
       });
-      select.value = values.includes(prev) ? prev : '';
+      select.value = values.includes(prev) ? prev : allValue;
     }
 
     function updatePageSizeControl() {
       const t = I18N[currentLang] || I18N.en;
       const select = document.getElementById('pageSizeSelect');
-      const prev = select.value || DEFAULT_PAGE_SIZE;
+      const prev =   select.value || DEFAULT_PAGE_SIZE;
       select.innerHTML = '';
       PAGE_SIZE_OPTIONS.forEach(v => {
         const o = document.createElement('option');
@@ -338,11 +269,7 @@
         ? nextScope
         : ((document.querySelector('input[name="scope"]:checked') || {}).value || 'body');
       currentScope = SCOPE_OPTIONS.includes(selected) ? selected : 'body';
-      try {
-        sendToFusion('set_scope', { scope: currentScope });
-      } catch (_) {
-        // Ignore bridge errors while panel initializes.
-      }
+      sendToFusion('set_scope', { scope: currentScope });
     }
 
     function clampTolerance(value, fallback, maxValue = MAX_COLOR_FILTER_TOLERANCE) {
@@ -353,9 +280,9 @@
 
     function getColorToleranceSettings() {
       return {
-        hue: clampTolerance(document.getElementById('colorFilterHue').value, DEFAULT_HUE_TOLERANCE),
-        sat: clampTolerance(document.getElementById('colorFilterSat').value, DEFAULT_SAT_TOLERANCE),
-        val: clampTolerance(document.getElementById('colorFilterVal').value, DEFAULT_VAL_TOLERANCE)
+        hue: clampTolerance(parseInt(document.getElementById('colorFilterHue').value), DEFAULT_HUE_TOLERANCE),
+        sat: clampTolerance(parseInt(document.getElementById('colorFilterSat').value), DEFAULT_SAT_TOLERANCE),
+        val: clampTolerance(parseInt(document.getElementById('colorFilterVal').value), DEFAULT_VAL_TOLERANCE)
       };
     }
 
@@ -394,27 +321,8 @@
       el.style.background = `conic-gradient(from ${startDeg - 90}deg, rgba(255,255,255,.62) 0deg, rgba(255,255,255,.62) ${span}deg, transparent ${span}deg, transparent 360deg)`;
     }
 
-    function rgbToHex(r, g, b) {
-      const toHex = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0');
-      return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
-    }
-
-    function hslToRgb(h, s, l) {
-      const c = (1 - Math.abs(2 * l - 1)) * s;
-      const x = c * (1 - Math.abs((h / 60) % 2 - 1));
-      const m = l - c / 2;
-      let r = 0, g = 0, b = 0;
-      if (h >= 0 && h < 60) { r = c; g = x; b = 0; }
-      else if (h >= 60 && h < 120) { r = x; g = c; b = 0; }
-      else if (h >= 120 && h < 180) { r = 0; g = c; b = x; }
-      else if (h >= 180 && h < 240) { r = 0; g = x; b = c; }
-      else if (h >= 240 && h < 300) { r = x; g = 0; b = c; }
-      else { r = c; g = 0; b = x; }
-      return { r: r * 255 + m * 255, g: g * 255 + m * 255, b: b * 255 + m * 255 };
-    }
-
     function setSelectedColorHex(hex) {
-      const value = sanitizeColorHex(hex);
+      const value = normalizeHex(hex);
       document.getElementById('colorFilterHex').value = value;
       onColorHexInput();
     }
@@ -510,21 +418,28 @@
         b.textContent = displayColor(e);
         const sm = document.createElement('small');
         color = e.color_hex ? e.color_hex : (e.color_hexes && e.color_hexes.length > 0 ? e.color_hexes[0] : '');
-        sm.textContent = `${displayManufacturer(e)} · ${displayMaterial(e)} · ${color}`;
+        textContent = [];
+        if (document.getElementById('cat').value === ALL_MANUFACTURERS_VALUE) {
+          textContent.push(displayManufacturer(e));
+        }
+
+        if (document.getElementById('mat').value === ALL_MATERIALS_VALUE) {
+          textContent.push(displayMaterial(e));
+        }
+
+        sm.textContent = textContent.concat(color).join(' · ');
         txt.appendChild(b);
         txt.appendChild(sm);
 
         btn.appendChild(sw);
         btn.appendChild(txt);
 
-        /*
-        e.badges.forEach(label => {
+        if (e.finish) {
           const badge = document.createElement('span');
           badge.className = 'badge';
-          badge.textContent = label;
+          badge.textContent = e.finish;
           btn.appendChild(badge);
-        });
-        */
+        }
 
         btn.addEventListener('click', () => applyColor(e, btn));
         frag.appendChild(btn);
@@ -537,9 +452,8 @@
       const t = I18N[currentLang] || I18N.en;
       const pageSize = rawCatalog.pageSize;
       const totalPages = Math.max(1, Math.ceil(rawCatalog.total/rawCatalog.pageSize));
-      currentPage = Math.min(Math.max(1, rawCatalog.page), totalPages);
+      const currentPage = Math.min(Math.max(1, rawCatalog.page), totalPages);
       document.getElementById('pageIndicator').textContent = `${t.pageLabel} ${currentPage}/${totalPages}`;
-
       document.getElementById('firstPageBtn').disabled = currentPage <= 1;
       document.getElementById('prevPageBtn').disabled = currentPage <= 1;
       document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
@@ -547,30 +461,30 @@
     }
 
     function prevPage() {
-      currentPage = Math.max(1, currentPage - 1);
+      catalog.page = Math.max(1, catalog.page - 1);
       sendFilamentQuery();
     }
 
     function firstPage() {
-      currentPage = 1;
+      catalog.page = 1;
       sendFilamentQuery();
     }
 
     function nextPage() {
       const pageSize = catalog.pageSize;
       const totalPages = Math.max(1, Math.ceil(catalog.total / pageSize));
-      currentPage = Math.min(totalPages, currentPage + 1);
+      catalog.page = Math.min(totalPages, catalog.page + 1);
       sendFilamentQuery();
     }
 
     function lastPage() {
       const pageSize = catalog.pageSize;
-      currentPage = Math.max(1, Math.ceil(catalog.total / pageSize));
+      catalog.page = Math.max(1, Math.ceil(catalog.total / pageSize));
       sendFilamentQuery();
     }
 
     function onPageSizeChange() {
-      currentPage = 1;
+      catalog.page = 1;
       persistFilters();
       sendFilamentQuery();
     }
@@ -580,30 +494,12 @@
       btn.classList.add('active');
       activeKey = colorKey(e);
       document.getElementById('status').textContent = I18N[currentLang].applying + displayMaterial(e) + ' · ' + displayColor(e);
-      const payload = {
-        manufacturer: e.manufacturer,
-        material: e.material,
-        color_name: e.color_name,
-        hex: e.hex,
-        hexes: e.hexes,
-        translucent: e.translucent,
-        opacity: e.opacity,
-        roughness: e.roughness,
-        finish: e.finish
-      };
-      adsk.fusionSendData('apply', { filament: e });
-    }
-
-    function finishMatch(entry, finishFilter) {
-      if (!finishFilter) return true;
-      if (finishFilter === 'multi') return entry.badges.includes('MULTI');
-      if (finishFilter === 'translucent') return entry.badges.includes('TRANS');
-      return entry.finish === finishFilter;
+      sendToFusion('apply', e);
     }
 
     function getCurrentFilters() {
       const cOn = document.getElementById('colorFilterOn').checked;
-      const cHex = sanitizeColorHex(document.getElementById('colorFilterHex').value);
+      const cHex = normalizeHex(document.getElementById('colorFilterHex').value);
       const tolerance = getColorToleranceSettings();
       return {
         q: document.getElementById('q').value.toLowerCase(),
@@ -611,156 +507,68 @@
         mat: document.getElementById('mat').value,
         fin: document.getElementById('finish').value,
         sort: document.getElementById('sort').value,
-        cOn: cOn ? '1' : '0',
-        cHex: cHex,
-        cHue: String(tolerance.hue),
-        cSat: String(tolerance.sat),
-        cVal: String(tolerance.val),
-        cDist: String(Math.round((tolerance.hue + tolerance.sat + tolerance.val) / 3)),
-        pageSize: document.getElementById('pageSizeSelect').value
-      };
-    }
-
-    function sanitizeFilters(filters) {
-      if (!filters || typeof filters !== 'object') {
-        return {
-          q: '',
-          cat: '',
-          mat: '',
-          fin: '',
-          sort: 'name',
-          cOn: '0',
-          cHex: DEFAULT_COLOR_FILTER_HEX,
-          cHue: DEFAULT_HUE_TOLERANCE,
-          cSat: DEFAULT_SAT_TOLERANCE,
-          cVal: DEFAULT_VAL_TOLERANCE,
-          cDist: DEFAULT_COLOR_FILTER_DISTANCE,
-          pageSize: DEFAULT_PAGE_SIZE
-        };
-      }
-      const pageSizeRaw = Number(filters.pageSize || DEFAULT_PAGE_SIZE);
-      const pageSize = PAGE_SIZE_OPTIONS.includes(pageSizeRaw) ? pageSizeRaw : DEFAULT_PAGE_SIZE;
-      const sort = filters.sort === 'color' ? 'color' : 'name';
-      const cOn = filters.cOn === '1' ? '1' : '0';
-      const cHex = sanitizeColorHex(filters.cHex || DEFAULT_COLOR_FILTER_HEX);
-      const hue = clampTolerance(filters.cHue, DEFAULT_HUE_TOLERANCE);
-      const sat = clampTolerance(filters.cSat, DEFAULT_SAT_TOLERANCE);
-      const val = clampTolerance(filters.cVal, DEFAULT_VAL_TOLERANCE);
-      const cDist = clampTolerance(filters.cDist, DEFAULT_COLOR_FILTER_DISTANCE);
-      return {
-        q: typeof filters.q === 'string' ? filters.q : '',
-        cat: typeof filters.cat === 'string' ? filters.cat : '',
-        mat: typeof filters.mat === 'string' ? filters.mat : '',
-        fin: typeof filters.fin === 'string' ? filters.fin : '',
-        sort: sort,
-        cOn: cOn,
-        cHex: cHex,
-        cHue: hue,
-        cSat: sat,
-        cVal: val,
-        cDist: cDist,
-        pageSize: pageSize
+        colorFilterOn: cOn ? true : false,
+        colorFilterHex: cHex,
+        tolerances: tolerance,
+        pageSize: parseInt(document.getElementById('pageSizeSelect').value)
       };
     }
 
     function persistFilters() {
-      if (restoringFilters) return;
-      try {
-        adsk.fusionSendData('save_filters', { filters: getCurrentFilters() });
-      } catch (_) {
-        // Ignore bridge errors; persistence is best-effort.
-      }
+      sendToFusion('save_filters', getCurrentFilters());
     }
 
     function applySavedFilters(filters) {
-      persistedFilters = sanitizeFilters(filters);
-      document.getElementById('pageSizeSelect').value = persistedFilters.pageSize;
-      currentPage = 1;
-      if (!catalog.length) return;
-      restoringFilters = true;
-      document.getElementById('q').value = persistedFilters.q;
-      document.getElementById('cat').value = persistedFilters.cat;
-      document.getElementById('mat').value = persistedFilters.mat;
-      document.getElementById('finish').value = persistedFilters.fin;
-      document.getElementById('sort').value = persistedFilters.sort;
-      document.getElementById('colorFilterOn').checked = persistedFilters.cOn === '1';
-      document.getElementById('colorFilterHex').value = persistedFilters.cHex;
-      document.getElementById('colorFilterHue').value = persistedFilters.cHue || DEFAULT_HUE_TOLERANCE;
-      document.getElementById('colorFilterSat').value = persistedFilters.cSat || DEFAULT_SAT_TOLERANCE;
-      document.getElementById('colorFilterVal').value = persistedFilters.cVal || DEFAULT_VAL_TOLERANCE;
+      document.getElementById('pageSizeSelect').value = filters.pageSize || DEFAULT_PAGE_SIZE;
+      document.getElementById('q').value = filters.q || "";
+      document.getElementById('cat').value = filters.cat || "";
+      document.getElementById('mat').value = filters.mat || "";
+      document.getElementById('finish').value = filters.fin || "";
+      document.getElementById('sort').value = filters.sort || "name";
+      document.getElementById('colorFilterOn').checked = filters.colorFilterOn || false;
+      document.getElementById('colorFilterHex').value = normalizeHex(filters.colorFilterHex);
+
+      if (filters.tolerances) {
+        document.getElementById('colorFilterHue').value = clampTolerance(filters.tolerances.hue, DEFAULT_HUE_TOLERANCE, 100);
+        document.getElementById('colorFilterSat').value = clampTolerance(filters.tolerances.sat, DEFAULT_SAT_TOLERANCE, 100);
+        document.getElementById('colorFilterVal').value = clampTolerance(filters.tolerances.val, DEFAULT_VAL_TOLERANCE, 100);
+      } else {
+        document.getElementById('colorFilterHue').value = DEFAULT_HUE_TOLERANCE;
+        document.getElementById('colorFilterSat').value = DEFAULT_SAT_TOLERANCE;
+        document.getElementById('colorFilterVal').value = DEFAULT_VAL_TOLERANCE;
+      }
+      persistFilters();
       updateColorFilterUiState();
       updateColorDistanceLabel();
-      restoringFilters = false;
       sendFilamentQuery();
       sendFilterLists();
     }
 
-    function hueDistance(a, b) {
-      const delta = Math.abs((a || 0) - (b || 0));
-      return Math.min(delta, 1 - delta);
-    }
-
-    function colorDistance(entry, target, settings) {
-      const tolerance = settings || {
-        hue: Number(DEFAULT_HUE_TOLERANCE),
-        sat: Number(DEFAULT_SAT_TOLERANCE),
-        val: Number(DEFAULT_VAL_TOLERANCE)
-      };
-      const entrySat = (entry.colorSat || 0);
-      const targetSat = (target.s || 0);
-      const targetIsNeutral = targetSat < NEUTRAL_SAT_THRESHOLD;
-      const entryIsNeutral = entrySat < NEUTRAL_SAT_THRESHOLD;
-      const hueTolerance = Math.max(5, Number(tolerance.hue || DEFAULT_HUE_TOLERANCE)) / 100;
-      const satTolerance = Math.max(5, Number(tolerance.sat || DEFAULT_SAT_TOLERANCE)) / 100;
-      const valTolerance = Math.max(5, Number(tolerance.val || DEFAULT_VAL_TOLERANCE)) / 100;
-
-      if (!targetIsNeutral && entryIsNeutral && entrySat < Math.max(0.08, targetSat * 0.35)) {
-        return 1.5;
-      }
-      if (targetIsNeutral && entrySat > VIBRANT_SAT_THRESHOLD && !entryIsNeutral) {
-        return 1.5;
-      }
-
-      const dh = hueDistance(entry.colorHue, target.h);
-      const ds = Math.abs(entrySat - targetSat);
-      const dl = Math.abs((entry.colorLum || 0) - target.l);
-      const hueTerm = (dh / Math.max(0.01, hueTolerance * 0.5)) * 0.55;
-      const satTerm = (ds / Math.max(0.01, satTolerance)) * 0.30;
-      const lumTerm = (dl / Math.max(0.01, valTolerance)) * 0.15;
-      return Math.min(1.5, hueTerm + satTerm + lumTerm);
-    }
-
-    function onFilterChange(options) {
-      const opts = options || {};
-      if (!opts.focusAnchor) {
-        currentPage = 1;
-      }
+    function onFilterChange() {
       const filters = getCurrentFilters();
       updateColorDistanceLabel();
       updateColorRangePreview(filters);
       persistFilters();
-      if (!opts.focusAnchor) {
-        sendFilterLists();
-      }
+      sendFilterLists();
       sendFilamentQuery();
     }
 
     function onColorFilterToggleChange() {
       updateColorFilterUiState();
-      onFilterChange({ focusAnchor: document.getElementById('colorFilterOn').checked });
+      onFilterChange();
     }
 
     function onColorToleranceInput() {
       updateColorDistanceLabel();
-      onFilterChange({ focusAnchor: true });
+      onFilterChange();
     }
 
     function onColorHexInput() {
-      onFilterChange({ focusAnchor: true });
+      onFilterChange();
     }
 
     function openSettingsPalette() {
-      adsk.fusionSendData('open_settings_palette', '');
+      sendToFusion('open_settings_palette');
     }
 
     function setUiLanguage(lang) {
@@ -793,15 +601,15 @@
     }
 
     function requestSavedFilters() {
-      adsk.fusionSendData('request_filters', '');
+      sendToFusion('request_filters');
     }
 
     function requestLanguage() {
-      adsk.fusionSendData('request_lang', '');
+      sendToFusion('request_lang');
     }
 
     function requestScope() {
-      adsk.fusionSendData('request_scope', '');
+      sendToFusion('request_scope');
     }
 
     function setQueryResults(results) {
@@ -814,28 +622,33 @@
       const finishes = data.finishes || [];
 
       const allManufacturers = I18N[currentLang].allManufacturers;
-      fillSelect(document.getElementById('cat'), allManufacturers, manufacturers, m => m);
+      fillSelect(document.getElementById('cat'), allManufacturers, ALL_MANUFACTURERS_VALUE, manufacturers, m => m);
 
       const allMaterials = I18N[currentLang].allLines;
-      fillSelect(document.getElementById('mat'), allMaterials, materials, m => m);
+      fillSelect(document.getElementById('mat'), allMaterials, ALL_MATERIALS_VALUE, materials, m => m);
 
       const allFinishes = I18N[currentLang].allFinishes;
-      fillSelect(document.getElementById('finish'), allFinishes, finishes, f => f);
+      fillSelect(document.getElementById('finish'), allFinishes, ALL_FINISHES_VALUE, finishes, f => f);
     }
 
     function setScope(data) {
-      currentScope = SCOPE_OPTIONS.includes(data.scope) ? data.Array : 'body';
+      currentScope = SCOPE_OPTIONS.includes(data.scope) ? data.scope : 'body';
       const el = document.querySelector(`input[name="scope"][value="${currentScope}"]`);
       if (el) {
         el.checked = true;
       }
     }
 
+    function getSelectElementValueOrNone(elementId, allValue) {
+      const value = document.getElementById(elementId).value;
+      return value === allValue ? null : value;
+    }
+
     function sendFilterLists() {
       q = {
-        manufacturer: document.getElementById('cat').value,
-        finish: document.getElementById('finish').value,
-        material: document.getElementById('mat').value
+        manufacturer: getSelectElementValueOrNone('cat', ALL_MANUFACTURERS_VALUE),
+        finish: getSelectElementValueOrNone('finish', ALL_FINISHES_VALUE),
+        material: getSelectElementValueOrNone('mat', ALL_MATERIALS_VALUE)
       };
       sendToFusion("get_filter_lists", q);
     }
@@ -845,9 +658,9 @@
 
       sendToFusion("query_filaments", {
         text: document.getElementById('q').value,
-        manufacturer: document.getElementById('cat').value,
-        finish: document.getElementById('finish').value,
-        material: document.getElementById('mat').value,
+        manufacturer: getSelectElementValueOrNone('cat', ALL_MANUFACTURERS_VALUE),
+        finish: getSelectElementValueOrNone('finish', ALL_FINISHES_VALUE),
+        material: getSelectElementValueOrNone('mat', ALL_MATERIALS_VALUE),
         colorFilterOn: enabled,
         color: document.getElementById('colorFilterHex').value,
         hsvTolerance: {
@@ -856,7 +669,7 @@
           v: parseInt(document.getElementById('colorFilterVal').value) / 100,
         },
         sort: document.getElementById('sort').value,
-        page: parseInt(currentPage),
+        page: parseInt(catalog.page),
         pageSize: parseInt(document.getElementById('pageSizeSelect').value)
       });
     }

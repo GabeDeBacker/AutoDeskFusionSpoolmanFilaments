@@ -419,8 +419,7 @@ class CatalogDatabase:
 
         # We don't want to return null values for whatever is being excluded.
         if exclude:
-            where.append("? is not null")
-            params.append(exclude)
+            where.append(f"{exclude} is not null")
 
         # Manufacturer constraint (unless excluded)
         if hasattr(q, "manufacturer") and q.manufacturer not in (None, "", "all") and exclude != "manufacturer":
