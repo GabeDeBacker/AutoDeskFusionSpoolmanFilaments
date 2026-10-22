@@ -113,7 +113,13 @@ def set_native_copied_color(appearance, filament):
                 pass
 
     if filament.translucent:
-        opacity =  0.45
+        filament_color = color_from_hex(get_filament_color(filament))
+        if filament_color and len(filament_color) == 8:
+            opacity =  filament_color[6:8]  # Extract the alpha component from the hex color
+            opacity = int(opacity, 16) / 255.0  # Convert to a float between 0 and 1
+        else:
+            opacity = 0.75
+
         for pid in ('transparency', 'generic_transparency', 'transparent_transparency'):
             try:
                 prop = props.itemById(pid)

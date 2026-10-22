@@ -454,14 +454,14 @@
         if (e.translucent) {
           const badge = document.createElement('span');
           badge.className = 'badge';
-          badge.textContent = I18N[currentLang].translucent;
+          badge.textContent = I18N[currentLang].translucentLabel;
           btn.appendChild(badge);
         }
 
         if (e.glow) {
           const badge = document.createElement('span');
           badge.className = 'badge';
-          badge.textContent = I18N[currentLang].translucent;
+          badge.textContent = I18N[currentLang].glowLabel;
           btn.appendChild(badge);
         }
 
@@ -715,6 +715,7 @@
 
     function fusionReady() {
       requestLanguage();
+      sendFilterLists();
       requestUiState();
       updateColorFilterUiState();
       updateColorDistanceLabel();
