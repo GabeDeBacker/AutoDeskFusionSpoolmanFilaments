@@ -6,7 +6,7 @@ from common import FUSION_API_ERRORS
 def color_from_hex(hex_value, alpha=255):
     """Create a Fusion ``Color`` from a ``#RRGGBB`` string."""
     h = hex_value.lstrip('#')
-    if (len(h) == 8) :
+    if len(h) == 8:
         alpha = int(h[6:8], 16)
     return adsk.core.Color.create(int(h[:2], 16), int(h[2:4], 16), int(h[4:6], 16), alpha)
 
@@ -101,8 +101,8 @@ def set_native_copied_color(appearance, filament):
     except FUSION_API_ERRORS:
         pass
 
-    if (hasattr(filament, 'roughness')):
-        roughness = float(filament.get('roughness', 0.44))
+    if hasattr(filament, 'roughness'):
+        roughness = float(getattr(filament, 'roughness', 0.44))
         for rid in ('surface_roughness', 'opaque_roughness', 'generic_roughness'):
             try:
                 rough_prop = props.itemById(rid)
@@ -170,11 +170,11 @@ def get_or_create_material(design, filament):
     if not three_d_printing_material:
         fusion_library = material_libraries.itemById('C1EEA57C-3F56-45FC-B8CB-A9EC46A9994C')
         if fusion_library:
-           # General Plastic
-           plastic = fusion_library.materials.itemById('PrismMaterial-012')
-           three_d_printing_material = design.materials.addByCopy(
-           plastic,
-           filament_material_name)
+            # General Plastic
+            plastic = fusion_library.materials.itemById('PrismMaterial-012')
+            three_d_printing_material = design.materials.addByCopy(
+            plastic,
+            filament_material_name)
 
     appearance = get_or_create_appearance(design, filament)
 
