@@ -309,6 +309,34 @@ h1 {
   display: none !important;
 }
 
+.glow-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text);
+}
+
+.glow-toggle input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.translucent-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text);
+}
+
+.translucent-toggle input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
 .colorfilter-toggle {
   display: flex;
   align-items: center;

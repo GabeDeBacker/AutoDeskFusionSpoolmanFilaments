@@ -1,11 +1,10 @@
 """Catalog palette management for the Fusion add-in."""
 
 from catalog_database import get_catalog_database
-from common import json_text
 from text_i18n import get_i18n_text
 from app_helpers import get_user_interface
 from palette_base import PaletteBase
-from ui_state import get_saved_filters, save_filters, save_scope, load_saved_scope
+from ui_state import load_ui_state, save_ui_state
 from appearance import apply_selection
 from settings_palette import SettingsPalette
 
@@ -22,10 +21,8 @@ class CatalogPalette(PaletteBase):
             720,
             'catalog_palette.html',
             {
-                'request_scope': self.handle_request_scope,
-                'set_scope': self.handle_set_scope,
-                'request_filters': self.handle_request_filters,
-                'save_filters': self.handle_save_filters,
+                'request_ui_state': self.handle_request_ui_state,
+                'save_ui_state': self.handle_save_ui_state,
                 'apply': self.handle_apply,
                 'open_settings_palette': self.open_settings_palette,
                 'query_filaments': self.handle_query_filaments,
@@ -37,29 +34,19 @@ class CatalogPalette(PaletteBase):
         self.database = get_catalog_database()
         self.settings_palette = None
 
-    def handle_request_scope(self, data):
-        """Handle the request to fetch the current scope."""
+    def handle_request_ui_state(self, data):
+        """Handle the request to fetch the current UI state."""
         del data
-        self.send_to_palette('setScope', {'scope': load_saved_scope()})
+        self.send_to_palette('set_ui_state', load_ui_state())
 
-    def handle_set_scope(self, data):
-        """Handle the request to set the current scope."""
-        if data.scope in ('body', 'face'):
-            save_scope(data.scope)
-
-    def handle_request_filters(self, data):
-        """Handle the request to fetch the current filters."""
-        del data
-        self.send_to_palette('setFilters', get_saved_filters())
-
-    def handle_save_filters(self, data):
-        """Handle the request to save the current filters."""
-        save_filters(data)
+    def handle_save_ui_state(self, data):
+        """Handle the request to save the current UI state."""
+        save_ui_state(data)
 
     def handle_apply(self, data):
         """Handle the request to apply the current filament."""
         sel = get_user_interface().activeSelections.all
-        status_message = apply_selection(data, load_saved_scope(), sel, get_i18n_text)
+        status_message = apply_selection(data, load_ui_state().get('scope', 'body'), sel, get_i18n_text)
         self.send_to_palette('status', status_message)
         get_user_interface().activeSelections.all = sel
 

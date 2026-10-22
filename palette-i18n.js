@@ -60,7 +60,9 @@ const I18N = {
     loadedCatalog: 'Catalog loaded.',
     catalogEmpty: 'Catalog is empty. Check JSON schema or file availability.',
     catalogUpdateRequestFailed: 'Catalog update request failed.',
-    applying: 'Applying: '
+    applying: 'Applying: ',
+    translucentLabel: 'Translucent',
+    glowLabel: 'Glow'
   },
   fr: {
     lang: 'fr',
@@ -123,6 +125,8 @@ const I18N = {
     loadedCatalog: 'Catalogue chargé.',
     catalogEmpty: 'Le catalogue est vide. Vérifiez le schéma JSON et la disponibilité du fichier.',
     catalogUpdateRequestFailed: 'La demande de mise à jour du catalogue a échoué.',
-    applying: 'Application : '
+    applying: 'Application : ',
+    translucentLabel: 'Translucide',
+    glowLabel: 'Lumineux'
   }
 };

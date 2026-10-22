@@ -332,6 +332,14 @@ class CatalogDatabase:
             where.append("material = ?")
             params.append(q.material)
 
+        if hasattr(q, "translucent") and q.translucent:
+            where.append("translucent = ?")
+            params.append(1 if q.translucent else 0)
+
+        if hasattr(q, "glow") and q.glow:
+            where.append("glow = ?")
+            params.append(1 if q.glow else 0)
+
         # HSV proximity
         if hasattr(q, "colorFilterOn")and q.colorFilterOn and hasattr(q, "hsvTolerance") and q.hsvTolerance and hasattr(q, "color") and q.color:
             color_h, color_s, color_v = self.hex_to_hsv(q.color)

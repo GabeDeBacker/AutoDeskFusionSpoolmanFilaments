@@ -6,11 +6,17 @@ from common import FUSION_API_ERRORS
 def color_from_hex(hex_value, alpha=255):
     """Create a Fusion ``Color`` from a ``#RRGGBB`` string."""
     h = hex_value.lstrip('#')
+    if (len(h) == 8) :
+        alpha = int(h[6:8], 16)
     return adsk.core.Color.create(int(h[:2], 16), int(h[2:4], 16), int(h[4:6], 16), alpha)
 
 def get_filament_color(filament):
     """Return the primary color hex of the filament."""
-    return filament.color_hex or (filament.color_hexes[0] if filament.color_hexes and len(filament.color_hexes) > 0 else '')
+    if hasattr(filament, 'color_hex') and filament.color_hex:
+        return filament.color_hex
+    if hasattr(filament, 'color_hexes') and filament.color_hexes and len(filament.color_hexes) > 0:
+        return filament.color_hexes[0]
+    return '#FF4F8CFF'
 
 def find_native_base(translucent=False):
     """Find a suitable native Autodesk base appearance for copy/recolor."""
@@ -95,15 +101,16 @@ def set_native_copied_color(appearance, filament):
     except FUSION_API_ERRORS:
         pass
 
-    roughness = float(filament.get('roughness', 0.44))
-    for rid in ('surface_roughness', 'opaque_roughness', 'generic_roughness'):
-        try:
-            rough_prop = props.itemById(rid)
-            if rough_prop and not rough_prop.isReadOnly:
-                rough_prop.value = roughness
-                break
-        except FUSION_API_ERRORS:
-            pass
+    if (hasattr(filament, 'roughness')):
+        roughness = float(filament.get('roughness', 0.44))
+        for rid in ('surface_roughness', 'opaque_roughness', 'generic_roughness'):
+            try:
+                rough_prop = props.itemById(rid)
+                if rough_prop and not rough_prop.isReadOnly:
+                    rough_prop.value = roughness
+                    break
+            except FUSION_API_ERRORS:
+                pass
 
     if filament.translucent:
         opacity =  0.45
@@ -115,7 +122,6 @@ def set_native_copied_color(appearance, filament):
             except FUSION_API_ERRORS:
                 pass
 
-
 def get_or_create_appearance(design, filament):
     """Return an existing or newly created design appearance for a filament."""
     name = get_appearance_name(filament)
@@ -123,7 +129,7 @@ def get_or_create_appearance(design, filament):
     if existing:
         return existing
 
-    base = find_native_base(bool(filament.get('translucent')))
+    base = find_native_base(bool(filament.translucent))
     if not base:
         return None
 

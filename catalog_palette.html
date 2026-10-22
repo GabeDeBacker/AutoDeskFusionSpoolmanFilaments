@@ -20,6 +20,16 @@
           <select id="mat" onchange="onFilterChange()"></select>
           <select id="finish" onchange="onFilterChange()"></select>
           <select id="sort" onchange="onFilterChange()"></select>
+          <div>
+            <label class="translucent-toggle">
+              <input id="translucentOn" type="checkbox" onchange="onFilterChange()">
+              <span id="translucentLabel"></span>
+            </label>
+            <label class="glow-toggle">
+              <input id="glowOn" type="checkbox" onchange="onFilterChange()">
+              <span id="glowLabel"></span>
+            </label>
+          </div>
           <div id="scopeGroup" class="scope-radio-group" role="radiogroup" aria-label="Apply scope"></div>
         </div>
         <div class="colorfilter">
@@ -441,6 +451,20 @@
           btn.appendChild(badge);
         }
 
+        if (e.translucent) {
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = I18N[currentLang].translucent;
+          btn.appendChild(badge);
+        }
+
+        if (e.glow) {
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = I18N[currentLang].translucent;
+          btn.appendChild(badge);
+        }
+
         btn.addEventListener('click', () => applyColor(e, btn));
         frag.appendChild(btn);
       });
@@ -498,28 +522,31 @@
     }
 
     function getCurrentFilters() {
-      const cOn = document.getElementById('colorFilterOn').checked;
-      const cHex = normalizeHex(document.getElementById('colorFilterHex').value);
-      const tolerance = getColorToleranceSettings();
       return {
-        q: document.getElementById('q').value.toLowerCase(),
-        cat: document.getElementById('cat').value,
-        mat: document.getElementById('mat').value,
-        fin: document.getElementById('finish').value,
-        sort: document.getElementById('sort').value,
-        colorFilterOn: cOn ? true : false,
-        colorFilterHex: cHex,
-        tolerances: tolerance,
-        pageSize: parseInt(document.getElementById('pageSizeSelect').value)
+        scope: document.querySelector('input[name="scope"]:checked').value || SCOPE_OPTIONS[0],
+        pageSize: parseInt(document.getElementById('pageSizeSelect').value || DEFAULT_PAGE_SIZE),
+        filters: {
+          q: (document.getElementById('q').value || "").toLowerCase(),
+          cat: document.getElementById('cat').value || "",
+          mat: document.getElementById('mat').value || "",
+          fin: document.getElementById('finish').value || "",
+          sort: document.getElementById('sort').value || "name",
+          colorFilterOn: document.getElementById('colorFilterOn').checked,
+          colorFilterHex: normalizeHex(document.getElementById('colorFilterHex').value),
+          tolerances: getColorToleranceSettings(),
+          translucent: document.getElementById('translucentOn').checked,
+          glow: document.getElementById('glowOn').checked,
+        },
       };
     }
 
-    function persistFilters() {
-      sendToFusion('save_filters', getCurrentFilters());
+    function saveUiState() {
+      sendToFusion('save_ui_state', getCurrentFilters());
     }
 
-    function applySavedFilters(filters) {
-      document.getElementById('pageSizeSelect').value = filters.pageSize || DEFAULT_PAGE_SIZE;
+    function applySavedUiState(uiState) {
+      const filters = uiState.filters || {};
+      document.getElementById('pageSizeSelect').value = uiState.pageSize || DEFAULT_PAGE_SIZE;
       document.getElementById('q').value = filters.q || "";
       document.getElementById('cat').value = filters.cat || "";
       document.getElementById('mat').value = filters.mat || "";
@@ -527,6 +554,9 @@
       document.getElementById('sort').value = filters.sort || "name";
       document.getElementById('colorFilterOn').checked = filters.colorFilterOn || false;
       document.getElementById('colorFilterHex').value = normalizeHex(filters.colorFilterHex);
+      document.getElementById('colorFilterHex').value = normalizeHex(filters.colorFilterHex);
+      document.getElementById('translucentOn').checked = filters.translucent || false;
+      document.getElementById('glowOn').checked = filters.glow || false;
 
       if (filters.tolerances) {
         document.getElementById('colorFilterHue').value = clampTolerance(filters.tolerances.hue, DEFAULT_HUE_TOLERANCE, 100);
@@ -537,7 +567,6 @@
         document.getElementById('colorFilterSat').value = DEFAULT_SAT_TOLERANCE;
         document.getElementById('colorFilterVal').value = DEFAULT_VAL_TOLERANCE;
       }
-      persistFilters();
       updateColorFilterUiState();
       updateColorDistanceLabel();
       sendFilamentQuery();
@@ -548,7 +577,7 @@
       const filters = getCurrentFilters();
       updateColorDistanceLabel();
       updateColorRangePreview(filters);
-      persistFilters();
+      saveUiState();
       sendFilterLists();
       sendFilamentQuery();
     }
@@ -588,6 +617,9 @@
       document.getElementById('prevPageBtn').title = t.prevPage;
       document.getElementById('nextPageBtn').title = t.nextPage;
       document.getElementById('lastPageBtn').title = t.lastPage;
+      document.getElementById('translucentLabel').textContent = t.translucentLabel;
+      document.getElementById('translucentLabel').textContent = t.translucentLabel;
+      document.getElementById('glowLabel').textContent = t.glowLabel;
       updatePageSizeControl();
       updateSortControl();
       buildScopeOptions();
@@ -600,16 +632,12 @@
       updatePager(rawCatalog);
     }
 
-    function requestSavedFilters() {
-      sendToFusion('request_filters');
+    function requestUiState() {
+      sendToFusion('request_ui_state');
     }
 
     function requestLanguage() {
       sendToFusion('request_lang');
-    }
-
-    function requestScope() {
-      sendToFusion('request_scope');
     }
 
     function setQueryResults(results) {
@@ -670,7 +698,9 @@
         },
         sort: document.getElementById('sort').value,
         page: parseInt(catalog.page),
-        pageSize: parseInt(document.getElementById('pageSizeSelect').value)
+        pageSize: parseInt(document.getElementById('pageSizeSelect').value),
+        translucent: document.getElementById('translucentOn').checked,
+        glow: document.getElementById('glowOn').checked
       });
     }
 
@@ -685,8 +715,7 @@
 
     function fusionReady() {
       requestLanguage();
-      requestSavedFilters();
-      requestScope();
+      requestUiState();
       updateColorFilterUiState();
       updateColorDistanceLabel();
       updateColorRangePreview();
@@ -697,9 +726,8 @@
       'status': function (data) {
         document.getElementById('status').textContent = data;
       },
+      'set_ui_state': applySavedUiState,
       'setLang': setUiLanguage,
-      'setFilters': applySavedFilters,
-      'setScope': setScope,
       'filament_query_results': setQueryResults,
       'filter_lists_results': setFilterLists,
       'refresh_catalog_complete': handleRefreshCatalogComplete

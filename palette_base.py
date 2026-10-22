@@ -41,7 +41,8 @@ class PaletteBase:
         if fusion_palette and not fusion_palette.isNative:
             fusion_palette.deleteMe()
 
-        kept_handlers.remove(self.html_event_handler)
+        if self.html_event_handler in kept_handlers:
+            kept_handlers.remove(self.html_event_handler)
         self.html_event_handler = None
 
     def ensure_palette(self, force_refresh=False):
