@@ -6,12 +6,12 @@ Functions:
 - import_spoolman(json_path, db_path): Imports the Spoolman catalog into the specified SQLite database.
 """
 
-from math import ceil
 import os
 import sqlite3
 import json
 import colorsys
 import time
+from math import ceil
 from urllib.request import urlopen, Request
 from common import path_from_add_on
 
@@ -341,8 +341,8 @@ class CatalogDatabase:
             params.append(1 if q.glow else 0)
 
         # HSV proximity
-        if hasattr(q, "colorFilterOn")and q.colorFilterOn and hasattr(q, "hsvTolerance") and q.hsvTolerance and hasattr(q, "color") and q.color:
-            color_h, color_s, color_v = self.hex_to_hsv(q.color)
+        if hasattr(q, "colorFilterOn")and q.colorFilterOn and hasattr(q, "hsvTolerance") and q.hsvTolerance and hasattr(q, "colorFilterHex") and q.colorFilterHex:
+            color_h, color_s, color_v = self.hex_to_hsv(q.colorFilterHex)
             if (q.hsvTolerance.h and q.hsvTolerance.s and q.hsvTolerance.v):
                 where.append("ABS(hue - ?) <= ?")
                 params.append(color_h)

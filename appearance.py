@@ -1,4 +1,6 @@
 """Fusion appearance creation and scope-based application helpers."""
+# adsk.fusion only available when Fusion is running
+# pylint: disable-next=import-error
 import adsk.fusion
 from app_helpers import get_design, get_user_interface
 from filament_helpers import get_or_create_material

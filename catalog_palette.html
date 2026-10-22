@@ -37,7 +37,7 @@
             <input id="colorFilterOn" type="checkbox" onchange="onColorFilterToggleChange()">
             <span id="colorFilterLabel"></span>
           </label>
-          <div id="colorFilterDetails">
+          <div id="colorFilterDetails" class="hidden">
             <div class="colorfilter-row">
               <div id="colorWheel" class="colorwheel" onclick="pickColorFromWheel(event)" aria-label="Color wheel"
                 role="button" tabindex="0">
@@ -69,8 +69,7 @@
                   <span id="colorFilterValValue" class="count">10%</span>
                 </div>
               </div>
-              <input id="colorFilterHex" type="color" value="#4f8cff" oninput="onColorHexInput()"
-                style="display:none; position:absolute; opacity:0; pointer-events:none;">
+              <input id="colorFilterHex" type="color" value="#4f8cff" oninput="onColorHexInput()"/>
             </div>
           </div>
         </div>
@@ -332,8 +331,13 @@
     }
 
     function setSelectedColorHex(hex) {
-      const value = normalizeHex(hex);
-      document.getElementById('colorFilterHex').value = value;
+      let value = hex.replace(/^#/, "").trim();
+
+      if (value.length === 6) {
+        document.getElementById('colorFilterHex').value = `#${value}`;
+      } else {
+        document.getElementById('colorFilterHex').value = `#${value.substring(0, 6)}`;
+      }
       onColorHexInput();
     }
 
@@ -357,8 +361,8 @@
 
     function updateColorRangePreview(filters) {
       const safeFilters = filters || getCurrentFilters();
-      const target = toHsl(safeFilters.cHex || DEFAULT_COLOR_FILTER_HEX);
-      const hueTolerance = Number(safeFilters.cHue || DEFAULT_HUE_TOLERANCE) / 100;
+      const target = toHsl(safeFilters.filters.coloreFilterHex || DEFAULT_COLOR_FILTER_HEX);
+      const hueTolerance = Number(safeFilters.filters.tolerances.hue || DEFAULT_HUE_TOLERANCE) / 100;
       const threshold = Math.max(0.05, Math.min(0.5, hueTolerance * 0.5));
       const radius = hueDistanceRadius(target, threshold);
       const start = target.h - radius;
@@ -366,7 +370,7 @@
       const rangeA = document.getElementById('colorWheelAllowedA');
       const rangeB = document.getElementById('colorWheelAllowedB');
       const center = document.getElementById('colorWheelCenter');
-      center.style.background = safeFilters.cHex || DEFAULT_COLOR_FILTER_HEX;
+      center.style.background = safeFilters.filters.colorFilterHex || DEFAULT_COLOR_FILTER_HEX;
 
       if (radius >= 0.5) {
         setWheelArc(rangeA, 0, 360);
@@ -444,25 +448,32 @@
         btn.appendChild(sw);
         btn.appendChild(txt);
 
+        let badgeRow = btn.querySelector('.badge-row');
+        if (!badgeRow) {
+          badgeRow = document.createElement('div');
+          badgeRow.className = 'badge-row';
+          btn.appendChild(badgeRow);
+        }
+
         if (e.finish) {
           const badge = document.createElement('span');
           badge.className = 'badge';
           badge.textContent = e.finish;
-          btn.appendChild(badge);
+          badgeRow.appendChild(badge);
         }
 
         if (e.translucent) {
           const badge = document.createElement('span');
           badge.className = 'badge';
           badge.textContent = I18N[currentLang].translucentLabel;
-          btn.appendChild(badge);
+          badgeRow.appendChild(badge);
         }
 
         if (e.glow) {
           const badge = document.createElement('span');
           badge.className = 'badge';
           badge.textContent = I18N[currentLang].glowLabel;
-          btn.appendChild(badge);
+          badgeRow.appendChild(badge);
         }
 
         btn.addEventListener('click', () => applyColor(e, btn));
@@ -553,8 +564,7 @@
       document.getElementById('finish').value = filters.fin || "";
       document.getElementById('sort').value = filters.sort || "name";
       document.getElementById('colorFilterOn').checked = filters.colorFilterOn || false;
-      document.getElementById('colorFilterHex').value = normalizeHex(filters.colorFilterHex);
-      document.getElementById('colorFilterHex').value = normalizeHex(filters.colorFilterHex);
+      document.getElementById('colorFilterHex').value = setSelectedColorHex(filters.colorFilterHex);
       document.getElementById('translucentOn').checked = filters.translucent || false;
       document.getElementById('glowOn').checked = filters.glow || false;
 
