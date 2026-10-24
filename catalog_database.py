@@ -14,6 +14,7 @@ import time
 from math import ceil
 from urllib.request import urlopen, Request
 from common import path_from_add_on
+from ui_state import normalize_ui_state
 
 CATALOG_CACHE_URL = 'https://donkie.github.io/SpoolmanDB/filaments.json'
 CATALOG_CACHE_TTL_SECONDS = 7 * 24 * 60 * 60
@@ -309,50 +310,56 @@ class CatalogDatabase:
             "saturation",
             "value"
         ]
+        normalized_state = normalize_ui_state(q)
+        filters = normalized_state["filters"]
+
         where = []
         params = []
 
         # Text search
-        if hasattr(q, "text") and q.text:
+        if filters["query"]:
             where.append("search_text LIKE ?")
-            params.append(f"%{q.text}%")
+            params.append(f"%{filters['query']}%")
 
         # Manufacturer filter
-        if hasattr(q, "manufacturer") and q.manufacturer:
+        if filters["manufacturer"] and filters["manufacturer"] != "all":
             where.append("manufacturer = ?")
-            params.append(q.manufacturer)
+            params.append(filters["manufacturer"])
 
         # Finish filter
-        if hasattr(q, "finish") and q.finish:
+        if filters["finish"] and filters["finish"] != "all":
             where.append("finish = ?")
-            params.append(q.finish)
+            params.append(filters["finish"])
 
         # Material filter
-        if hasattr(q, "material") and q.material:
+        if filters["material"] and filters["material"] != "all":
             where.append("material = ?")
-            params.append(q.material)
+            params.append(filters["material"])
 
-        if hasattr(q, "translucent") and q.translucent:
+        if filters["translucent"]:
             where.append("translucent = ?")
-            params.append(1 if q.translucent else 0)
+            params.append(1)
 
-        if hasattr(q, "glow") and q.glow:
+        if filters["glow"]:
             where.append("glow = ?")
-            params.append(1 if q.glow else 0)
+            params.append(1)
 
         # HSV proximity
-        if hasattr(q, "colorFilterOn") and q.colorFilterOn and hasattr(q, "tolerances") and q.tolerances and hasattr(q, "colorFilterHex") and q.colorFilterHex:
-            color_h, color_s, color_v = self.hex_to_hsv(q.colorFilterHex)
-            if (q.tolerances.hue and q.tolerances.sat and q.tolerances.val):
+        if filters["colorFilterOn"] and filters["colorFilterHex"]:
+            color_h, color_s, color_v = self.hex_to_hsv(filters["colorFilterHex"])
+            hue_tolerance = filters["tolerances"]["hue"] / 100.0
+            saturation_tolerance = filters["tolerances"]["saturation"] / 100.0
+            value_tolerance = filters["tolerances"]["value"] / 100.0
+            if hue_tolerance and saturation_tolerance and value_tolerance:
                 where.append("ABS(hue - ?) <= ?")
                 params.append(color_h)
-                params.append(q.tolerances.hue)
+                params.append(hue_tolerance)
                 where.append("ABS(saturation - ?) <= ?")
                 params.append(color_s)
-                params.append(q.tolerances.sat)
+                params.append(saturation_tolerance)
                 where.append("ABS(value - ?) <= ?")
                 params.append(color_v)
-                params.append(q.tolerances.val)
+                params.append(value_tolerance)
 
         # Build WHERE clause
         if len(where) != 0:
@@ -361,16 +368,19 @@ class CatalogDatabase:
             where_clause = ""
 
         # Sorting
-        if hasattr(q, "sort") and q.sort == "name":
+        if filters["sort"] == "name":
             order_clause = "ORDER BY name ASC"
-        elif hasattr(q, "sort") and q.sort == "color":
+        elif filters["sort"] == "color":
             order_clause = "ORDER BY hue ASC, saturation ASC, value ASC"
         else:
             order_clause = ""
 
         # Pagination
-        page = q.page if hasattr(q, "page") else 1
-        page_size = q.pageSize if hasattr(q, "pageSize") else 40
+        page = getattr(q, "page", 1) if not isinstance(q, dict) else q.get("page", 1)
+        if page is None:
+            page = 1
+        page = max(1, int(page))
+        page_size = normalized_state["pageSize"]
         offset = (page - 1) * page_size
 
         limit_clause = "LIMIT ? OFFSET ?"
@@ -429,20 +439,23 @@ class CatalogDatabase:
         if exclude:
             where.append(f"{exclude} is not null")
 
+        normalized_state = normalize_ui_state(q)
+        filters = normalized_state["filters"]
+
         # Manufacturer constraint (unless excluded)
-        if hasattr(q, "manufacturer") and q.manufacturer not in (None, "", "all") and exclude != "manufacturer":
+        if filters["manufacturer"] not in (None, "", "all") and exclude != "manufacturer":
             where.append("manufacturer = ?")
-            params.append(q.manufacturer)
+            params.append(filters["manufacturer"])
 
         # Material constraint (unless excluded)
-        if hasattr(q, "material") and q.material not in (None, "", "all") and exclude != "material":
+        if filters["material"] not in (None, "", "all") and exclude != "material":
             where.append("material = ?")
-            params.append(q.material)
+            params.append(filters["material"])
 
         # Finish constraint (unless excluded)
-        if hasattr(q, "finish") and q.finish not in (None, "", "all") and exclude != "finish":
+        if filters["finish"] not in (None, "", "all") and exclude != "finish":
             where.append("finish = ?")
-            params.append(q.finish)
+            params.append(filters["finish"])
 
         clause = "WHERE " + " AND ".join(where) if where else ""
         return clause, params

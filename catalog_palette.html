@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="palette.css">
-  <script src="palette-i18n.js"></script>
-  <script src="fusion_helpers.js"></script>
-  <script src="color_helpers.js"></script>
+  <script src="scripts/palette-i18n.js"></script>
+  <script src="scripts/fusion_helpers.js"></script>
+  <script src="scripts/color_helpers.js"></script>
 </head>
 
 <body>
@@ -15,9 +15,9 @@
     <div id="app">
       <div id="content">
         <div class="controls">
-          <input id="q" placeholder="Search..." oninput="onFilterChange()">
-          <select id="cat" onchange="onFilterChange()"></select>
-          <select id="mat" onchange="onFilterChange()"></select>
+          <input id="query" placeholder="Search..." oninput="onFilterChange()">
+          <select id="manufacturer" onchange="onFilterChange()"></select>
+          <select id="material" onchange="onFilterChange()"></select>
           <select id="finish" onchange="onFilterChange()"></select>
           <select id="sort" onchange="onFilterChange()"></select>
           <div>
@@ -83,12 +83,12 @@
       <select id="pageSizeSelect" onchange="onPageSizeChange()"></select>
     </div>
   </footer>
-  <script src="catalog_palette_state.js"></script>
-  <script src="catalog_palette_controls.js"></script>
-  <script src="catalog_palette_color_filter.js"></script>
-  <script src="catalog_palette_render.js"></script>
-  <script src="catalog_palette_data.js"></script>
-  <script src="catalog_palette_bootstrap.js"></script>
+  <script src="scripts/catalog_palette_state.js"></script>
+  <script src="scripts/catalog_palette_controls.js"></script>
+  <script src="scripts/catalog_palette_color_filter.js"></script>
+  <script src="scripts/catalog_palette_render.js"></script>
+  <script src="scripts/catalog_palette_data.js"></script>
+  <script src="scripts/catalog_palette_bootstrap.js"></script>
 </body>
 
 </html>

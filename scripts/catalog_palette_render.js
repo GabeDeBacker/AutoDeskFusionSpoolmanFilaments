@@ -1,17 +1,18 @@
-function swatchBackground(e) {
-  const colors = e.color_hexes;
+function swatchBackground(entry) {
+  const colors = entry.color_hexes;
+  let gradient;
   let defaultStart = '#cccccc88';
   let defaultEnd = "#ccccccff";
   let gradientType = 'linear-gradient(90deg, ';
-  let translucentStart = e.translucent ? '25' : 'FF';
+  let translucentStart = entry.translucent ? '25' : 'FF';
   let translucentEnd = 'FF';
-  if (e.multi_color_direction === 'coaxial') {
+  if (entry.multi_color_direction === 'coaxial') {
     gradientType = 'radial-gradient(circle, ';
   }
 
-  if ((!colors || colors.length === 0) && e.color_hex) {
-    const start = normalizeHex(e.color_hex, translucentStart);
-    const end = normalizeHex(e.color_hex, translucentEnd);
+  if ((!colors || colors.length === 0) && entry.color_hex) {
+    const start = normalizeHex(entry.color_hex, translucentStart);
+    const end = normalizeHex(entry.color_hex, translucentEnd);
     gradient = `${gradientType}${start}, ${end})`;
   } else if (colors && colors.length > 0) {
     if (colors.length === 1) {
@@ -19,8 +20,8 @@ function swatchBackground(e) {
       const end = normalizeHex(colors[0], translucentEnd);
       gradient = `${gradientType}${start}, ${end})`;
     } else {
-      const starts = colors.map((c) => normalizeHex(c, translucentStart));
-      const ends = colors.map((c) => normalizeHex(c, translucentEnd));
+      const starts = colors.map((colorHex) => normalizeHex(colorHex, translucentStart));
+      const ends = colors.map((colorHex) => normalizeHex(colorHex, translucentEnd));
       gradient = `${gradientType}${starts.join(", ")}, ${ends.join(
         ", "
       )})`;
@@ -41,32 +42,32 @@ function renderCatalog(rawCatalog) {
   grid.innerHTML = '';
   const frag = document.createDocumentFragment();
 
-  rawCatalog.results.forEach((e) => {
+  rawCatalog.results.forEach((entry) => {
     const btn = document.createElement('button');
     btn.className = 'card';
-    const key = colorKey(e);
+    const key = colorKey(entry);
     if (activeKey === key) btn.classList.add('active');
-    btn.dataset.cat = e.category;
-    btn.dataset.material = e.material;
-    btn.dataset.search = e.name;
+    btn.dataset.cat = entry.category;
+    btn.dataset.material = entry.material;
+    btn.dataset.search = entry.name;
 
     const sw = document.createElement('span');
     sw.className = 'swatch';
-    sw.style.background = swatchBackground(e);
+    sw.style.background = swatchBackground(entry);
 
     const txt = document.createElement('span');
     txt.className = 'txt';
     const b = document.createElement('b');
-    b.textContent = displayColor(e);
+    b.textContent = displayColor(entry);
     const sm = document.createElement('small');
-    color = e.color_hex ? e.color_hex : (e.color_hexes && e.color_hexes.length > 0 ? e.color_hexes[0] : '');
-    textContent = [];
-    if (document.getElementById('cat').value === ALL_MANUFACTURERS_VALUE) {
-      textContent.push(displayManufacturer(e));
+    const color = entry.color_hex ? entry.color_hex : (entry.color_hexes && entry.color_hexes.length > 0 ? entry.color_hexes[0] : '');
+    const textContent = [];
+    if (document.getElementById('manufacturer').value === ALL_MANUFACTURERS_VALUE) {
+      textContent.push(displayManufacturer(entry));
     }
 
-    if (document.getElementById('mat').value === ALL_MATERIALS_VALUE) {
-      textContent.push(displayMaterial(e));
+    if (document.getElementById('material').value === ALL_MATERIALS_VALUE) {
+      textContent.push(displayMaterial(entry));
     }
 
     sm.textContent = textContent.concat(color).join(' · ');
@@ -83,28 +84,28 @@ function renderCatalog(rawCatalog) {
       btn.appendChild(badgeRow);
     }
 
-    if (e.finish) {
+    if (entry.finish) {
       const badge = document.createElement('span');
       badge.className = 'badge';
-      badge.textContent = e.finish;
+      badge.textContent = entry.finish;
       badgeRow.appendChild(badge);
     }
 
-    if (e.translucent) {
+    if (entry.translucent) {
       const badge = document.createElement('span');
       badge.className = 'badge';
       badge.textContent = I18N[currentLang].translucentLabel;
       badgeRow.appendChild(badge);
     }
 
-    if (e.glow) {
+    if (entry.glow) {
       const badge = document.createElement('span');
       badge.className = 'badge';
       badge.textContent = I18N[currentLang].glowLabel;
       badgeRow.appendChild(badge);
     }
 
-    btn.addEventListener('click', () => applyColor(e, btn));
+    btn.addEventListener('click', () => applyColor(entry, btn));
     frag.appendChild(btn);
   });
 

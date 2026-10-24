@@ -2,7 +2,7 @@ function setUiLanguage(lang) {
   currentLang = I18N[lang.lang] ? lang.lang : 'en';
   const t = I18N[currentLang];
   document.documentElement.lang = t.lang;
-  document.getElementById('q').placeholder = t.searchPlaceholder;
+  document.getElementById('query').placeholder = t.searchPlaceholder;
   document.getElementById('openSettings').textContent = '⚙';
   document.getElementById('openSettings').title = t.openSettings;
   document.getElementById('openSettings').setAttribute('aria-label', t.openSettings);

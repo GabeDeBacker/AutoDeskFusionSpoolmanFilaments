@@ -7,8 +7,8 @@ function clampTolerance(value, fallback, maxValue = MAX_COLOR_FILTER_TOLERANCE) 
 function getColorToleranceSettings() {
   return {
     hue: clampTolerance(parseInt(document.getElementById('colorFilterHue').value), DEFAULT_HUE_TOLERANCE),
-    sat: clampTolerance(parseInt(document.getElementById('colorFilterSat').value), DEFAULT_SAT_TOLERANCE),
-    val: clampTolerance(parseInt(document.getElementById('colorFilterVal').value), DEFAULT_VAL_TOLERANCE)
+    saturation: clampTolerance(parseInt(document.getElementById('colorFilterSat').value), DEFAULT_SAT_TOLERANCE),
+    value: clampTolerance(parseInt(document.getElementById('colorFilterVal').value), DEFAULT_VAL_TOLERANCE)
   };
 }
 
@@ -22,10 +22,10 @@ function updateColorFilterUiState() {
 }
 
 function updateColorDistanceLabel() {
-  const tolerance = getColorToleranceSettings();
-  document.getElementById('colorFilterHueValue').textContent = `${tolerance.hue}%`;
-  document.getElementById('colorFilterSatValue').textContent = `${tolerance.sat}%`;
-  document.getElementById('colorFilterValValue').textContent = `${tolerance.val}%`;
+  const toleranceSettings = getColorToleranceSettings();
+  document.getElementById('colorFilterHueValue').textContent = `${toleranceSettings.hue}%`;
+  document.getElementById('colorFilterSatValue').textContent = `${toleranceSettings.saturation}%`;
+  document.getElementById('colorFilterValValue').textContent = `${toleranceSettings.value}%`;
 }
 
 function setSelectedColorHex(hex) {
@@ -69,8 +69,8 @@ function pickColorFromWheel(event) {
   const cssOffset = getWheelRotation(wheel);
   const baseOffset = 90;
   const angle = (rawAngle + cssOffset + baseOffset) % 360;
-  const sat = Math.min(1, distance / radius);
-  const rgb = hslToRgb(angle, sat, 0.5);
+  const saturation = Math.min(1, distance / radius);
+  const rgb = hslToRgb(angle, saturation, 0.5);
   setSelectedColorHex(rgbToHex(rgb.r, rgb.g, rgb.b));
 }
 
@@ -101,9 +101,9 @@ function updateWheelOverlay(uiState) {
   document.querySelector('.colorwheel')
     .style.setProperty('--wheel-overlay', overlay);
 
-  const tol = uiState.filters.tolerances.sat / 100;
-  let inner = Math.max(0, colorHsl.s - tol);
-  let outer = Math.min(1, colorHsl.s + tol);
+  const saturationTolerance = uiState.filters.tolerances.saturation / 100;
+  let inner = Math.max(0, colorHsl.s - saturationTolerance);
+  let outer = Math.min(1, colorHsl.s + saturationTolerance);
   inner = inner * 100;
   outer = outer * 100;
 
