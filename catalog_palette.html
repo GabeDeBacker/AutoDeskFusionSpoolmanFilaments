@@ -368,10 +368,10 @@
       setSelectedColorHex(rgbToHex(rgb.r, rgb.g, rgb.b));
     }
 
-    function updateWheelOverlay(filters) {
-      const colorHsl = toHsl(filters.filters.colorFilterHex);
+    function updateWheelOverlay(uiState) {
+      const colorHsl = toHsl(uiState.filters.colorFilterHex);
       const selectedHue = colorHsl.h;
-      const hueTolDeg = (filters.filters.tolerances.hue / 100) * 180;   // tolerance percent → degrees
+      const hueTolDeg = (uiState.filters.tolerances.hue / 100) * 180;   // tolerance percent → degrees
 
       const start = (selectedHue - hueTolDeg + 360) % 360;
       const end = (selectedHue + hueTolDeg) % 360;
@@ -397,7 +397,7 @@
         .style.setProperty('--wheel-overlay', overlay);
       
       // Handle the SATURATION overlay
-      const tol = filters.filters.tolerances.sat / 100;
+      const tol = uiState.filters.tolerances.sat / 100;
 
       let inner = Math.max(0, colorHsl.s - tol);
       let outer = Math.min(1, colorHsl.s + tol);
@@ -552,7 +552,7 @@
       sendToFusion('apply', e);
     }
 
-    function getCurrentFilters() {
+    function getCurrentUiStateFromElements() {
       return {
         scope: document.querySelector('input[name="scope"]:checked').value || SCOPE_OPTIONS[0],
         pageSize: parseInt(document.getElementById('pageSizeSelect').value || DEFAULT_PAGE_SIZE),
@@ -572,7 +572,7 @@
     }
 
     function saveUiState() {
-      sendToFusion('save_ui_state', getCurrentFilters());
+      sendToFusion('save_ui_state', getCurrentUiStateFromElements());
     }
 
     function applySavedUiState(uiState) {
@@ -587,6 +587,8 @@
       document.querySelector('.colorwheel').style.setProperty('--inner-color', `${normalizeHexWithoutAlpha(filters.colorFilterHex)}`);
       document.getElementById('translucentOn').checked = filters.translucent || false;
       document.getElementById('glowOn').checked = filters.glow || false;
+
+      updateWheelOverlay(uiState);
 
       if (filters.tolerances) {
         document.getElementById('colorFilterHue').value = clampTolerance(filters.tolerances.hue, DEFAULT_HUE_TOLERANCE, 100);
@@ -604,7 +606,7 @@
     }
 
     function onFilterChange() {
-      const filters = getCurrentFilters();
+      const filters = getCurrentUiStateFromElements();
       updateColorDistanceLabel();
       saveUiState();
       sendFilterLists();
@@ -617,8 +619,8 @@
     }
 
     function onColorToleranceInput() {
-      const filters = getCurrentFilters();
-      updateWheelOverlay(filters);
+      const uiState = getCurrentUiStateFromElements();
+      updateWheelOverlay(uiState);
       updateColorDistanceLabel();
       onFilterChange();
     }
