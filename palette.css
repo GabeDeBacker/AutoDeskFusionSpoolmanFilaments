@@ -119,18 +119,6 @@ h1 {
   margin: 0 0 4px;
 }
 
-.headrow {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.headrow h1 {
-  margin: 0;
-}
-
 .headicons {
   display: flex;
   gap: 4px;
@@ -251,14 +239,6 @@ h1 {
   padding: 0;
 }
 
-.colorfilter-row {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 12px;
-  align-items: start;
-  margin-top: 8px;
-}
-
 .colorfilter-sliders {
   margin-top: 8px;
   display: flex;
@@ -283,24 +263,6 @@ h1 {
 .colorfilter-slider input[type="range"] {
   width: 100%;
   padding: 0;
-}
-
-.colorfilter-row .count,
-.colorfilter-summary .count {
-  margin: 0;
-  white-space: nowrap;
-}
-
-.colorfilter-summary {
-  display: none;
-}
-
-.colorfilter-preview {
-  display: none;
-}
-
-#colorHueHint {
-  display: none;
 }
 
 .colorwheel {
@@ -388,10 +350,6 @@ select {
   display: none;
 }
 
-.setting-row {
-  margin: 10px;
-}
-
 .settings-section {
   margin: 10px 10px 0;
   border: 1px solid var(--border);
@@ -419,20 +377,6 @@ select {
   color: var(--text);
 }
 
-.setting-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: var(--text);
-}
-
-.setting-toggle input {
-  width: auto;
-  margin: 0;
-  padding: 0;
-}
-
 .settings-actions {
   margin-top: 8px;
 }
@@ -458,10 +402,6 @@ select {
   align-items: center;
   justify-content: center;
   gap: 6px;
-}
-
-.pagerrow-secondary {
-  margin-top: 6px;
 }
 
 .pagerrow-bottom {
