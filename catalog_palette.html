@@ -38,42 +38,32 @@
             <span id="colorFilterLabel"></span>
           </label>
           <div id="colorFilterDetails" class="hidden">
-            <div class="colorfilter-row">
-              <div id="colorWheel" class="colorwheel" onclick="pickColorFromWheel(event)" aria-label="Color wheel"
-                role="button" tabindex="0">
-                <span class="colorwheel-dim"></span>
-                <span id="colorWheelAllowedA" class="colorwheel-allowed"></span>
-                <span id="colorWheelAllowedB" class="colorwheel-allowed"></span>
-                <span id="colorWheelCenter" class="colorwheel-center"
-                  ondblclick="document.getElementById('colorFilterHex').click()" aria-label="Open color picker"
-                  role="button" tabindex="0"></span>
+            <div id="colorWheel" class="colorwheel" onclick="pickColorFromWheel(event)"></div>
+            <div class="colorfilter-sliders">
+              <div class="colorfilter-label">Tolerances</div>
+              <div class="colorfilter-slider">
+                <label for="colorFilterHue">H</label>
+                <input id="colorFilterHue" type="range" min="1" max="100" step="1" value="10"
+                  oninput="onColorToleranceInput()">
+                <span id="colorFilterHueValue" class="count">10%</span>
               </div>
-              <div class="colorfilter-sliders">
-                <div class="colorfilter-label">Tolerances</div>
-                <div class="colorfilter-slider">
-                  <label for="colorFilterHue">H</label>
-                  <input id="colorFilterHue" type="range" min="0" max="100" step="1" value="10"
-                    oninput="onColorToleranceInput()">
-                  <span id="colorFilterHueValue" class="count">10%</span>
-                </div>
-                <div class="colorfilter-slider">
-                  <label for="colorFilterSat">S</label>
-                  <input id="colorFilterSat" type="range" min="0" max="100" step="1" value="10"
-                    oninput="onColorToleranceInput()">
-                  <span id="colorFilterSatValue" class="count">10%</span>
-                </div>
-                <div class="colorfilter-slider">
-                  <label for="colorFilterVal">V</label>
-                  <input id="colorFilterVal" type="range" min="0" max="100" step="1" value="10"
-                    oninput="onColorToleranceInput()">
-                  <span id="colorFilterValValue" class="count">10%</span>
-                </div>
+              <div class="colorfilter-slider">
+                <label for="colorFilterSat">S</label>
+                <input id="colorFilterSat" type="range" min="1" max="100" step="1" value="10"
+                  oninput="onColorToleranceInput()">
+                <span id="colorFilterSatValue" class="count">10%</span>
               </div>
-              <input id="colorFilterHex" type="color" value="#4f8cff" oninput="onColorHexInput()"/>
+              <div class="colorfilter-slider">
+                <label for="colorFilterVal">V</label>
+                <input id="colorFilterVal" type="range" min="1" max="100" step="1" value="10"
+                  oninput="onColorToleranceInput()">
+                <span id="colorFilterValValue" class="count">10%</span>
+              </div>
             </div>
           </div>
         </div>
-      </div> <!-- end of #content -->
+      </div>
+    </div> <!-- end of #content -->
   </header>
   </div>
   <div id="grid" class="grid"></div>
@@ -149,7 +139,7 @@
       let gradientType = 'linear-gradient(90deg, ';
       let translucentStart = e.translucent ? '25' : 'FF';
       let translucentEnd = 'FF';
-      if (e.multi_color_direction  === 'coaxial') {
+      if (e.multi_color_direction === 'coaxial') {
         gradientType = 'radial-gradient(circle, ';
       }
 
@@ -204,7 +194,7 @@
     function updatePageSizeControl() {
       const t = I18N[currentLang] || I18N.en;
       const select = document.getElementById('pageSizeSelect');
-      const prev =   select.value || DEFAULT_PAGE_SIZE;
+      const prev = select.value || DEFAULT_PAGE_SIZE;
       select.innerHTML = '';
       PAGE_SIZE_OPTIONS.forEach(v => {
         const o = document.createElement('option');
@@ -297,7 +287,6 @@
 
     function updateColorFilterUiState() {
       const enabled = document.getElementById('colorFilterOn').checked;
-      document.getElementById('colorFilterHex').disabled = !enabled;
       document.getElementById('colorFilterHue').disabled = !enabled;
       document.getElementById('colorFilterSat').disabled = !enabled;
       document.getElementById('colorFilterVal').disabled = !enabled;
@@ -319,80 +308,64 @@
       return maxHueDiff;
     }
 
-    function setWheelArc(el, startDeg, endDeg) {
-      const span = Math.max(0, endDeg - startDeg);
-      if (span <= 0) {
-        el.style.display = 'none';
-        el.style.background = 'none';
-        return;
-      }
-      el.style.display = 'block';
-      el.style.background = `conic-gradient(from ${startDeg - 90}deg, rgba(255,255,255,.62) 0deg, rgba(255,255,255,.62) ${span}deg, transparent ${span}deg, transparent 360deg)`;
-    }
-
     function setSelectedColorHex(hex) {
       let value = hex.replace(/^#/, "").trim();
 
       if (value.length === 6) {
-        document.getElementById('colorFilterHex').value = `#${value}`;
+        document.querySelector('.colorwheel').style.setProperty('--inner-color', `#${value}`);
       } else {
-        document.getElementById('colorFilterHex').value = `#${value.substring(0, 6)}`;
+        document.querySelector('.colorwheel').style.setProperty('--inner-color', `#${value.substring(0, 6)}`);
       }
       onColorHexInput();
+    }
+
+    function getWheelRotation(element) {
+      const bg = getComputedStyle(element).backgroundImage;
+
+      // Extract "from Xdeg" if present
+      const match = bg.match(/from\s+([-\d.]+)deg/i);
+      if (match) {
+        return parseFloat(match[1]);   // CSS rotation offset
+      }
+
+      // If no "from" is specified, CSS defaults to 0deg at 12 o’clock
+      return 0;
     }
 
     function pickColorFromWheel(event) {
       const wheel = document.getElementById('colorWheel');
       if (!wheel) return;
+
       const rect = wheel.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
+
+      // dx, dy from center
       const dx = (event.clientX || cx) - cx;
       const dy = (event.clientY || cy) - cy;
+
       const distance = Math.sqrt(dx * dx + dy * dy);
       const radius = Math.min(rect.width, rect.height) / 2;
       if (distance > radius) return;
-      const wheelAngle = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
-      const angle = (wheelAngle + 180) % 360;
+
+      // Raw angle from math space (0° = right)
+      const rawAngle = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360;
+
+      // Read CSS conic-gradient rotation
+      const cssOffset = getWheelRotation(wheel);
+
+      // Base correction: move 0° from right → top
+      const baseOffset = 90;
+
+      // Convert math angle → CSS angle
+      const angle = (rawAngle + cssOffset + baseOffset) % 360;
+
+      // Saturation based on radius
       const sat = Math.min(1, distance / radius);
+
+      // Convert to RGB
       const rgb = hslToRgb(angle, sat, 0.5);
       setSelectedColorHex(rgbToHex(rgb.r, rgb.g, rgb.b));
-    }
-
-    function updateColorRangePreview(filters) {
-      const safeFilters = filters || getCurrentFilters();
-      const target = toHsl(safeFilters.filters.coloreFilterHex || DEFAULT_COLOR_FILTER_HEX);
-      const hueTolerance = Number(safeFilters.filters.tolerances.hue || DEFAULT_HUE_TOLERANCE) / 100;
-      const threshold = Math.max(0.05, Math.min(0.5, hueTolerance * 0.5));
-      const radius = hueDistanceRadius(target, threshold);
-      const start = target.h - radius;
-      const end = target.h + radius;
-      const rangeA = document.getElementById('colorWheelAllowedA');
-      const rangeB = document.getElementById('colorWheelAllowedB');
-      const center = document.getElementById('colorWheelCenter');
-      center.style.background = safeFilters.filters.colorFilterHex || DEFAULT_COLOR_FILTER_HEX;
-
-      if (radius >= 0.5) {
-        setWheelArc(rangeA, 0, 360);
-        setWheelArc(rangeB, 0, 0);
-      } else {
-        const startNorm = ((start % 1) + 1) % 1;
-        const endNorm = ((end % 1) + 1) % 1;
-        const startDeg = startNorm * 360;
-        const endDeg = endNorm * 360;
-        if (startNorm <= endNorm) {
-          setWheelArc(rangeA, startDeg, endDeg);
-          setWheelArc(rangeB, 0, 0);
-        } else {
-          setWheelArc(rangeA, 0, endDeg);
-          setWheelArc(rangeB, startDeg, 360);
-        }
-      }
-
-      const deg = Math.round(radius * 360);
-      if (document.getElementById('colorHueHint')) {
-        document.getElementById('colorHueHint').textContent = '';
-      }
     }
 
     function displayManufacturer(entry) {
@@ -420,7 +393,7 @@
         if (activeKey === key) btn.classList.add('active');
         btn.dataset.cat = e.category;
         btn.dataset.material = e.material;
-        btn.dataset.search=e.name;
+        btn.dataset.search = e.name;
 
         const sw = document.createElement('span');
         sw.className = 'swatch';
@@ -486,7 +459,7 @@
     function updatePager(rawCatalog) {
       const t = I18N[currentLang] || I18N.en;
       const pageSize = rawCatalog.pageSize;
-      const totalPages = Math.max(1, Math.ceil(rawCatalog.total/rawCatalog.pageSize));
+      const totalPages = Math.max(1, Math.ceil(rawCatalog.total / rawCatalog.pageSize));
       const currentPage = Math.min(Math.max(1, rawCatalog.page), totalPages);
       document.getElementById('pageIndicator').textContent = `${t.pageLabel} ${currentPage}/${totalPages}`;
       document.getElementById('firstPageBtn').disabled = currentPage <= 1;
@@ -543,7 +516,7 @@
           fin: document.getElementById('finish').value || "",
           sort: document.getElementById('sort').value || "name",
           colorFilterOn: document.getElementById('colorFilterOn').checked,
-          colorFilterHex: normalizeHex(document.getElementById('colorFilterHex').value),
+          colorFilterHex: normalizeHex(document.querySelector('.colorwheel').style.getPropertyValue('--inner-color')),
           tolerances: getColorToleranceSettings(),
           translucent: document.getElementById('translucentOn').checked,
           glow: document.getElementById('glowOn').checked,
@@ -564,7 +537,7 @@
       document.getElementById('finish').value = filters.fin || "";
       document.getElementById('sort').value = filters.sort || "name";
       document.getElementById('colorFilterOn').checked = filters.colorFilterOn || false;
-      document.getElementById('colorFilterHex').value = setSelectedColorHex(filters.colorFilterHex);
+      document.querySelector('.colorwheel').style.setProperty('--inner-color', `${normalizeHexWithoutAlpha(filters.colorFilterHex)}`);
       document.getElementById('translucentOn').checked = filters.translucent || false;
       document.getElementById('glowOn').checked = filters.glow || false;
 
@@ -586,7 +559,6 @@
     function onFilterChange() {
       const filters = getCurrentFilters();
       updateColorDistanceLabel();
-      updateColorRangePreview(filters);
       saveUiState();
       sendFilterLists();
       sendFilamentQuery();
@@ -634,7 +606,6 @@
       updateSortControl();
       buildScopeOptions();
       updateColorDistanceLabel();
-      updateColorRangePreview();
     }
 
     function setCatalog(rawCatalog) {
@@ -700,7 +671,7 @@
         finish: getSelectElementValueOrNone('finish', ALL_FINISHES_VALUE),
         material: getSelectElementValueOrNone('mat', ALL_MATERIALS_VALUE),
         colorFilterOn: enabled,
-        color: document.getElementById('colorFilterHex').value,
+        color: document.querySelector('.colorwheel').style.getPropertyValue('--inner-color'),
         hsvTolerance: {
           h: parseInt(document.getElementById('colorFilterHue').value) / 100,
           s: parseInt(document.getElementById('colorFilterSat').value) / 100,
@@ -729,7 +700,6 @@
       requestUiState();
       updateColorFilterUiState();
       updateColorDistanceLabel();
-      updateColorRangePreview();
       refreshCatalog();
     }
 

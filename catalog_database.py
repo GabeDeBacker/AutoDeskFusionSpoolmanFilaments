@@ -341,18 +341,18 @@ class CatalogDatabase:
             params.append(1 if q.glow else 0)
 
         # HSV proximity
-        if hasattr(q, "colorFilterOn")and q.colorFilterOn and hasattr(q, "hsvTolerance") and q.hsvTolerance and hasattr(q, "colorFilterHex") and q.colorFilterHex:
+        if hasattr(q, "colorFilterOn") and q.colorFilterOn and hasattr(q, "tolerances") and q.tolerances and hasattr(q, "colorFilterHex") and q.colorFilterHex:
             color_h, color_s, color_v = self.hex_to_hsv(q.colorFilterHex)
-            if (q.hsvTolerance.h and q.hsvTolerance.s and q.hsvTolerance.v):
+            if (q.tolerances.hue and q.tolerances.sat and q.tolerances.val):
                 where.append("ABS(hue - ?) <= ?")
                 params.append(color_h)
-                params.append(q.hsvTolerance.h)
+                params.append(q.tolerances.hue)
                 where.append("ABS(saturation - ?) <= ?")
                 params.append(color_s)
-                params.append(q.hsvTolerance.s)
+                params.append(q.tolerances.sat)
                 where.append("ABS(value - ?) <= ?")
                 params.append(color_v)
-                params.append(q.hsvTolerance.v)
+                params.append(q.tolerances.val)
 
         # Build WHERE clause
         if len(where) != 0:

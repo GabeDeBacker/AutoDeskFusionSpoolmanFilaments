@@ -48,8 +48,13 @@ function normalizeHex(hex, fallbackAlpha) {
         return `#${hex}`;
     }
 
-    // Should never reach here due to regex
+    // Should never reach here due to regexrgbToHex
     return DEFAULT_COLOR_FILTER_HEX;
+}
+
+function normalizeHexWithoutAlpha(hex) {
+    // Keep the leading '#' and the 6-digit RGB part
+    return normalizeHex(hex).substring(0, 7);
 }
 
 function rgbToHex(r, g, b) {

@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -12,13 +13,17 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  min-height: 0; /* critical for Fusion */
+  min-height: 0;
+  /* critical for Fusion */
 }
 
 #grid {
-  flex: 1 1 auto;     /* take remaining space */
-  overflow-y: auto;   /* scroll only inside the grid */
-  min-height: 0;      /* CRITICAL: allows flex child to shrink */
+  flex: 1 1 auto;
+  /* take remaining space */
+  overflow-y: auto;
+  /* scroll only inside the grid */
+  min-height: 0;
+  /* CRITICAL: allows flex child to shrink */
 }
 
 #content {
@@ -39,7 +44,7 @@ body {
   --muted: #c2cbda;
   --button-bg: #3a4456;
   --button-hover-border: #8f9db1;
-  --overlay-soft: rgba(8,12,18,0.22);
+  --overlay-soft: rgba(8, 12, 18, 0.22);
   --debug-accent: #f4d38d;
   --debug-error: #ffb0a1;
   --debug-log-text: #f9d9a3;
@@ -47,10 +52,10 @@ body {
   --debug-panel-bg: rgba(108, 79, 30, 0.24);
   --debug-clear-border: #8a6b35;
   --debug-clear-bg: rgba(14, 19, 27, 0.34);
-  --wheel-inner-ring: rgba(255,255,255,.22);
-  --wheel-dim: rgba(18,26,39,.42);
+  --wheel-inner-ring: rgba(255, 255, 255, .22);
+  --wheel-dim: rgba(18, 26, 39, .42);
   --wheel-center-border: #fff;
-  --wheel-center-shadow: rgba(0,0,0,.42);
+  --wheel-center-shadow: rgba(0, 0, 0, .42);
   --card-hover-border: #97a7be;
   --swatch-border: #ffffff45;
   --badge-border: #ffffff33;
@@ -68,18 +73,18 @@ body {
     --muted: #5e6a78;
     --button-bg: #e6ebf1;
     --button-hover-border: #9aa8b8;
-    --overlay-soft: rgba(0,0,0,0.06);
+    --overlay-soft: rgba(0, 0, 0, 0.06);
     --debug-accent: #7a5600;
     --debug-error: #b24c3a;
     --debug-log-text: #6d4d00;
     --debug-panel-border: #c59e57;
     --debug-panel-bg: rgba(197, 158, 87, 0.18);
     --debug-clear-border: #b8914c;
-    --debug-clear-bg: rgba(184,145,76,0.14);
-    --wheel-inner-ring: rgba(255,255,255,.45);
-    --wheel-dim: rgba(255,255,255,.28);
+    --debug-clear-bg: rgba(184, 145, 76, 0.14);
+    --wheel-inner-ring: rgba(255, 255, 255, .45);
+    --wheel-dim: rgba(255, 255, 255, .28);
     --wheel-center-border: #fff;
-    --wheel-center-shadow: rgba(0,0,0,.25);
+    --wheel-center-shadow: rgba(0, 0, 0, .25);
     --card-hover-border: #8f9bad;
     --swatch-border: #00000035;
     --badge-border: #00000020;
@@ -250,12 +255,15 @@ h1 {
   display: grid;
   grid-template-columns: 150px 1fr;
   gap: 12px;
-  align-items: center;
+  align-items: start;
   margin-top: 8px;
 }
 
 .colorfilter-sliders {
-  display: grid;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   gap: 8px;
 }
 
@@ -296,59 +304,49 @@ h1 {
 }
 
 .colorwheel {
+  --inner-radius: 20%;
+  --inner-border-width: 2px;
   position: relative;
-  width: 132px;
-  height: 132px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  border: 1px solid var(--border);
-  background: conic-gradient(
-    from -90deg,
-    hsl(0 100% 50%),
-    hsl(60 100% 50%),
-    hsl(120 100% 50%),
-    hsl(180 100% 50%),
-    hsl(240 100% 50%),
-    hsl(300 100% 50%),
-    hsl(360 100% 50%)
-  );
-  box-shadow: inset 0 0 0 1px var(--wheel-inner-ring);
+  border: 2px solid var(--border);
+  background:
+    /* INNER BORDER */
+    radial-gradient(circle,
+      transparent 0 calc(var(--inner-radius) - var(--inner-border-width)),
+      var(--inner-border, black) calc(var(--inner-radius) - var(--inner-border-width)) var(--inner-radius),
+      transparent var(--inner-radius) 100%),
+
+    /* INNER FILL */
+    radial-gradient(circle,
+      var(--inner-color, white) 0 var(--inner-radius),
+      transparent var(--inner-radius) 100%),
+    conic-gradient(from 0deg,
+      hsl(0, 100%, 50%) 0deg,
+      hsl(30 100% 50%) 30deg,
+      hsl(60 100% 50%) 60deg,
+      hsl(90 100% 50%) 90deg,
+      hsl(120 100% 50%) 120deg,
+      hsl(180 100% 50%) 180deg,
+      hsl(210 100% 50%) 210deg,
+      hsl(270 100% 50%) 270deg,
+      hsl(300 100% 50%) 300deg,
+      hsl(330 100% 50%) 330deg,
+      hsl(360 100% 50%) 360deg);
   cursor: pointer;
   user-select: none;
   margin: 0 auto;
 }
 
-.colorwheel-dim {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--wheel-dim);
+#colorFilterDetails {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;   /* keeps the tops aligned */
+  gap: 12px;                 /* spacing between wheel and sliders */
+  align-items: center;
 }
 
-.colorwheel-allowed {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-}
-
-.colorwheel-center {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid var(--wheel-center-border);
-  box-shadow: 0 0 0 1px var(--wheel-center-shadow);
-  transform: translate(-50%,-50%);
-}
-
-#colorFilterHex {
-  width: 0;
-  height: 0;
-  border: none;
-  padding: 0;
-  margin: 0;
-}
 .colorwheel.disabled {
   opacity: .45;
 }
@@ -551,12 +549,15 @@ select {
 
 .badge-row {
   display: flex;
-  gap: 4px;                 /* spacing between badges */
+  gap: 4px;
+  /* spacing between badges */
   position: absolute;
-  bottom: 4px;              /* adjust to taste */
+  bottom: 4px;
+  /* adjust to taste */
   left: 4px;
   right: 4px;
-  pointer-events: none;     /* badges don’t interfere with clicking */
+  pointer-events: none;
+  /* badges don’t interfere with clicking */
 }
 
 .card:hover {
