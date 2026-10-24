@@ -378,6 +378,7 @@
 
       let overlay;
 
+      // Handle the HUE overlay
       if (start < end) {
         overlay = `
       conic-gradient(
@@ -386,16 +387,32 @@
         rgba(0,0,0,0.35) ${end}deg 360deg
       )`;
       } else {
-        overlay = `
-      conic-gradient(
+        overlay = `conic-gradient(
         transparent 0deg ${end}deg,
         rgba(0,0,0,0.35) ${end}deg ${start}deg,
-        transparent ${start}deg 360deg
-      )`;
+        transparent ${start}deg 360deg)`;
       }
 
       document.querySelector('.colorwheel')
         .style.setProperty('--wheel-overlay', overlay);
+      
+      // Handle the SATURATION overlay
+      const tol = filters.filters.tolerances.sat / 100;
+
+      let inner = Math.max(0, colorHsl.s - tol);
+      let outer = Math.min(1, colorHsl.s + tol);
+
+      // Convert to percentages for CSS
+      inner = inner * 100;
+      outer = outer * 100;
+
+      overlay = `radial-gradient(circle,
+      rgba(0,0,0,0.35) 0% ${inner}%,
+      transparent ${inner}% ${outer}%,
+      rgba(0,0,0,0.35) ${outer}% 100%)`;
+
+      document.querySelector('.colorwheel')
+        .style.setProperty('--sat-overlay', overlay);
     }
 
     function displayManufacturer(entry) {

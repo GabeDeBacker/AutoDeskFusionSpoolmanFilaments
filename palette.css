@@ -326,6 +326,9 @@ h1 {
     /* DIMMING OVERLAY — sits ABOVE the conic gradient but BELOW the inner circle */
     var(--wheel-overlay, none),
 
+    /* SATURATION OVERLAY */
+    var(--sat-overlay, none),
+
     conic-gradient(from 0deg,
       hsl(0, 100%, 50%) 0deg,
       hsl(30 100% 50%) 30deg,
