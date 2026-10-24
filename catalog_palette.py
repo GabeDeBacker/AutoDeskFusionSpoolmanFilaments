@@ -76,4 +76,4 @@ class CatalogPalette(PaletteBase):
     def handle_refresh_catalog(self, data ):
         """Handle the request to refresh the catalog."""
         self.database.refresh_if_needed(force=data.force)
-        self.send_to_palette('refresh_catalog_complete')
+        self.send_to_all_palettes('refresh_catalog_complete')

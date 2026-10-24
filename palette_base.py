@@ -8,20 +8,34 @@ from text_i18n import get_i18n_text
 from common import json_text, make_file_url
 
 kept_handlers = []
+all_palettes = []
 
 class PaletteBase:
     """Base class for managing palettes in the Fusion add-in."""
 
     def __init__(self, palette_id, title_resource, width, height, html_file, action_handlers):
         """Initialize the PaletteBase instance."""
+        handlers = {**action_handlers, 'request_lang': self.handle_request_lang}
+
         self.palette = None
         self.palette_id = palette_id
         self.title_resource = get_i18n_text(title_resource)
         self.width = width
         self.height = height
         self.html_file = os.path.join(os.path.dirname(__file__), html_file)
-        self.action_handlers = action_handlers
+        self.action_handlers = handlers
         self.html_event_handler = None
+        all_palettes.append(self)
+
+    def handle_request_lang(self, data):
+        """Handle the handle_request_lang action from the palette."""
+        del data
+        if (self.palette):
+            self.palette.sendInfoToHTML('setLang', json_text({ 'lang': ensure_lang() }))
+        else:
+            palette = get_user_interface().palettes.itemById(self.palette_id)
+            if palette:
+                palette.sendInfoToHTML('setLang', json_text({ 'lang': ensure_lang() }))
 
     def open_palette(self, toggle = False, visible = False):
         """Open the palette, optionally toggling its visibility."""
@@ -44,6 +58,9 @@ class PaletteBase:
         if self.html_event_handler in kept_handlers:
             kept_handlers.remove(self.html_event_handler)
         self.html_event_handler = None
+
+        if self in all_palettes:
+            all_palettes.remove(self)
 
     def ensure_palette(self, force_refresh=False):
         """Return existing palette  or create/configure it with HTML event handler."""
@@ -87,3 +104,9 @@ class PaletteBase:
         """Send an action payload to a palette when present."""
         if self.palette:
             self.palette.sendInfoToHTML(action, json_text(data or {}))
+
+    def send_to_all_palettes(self, action, data = None):
+        """Send an action payload to all palettes."""
+        for palette in all_palettes:
+            if palette:
+                palette.sendInfoToHTML(action, json_text(data or {}))
