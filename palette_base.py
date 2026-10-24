@@ -109,4 +109,4 @@ class PaletteBase:
         """Send an action payload to all palettes."""
         for palette in all_palettes:
             if palette:
-                palette.sendInfoToHTML(action, json_text(data or {}))
+                palette.send_to_palette(action, json_text(data or {}))

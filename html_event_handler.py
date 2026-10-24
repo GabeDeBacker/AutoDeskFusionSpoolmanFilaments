@@ -4,6 +4,7 @@ import json
 from types import SimpleNamespace
 from typing import Callable, Any, Dict
 import adsk.core
+from log import log
 
 Handler = Callable[[Any], None]
 Handlers = Dict[str, Handler]
@@ -25,6 +26,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
         try:
             json_object = (eventArgs and eventArgs.data and json.loads(eventArgs.data, object_hook=lambda d: SimpleNamespace(**d))) or {}
         except json.JSONDecodeError:
+            log.writeError("Failed to decode JSON from event data: {}", eventArgs.data)
             json_object = {}
 
         # Need to handle the response action appropriately
@@ -34,4 +36,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
         if self.handlers is not None:
             handler = self.handlers.get(eventArgs.action)
             if handler:
-                handler(json_object)
+                try:
+                    handler(json_object)
+                except Exception as e:
+                    log.writeError("Error handling action '{}': {}", eventArgs.action, str(e))

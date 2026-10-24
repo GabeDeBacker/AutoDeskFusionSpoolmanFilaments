@@ -318,8 +318,10 @@ class CatalogDatabase:
 
         # Text search
         if filters["query"]:
-            where.append("search_text LIKE ?")
-            params.append(f"%{filters['query']}%")
+            search_filters = str.split(filters["query"])
+            for term in search_filters:
+                where.append("(name LIKE ? or manufacturer LIKE ? or material LIKE ? or color_hex LIKE ? or finish LIKE ?)")
+                params.extend([f"%{term}%"] * 5)
 
         # Manufacturer filter
         if filters["manufacturer"] and filters["manufacturer"] != "all":

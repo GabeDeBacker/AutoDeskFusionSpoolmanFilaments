@@ -30,6 +30,7 @@ __pycache__/
 filament_catalog_cache.json
 spoolman_filament_catalog_cache.json
 ui_state.json
+log.txt
 filament_catalog_cache.db
 cache/*
 
