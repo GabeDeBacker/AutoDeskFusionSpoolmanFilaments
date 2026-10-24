@@ -368,6 +368,36 @@
       setSelectedColorHex(rgbToHex(rgb.r, rgb.g, rgb.b));
     }
 
+    function updateWheelOverlay(filters) {
+      const colorHsl = toHsl(filters.filters.colorFilterHex);
+      const selectedHue = colorHsl.h;
+      const hueTolDeg = (filters.filters.tolerances.hue / 100) * 180;   // tolerance percent → degrees
+
+      const start = (selectedHue - hueTolDeg + 360) % 360;
+      const end = (selectedHue + hueTolDeg) % 360;
+
+      let overlay;
+
+      if (start < end) {
+        overlay = `
+      conic-gradient(
+        rgba(0,0,0,0.35) 0deg ${start}deg,
+        transparent ${start}deg ${end}deg,
+        rgba(0,0,0,0.35) ${end}deg 360deg
+      )`;
+      } else {
+        overlay = `
+      conic-gradient(
+        transparent 0deg ${end}deg,
+        rgba(0,0,0,0.35) ${end}deg ${start}deg,
+        transparent ${start}deg 360deg
+      )`;
+      }
+
+      document.querySelector('.colorwheel')
+        .style.setProperty('--wheel-overlay', overlay);
+    }
+
     function displayManufacturer(entry) {
       return textFor(entry, 'manufacturer_i18n') || entry.manufacturer;
     }
@@ -570,6 +600,8 @@
     }
 
     function onColorToleranceInput() {
+      const filters = getCurrentFilters();
+      updateWheelOverlay(filters);
       updateColorDistanceLabel();
       onFilterChange();
     }

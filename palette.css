@@ -322,6 +322,10 @@ h1 {
     radial-gradient(circle,
       var(--inner-color, white) 0 var(--inner-radius),
       transparent var(--inner-radius) 100%),
+
+    /* DIMMING OVERLAY — sits ABOVE the conic gradient but BELOW the inner circle */
+    var(--wheel-overlay, none),
+
     conic-gradient(from 0deg,
       hsl(0, 100%, 50%) 0deg,
       hsl(30 100% 50%) 30deg,
