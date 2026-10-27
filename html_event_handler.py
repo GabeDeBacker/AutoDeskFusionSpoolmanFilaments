@@ -26,7 +26,7 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
         try:
             json_object = (eventArgs and eventArgs.data and json.loads(eventArgs.data, object_hook=lambda d: SimpleNamespace(**d))) or {}
         except json.JSONDecodeError:
-            log.writeError("Failed to decode JSON from event data: {}", eventArgs.data)
+            log.write_error("Failed to decode JSON from event data: {}", eventArgs.data)
             json_object = {}
 
         # Need to handle the response action appropriately
@@ -39,4 +39,4 @@ class HTMLEventHandler(adsk.core.HTMLEventHandler):
                 try:
                     handler(json_object)
                 except Exception as e:
-                    log.writeError("Error handling action '{}': {}", eventArgs.action, str(e))
+                    log.write_error("Error handling action '{}': {}", eventArgs.action, str(e))

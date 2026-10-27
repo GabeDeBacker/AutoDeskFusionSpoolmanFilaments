@@ -145,6 +145,7 @@ def get_appearance_name(filament):
 def get_or_create_material(design, filament):
     """Return an existing or newly created design material for a filament."""
     design = adsk.fusion.Design.cast(get_application().activeProduct)
+    appearance = get_or_create_appearance(design, filament)
     material_libraries = get_application().materialLibraries
     filament_material_name = f"Plastic/{filament.material}/{filament.name}"
     three_d_printing_material = design.materials.itemByName(filament_material_name)
@@ -157,6 +158,5 @@ def get_or_create_material(design, filament):
             plastic,
             filament_material_name)
 
-    appearance = get_or_create_appearance(design, filament)
-
+    three_d_printing_material.appearance.color = appearance.color
     return three_d_printing_material, appearance

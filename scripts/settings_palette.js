@@ -24,7 +24,7 @@ function updateCatalogAttribution() {
   const attributionElement = document.getElementById('catalogAttribution');
   const sourceLabel = sourceCreditLabel(catalogMeta.source);
   attributionElement.innerHTML = `${translations.dataSourceLabel}: <a href="${CATALOG_CREDIT_URL}" target="_blank" rel="noopener noreferrer">${sourceLabel}</a>`;
-  document.getElementById('catalogVersion').textContent = `${translations.dataVersionLabel}: ${String(catalogMeta.catalog_version || 'unknown')}`;
+  document.getElementById('catalogVersion').textContent = `${translations.dataVersionLabel}: ${String(catalogMeta.catalog_version || translations.dataVersionUnknown)}`;
   document.getElementById('catalogLinesValue').textContent = `${String(catalogMeta.entry_count || '0')}`;
 }
 

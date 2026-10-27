@@ -1,6 +1,5 @@
 """Catalog palette management for the Fusion add-in."""
 
-from catalog_database import get_catalog_database
 from text_i18n import get_i18n_text
 from app_helpers import get_user_interface
 from palette_base import PaletteBase
@@ -27,11 +26,8 @@ class CatalogPalette(PaletteBase):
                 'open_settings_palette': self.open_settings_palette,
                 'query_filaments': self.handle_query_filaments,
                 'get_filter_lists': self.handle_get_filter_lists,
-                'get_catalog_metadata': self.handle_get_catalog_metadata,
-                'refresh_catalog': self.handle_refresh_catalog
             }
         )
-        self.database = get_catalog_database()
         self.settings_palette = None
 
     def handle_request_ui_state(self, data):
@@ -47,7 +43,7 @@ class CatalogPalette(PaletteBase):
         """Handle the request to apply the current filament."""
         sel = get_user_interface().activeSelections.all
         status_message = apply_selection(data, load_ui_state().get('scope', 'body'), sel, get_i18n_text)
-        self.send_to_palette('status', status_message)
+        self.send_to_palette('status', {'status': status_message})
         get_user_interface().activeSelections.all = sel
 
     def open_settings_palette(self, data):
@@ -66,14 +62,3 @@ class CatalogPalette(PaletteBase):
         """Handle the request to get the filter lists."""
         results = self.database.get_filter_lists(data)
         self.send_to_palette('filter_lists_results', results)
-
-    def handle_get_catalog_metadata(self, data):
-        """Handle the request to get catalog metadata."""
-        del data
-        metadata = self.database.get_catalog_metadata()
-        self.send_to_palette('catalog_metadata', metadata)
-
-    def handle_refresh_catalog(self, data ):
-        """Handle the request to refresh the catalog."""
-        self.database.refresh_if_needed(force=data.force)
-        self.send_to_all_palettes('refresh_catalog_complete')

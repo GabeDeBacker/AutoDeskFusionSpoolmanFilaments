@@ -15,7 +15,7 @@
     <div id="app">
       <div id="content">
         <div class="controls">
-          <input id="query" placeholder="Search..." oninput="onFilterChange()">
+          <input id="query" placeholder="" oninput="onFilterChange()">
           <select id="manufacturer" onchange="onFilterChange()"></select>
           <select id="material" onchange="onFilterChange()"></select>
           <select id="finish" onchange="onFilterChange()"></select>
@@ -40,7 +40,7 @@
           <div id="colorFilterDetails" class="hidden">
             <div id="colorWheel" class="colorwheel" onclick="pickColorFromWheel(event)"></div>
             <div class="colorfilter-sliders">
-              <div class="colorfilter-label">Tolerances</div>
+              <div id="colorToleranceLabel" class="colorfilter-label"></div>
               <div class="colorfilter-slider">
                 <label for="colorFilterHue">H</label>
                 <input id="colorFilterHue" type="range" min="1" max="100" step="1" value="10"

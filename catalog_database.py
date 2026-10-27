@@ -11,7 +11,9 @@ import sqlite3
 import json
 import colorsys
 import time
+import threading
 from math import ceil
+from typing import Callable
 from urllib.request import urlopen, Request
 from common import path_from_add_on
 from ui_state import normalize_ui_state
@@ -25,7 +27,9 @@ class CatalogDatabase:
     def __init__(self, db_path: str):
         """Initialize the CatalogDatabase with the path to the SQLite database."""
         self.db_path = db_path
+        os.makedirs(path_from_add_on("cache"), exist_ok=True)
         self.connection = None
+        self.thread_id = threading.get_ident()
 
     @staticmethod
     def cache_directory():
@@ -53,12 +57,18 @@ class CatalogDatabase:
             self.connection.close()
             self.connection = None
 
+    def create_connection(self):
+        """Create a new connection to the SQLite database."""
+        return sqlite3.connect(self.db_path)
+
     def ensure_connection(self):
         """Ensure that a connection to the SQLite database is established and return it."""
-        os.makedirs(path_from_add_on("cache"), exist_ok=True)
+        if threading.get_ident() != self.thread_id:
+            raise RuntimeError("Connection requested from a different thread than the one that created it.")
+
         if self.connection is not None:
             return self.connection
-        self.connection = sqlite3.connect(self.db_path)
+        self.connection = self.create_connection()
         return self.connection
 
     def hex_to_hsv(self, hex_color: str):
@@ -130,9 +140,8 @@ class CatalogDatabase:
                         break
                     out.write(chunk)
 
-    def set_metadata(self, metadata):
+    def set_metadata(self, con, metadata):
         """Set the metadata for the filament catalog in the database."""
-        con = self.ensure_connection()
         cur = con.cursor()
         # Drop and recreate table
         cur.execute("DROP TABLE IF EXISTS catalog_metadata")
@@ -164,14 +173,17 @@ class CatalogDatabase:
         ))
         con.commit()
 
-    def import_spoolman(self):
+    def import_spoolman(self, con, status: Callable[[str], None] = None):
         """Import the Spoolman filament catalog from a JSON file into an SQLite database."""
+        if status:
+            status('downloading_spoolman_entries')
         self.download_spoolman_entries()
         json_path = self.cache_spoolman_catalog_path()
-        con = self.ensure_connection()
         cur = con.cursor()
         entry_count = 0
 
+        if status:
+            status('preparing_database_for_import')
         # Speed pragmas
         cur.execute("PRAGMA journal_mode = WAL;")
         cur.execute("PRAGMA synchronous = NORMAL;")
@@ -180,6 +192,8 @@ class CatalogDatabase:
 
         # Drop and recreate table
         cur.execute("DROP TABLE IF EXISTS filaments")
+        if status:
+            status('creating_filaments_table')
         cur.execute("""
             CREATE TABLE filaments (
                 id TEXT PRIMARY KEY,
@@ -212,6 +226,8 @@ class CatalogDatabase:
 
         # This is going to take a lot of memory temporarily, but otherwise the import will be much faster than inserting rows one by one.
         rows = []
+        if status:
+            status('importing_spoolman_entries')
         for entry in self.stream_json_array(json_path):
             entry_count += 1
 
@@ -253,6 +269,9 @@ class CatalogDatabase:
 
         con.commit()
 
+        if status:
+            status('creating_indexes_for_filaments_table')
+
         con.execute("""CREATE INDEX idx_filaments_id ON filaments(id);""")
         con.execute("""CREATE INDEX idx_filaments_manufacturer ON filaments(manufacturer);""")
         con.execute("""CREATE INDEX idx_filaments_material ON filaments(material);""")
@@ -273,8 +292,10 @@ class CatalogDatabase:
             "entry_count": entry_count,
             "source": "spoolman-db"
         }
+        if status:
+            status('setting_catalog_metadata')
 
-        self.set_metadata(metadata)
+        self.set_metadata(con, metadata)
 
     def query_filaments(self, q):
         """Query filaments from the database based on the given filters.
@@ -510,9 +531,12 @@ class CatalogDatabase:
             "finishes": finishes
         }
 
-    def get_catalog_metadata(self) -> dict:
+
+    def get_catalog_metadata(self, con = None) -> dict:
         """Get the catalog metadata from the database."""
-        con = self.ensure_connection()
+        if con is None:
+            con = self.ensure_connection()
+
         cur = con.cursor()
         cur.execute("""
             SELECT name FROM sqlite_master
@@ -552,21 +576,37 @@ class CatalogDatabase:
             "source": row[4]
         }
 
-    def refresh_if_needed(self, force = False):
+    def refresh_if_needed(self, status: Callable[..., None] = None, force = False):
+        """Start a background thread to refresh the catalog if needed."""
+        thread = threading.Thread(target=self.refresh_if_needed_thread, args=(status, force))
+        thread.start()
+        return thread
+    
+    def refresh_if_needed_thread(self, status: Callable[..., None] = None, force = False):
         """Refresh the catalog if it is outdated."""
-        if force:
-            self.import_spoolman()
-            return
+        con = self.create_connection()
+        try:
+            if force:
+                if status:
+                    status('force_refresh')
+                self.import_spoolman(con, status)
+                return
 
-        metadata = self.get_catalog_metadata()
-        if (metadata is None or metadata.get('generated_epoch') is None):
-            self.import_spoolman()
-            return
+            metadata = self.get_catalog_metadata(con)
+            if (metadata is None or metadata.get('generated_epoch') is None):
+                if status:
+                    status('catalog_metadata_missing_importing_catalog')
+                self.import_spoolman(con, status)
+                return
 
-        if metadata and metadata.get('generated_epoch') is not None:
-            last_refresh = int(metadata['generated_epoch'])
-            if not last_refresh or self.is_catalog_outdated(last_refresh):
-                self.import_spoolman()
+            if metadata and metadata.get('generated_epoch') is not None:
+                last_refresh = int(metadata['generated_epoch'])
+                if not last_refresh or self.is_catalog_outdated(last_refresh):
+                    if status:
+                        status('catalog_outdated_importing_catalog')
+                    self.import_spoolman(con, status)
+        finally:
+            con.close()
 
     def is_catalog_outdated(self, last_refresh: int) -> bool:
         """Check if the catalog is outdated based on the last refresh timestamp."""

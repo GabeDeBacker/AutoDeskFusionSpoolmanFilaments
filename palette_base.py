@@ -6,6 +6,7 @@ from html_event_handler import HTMLEventHandler
 from lang import ensure_lang    
 from text_i18n import get_i18n_text
 from common import json_text, make_file_url
+from catalog_database import CatalogDatabase, get_catalog_database
 
 kept_handlers = []
 all_palettes = []
@@ -15,7 +16,11 @@ class PaletteBase:
 
     def __init__(self, palette_id, title_resource, width, height, html_file, action_handlers):
         """Initialize the PaletteBase instance."""
-        handlers = {**action_handlers, 'request_lang': self.handle_request_lang}
+        handlers = {**action_handlers,
+                    'request_lang': self.handle_request_lang, 
+                    'refresh_catalog': self.handle_refresh_catalog,
+                    'request_catalog_metadata': self.request_catalog_metadata,
+                    }
 
         self.palette = None
         self.palette_id = palette_id
@@ -24,6 +29,7 @@ class PaletteBase:
         self.height = height
         self.html_file = os.path.join(os.path.dirname(__file__), html_file)
         self.action_handlers = handlers
+        self.database : CatalogDatabase = get_catalog_database()
         self.html_event_handler = None
         all_palettes.append(self)
 
@@ -36,6 +42,22 @@ class PaletteBase:
             palette = get_user_interface().palettes.itemById(self.palette_id)
             if palette:
                 palette.sendInfoToHTML('setLang', json_text({ 'lang': ensure_lang() }))
+
+    def request_catalog_metadata(self, data):
+        """Handle the request to get catalog metadata."""
+        del data
+        metadata = self.database.get_catalog_metadata()
+        self.send_to_all_palettes('catalog_metadata', metadata)
+
+    def handle_refresh_catalog(self, data ):
+        """Handle the request to refresh the catalog."""
+        self.database.refresh_if_needed(self.handle_status, force=data.force)
+        self.send_to_all_palettes('refresh_catalog_complete')
+
+    def handle_status(self, status: str, *args, **kwargs):
+        """Handle the request to get the current status."""
+        i18n_status = get_i18n_text(status, *args, **kwargs)
+        self.send_to_all_palettes('status', {'status': i18n_status})
 
     def open_palette(self, toggle = False, visible = False):
         """Open the palette, optionally toggling its visibility."""
@@ -109,4 +131,4 @@ class PaletteBase:
         """Send an action payload to all palettes."""
         for palette in all_palettes:
             if palette:
-                palette.send_to_palette(action, json_text(data or {}))
+                palette.send_to_palette(action, data or {})

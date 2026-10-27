@@ -7,6 +7,7 @@ function setUiLanguage(lang) {
   document.getElementById('openSettings').title = t.openSettings;
   document.getElementById('openSettings').setAttribute('aria-label', t.openSettings);
   document.getElementById('colorFilterLabel').textContent = t.colorProximityLabel;
+  document.getElementById('colorToleranceLabel').textContent = t.tolerancesLabel;
   document.getElementById('firstPageBtn').textContent = '◀◀';
   document.getElementById('prevPageBtn').textContent = '◀';
   document.getElementById('nextPageBtn').textContent = '▶';
@@ -33,14 +34,14 @@ function fusionReady() {
 }
 
 setHandlers({
-  'status': function (data) {
-    document.getElementById('status').textContent = data;
-  },
   'set_ui_state': applySavedUiState,
   'setLang': setUiLanguage,
   'filament_query_results': setQueryResults,
   'filter_lists_results': setFilterLists,
-  'refresh_catalog_complete': handleRefreshCatalogComplete
+  'refresh_catalog_complete': handleRefreshCatalogComplete,
+  'status': function (data) {
+    document.getElementById('status').textContent = data.status;
+  }
 });
 
 const browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();

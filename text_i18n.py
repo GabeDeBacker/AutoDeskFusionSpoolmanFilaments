@@ -1,5 +1,7 @@
 """Localized text resources and language detection for the add-in UI."""
 
+from log import log
+
 from lang import ensure_lang
 
 LANG_DETECT_ERRORS = (RuntimeError, AttributeError, TypeError, ValueError)
@@ -42,6 +44,15 @@ I18N = {
             'Apply filament appearances generated from the SpoolmanDB catalog.'
         ),
         'filament_library': '3D Printing Library',
+        'force_refresh': 'Forcing refresh of the catalog.',
+        'downloading_spoolman_entries': 'Downloading Spoolman entries',
+        'preparing_database_for_import': 'Preparing database for import.',
+        'creating_filaments_table': 'Creating filaments table.',
+        'importing_spoolman_entries': 'Importing Spoolman entries into database.',
+        'creating_indexes_for_filaments_table': 'Creating indexes for filaments table.',
+        'setting_catalog_metadata': 'Setting catalog metadata.',
+        'catalog_outdated_importing_catalog': 'Catalog outdated, importing catalog.',
+        'catalog_metadata_missing_importing_catalog': 'Catalog metadata missing, importing catalog.',        
     },
     'fr': {
         'select_prompt': 'Sélectionnez d’abord une face ou un corps.',
@@ -88,15 +99,27 @@ I18N = {
             'via des copies de la bibliothèque Autodesk. Raccourci conseillé '
             ': Cmd+B.'
         ),
-        'filament_library': '3D Printing Library'
+        'filament_library': '3D Printing Library',
+        'force_refresh': 'Actualisation forcée du catalogue.',
+        'downloading_spoolman_entries': 'Téléchargement des entrées Spoolman.',
+        'preparing_database_for_import': 'Préparation de la base de données pour l’import.',
+        'creating_filaments_table': 'Création de la table des filaments.',
+        'importing_spoolman_entries': 'Import des entrées Spoolman dans la base de données.',
+        'creating_indexes_for_filaments_table': 'Création des index pour la table des filaments.',
+        'setting_catalog_metadata': 'Définition des métadonnées du catalogue.',
+        'catalog_outdated_importing_catalog': 'Catalogue obsolète, import du catalogue en cours.',
+        'catalog_metadata_missing_importing_catalog': 'Métadonnées du catalogue manquantes, import du catalogue en cours.',
     }
 }
 
-def get_i18n_text(key, **kwargs):
+def get_i18n_text(key, *args, **kwargs):
     """Return localized text for ``key`` with optional format kwargs."""
     lang = ensure_lang()
     table = I18N.get(lang, I18N['en'])
     txt = table.get(key, I18N['en'].get(key, key))
-    return txt.format(**kwargs) if kwargs else txt
+    if txt is None:
+        log.write_error("Missing i18n text for key: {}", key)
+        return key
+    return txt.format(*args, **kwargs) if args or kwargs else txt
 
 __all__ = ['get_i18n_text', 'ensure_lang']

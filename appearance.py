@@ -25,8 +25,27 @@ def apply_selection(filament, scope='body', selection=None, get_text=None):
             entity.appearance = appearance
             count += 1
         if active_scope == 'body' and isinstance(entity, adsk.fusion.BRepBody):
-            entity.appearance = appearance
+            if not entity.isTransient and three_d_printing_material is not None:
+                entity.material = three_d_printing_material
+            else:
+                entity.appearance = appearance
             count += 1
+
+    if three_d_printing_material is not None:
+        color = three_d_printing_material.appearance.color
+        old_red  = color.red
+        color.red = (old_red + 1) % 256
+        three_d_printing_material.appearance.color = color
+        color.red = old_red
+        three_d_printing_material.appearance.color = color
+
+    if appearance is not None:
+        color = appearance.color
+        old_red  = color.red
+        color.red = (old_red + 1) % 256
+        appearance.color = color
+        color.red = old_red
+        appearance.color = color
 
     if count:
         labels = {
