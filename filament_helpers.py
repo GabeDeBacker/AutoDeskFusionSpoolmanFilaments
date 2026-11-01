@@ -93,14 +93,14 @@ def set_native_copied_color(appearance, filament):
             prop.hasConnectedTexture = False
 
     for prop in props:
+        # The Fusion API has "goo" that lets you attempt to set
+        # multiple colors, say for a multi-color filament,
+        # but it simply does not work. I don't see this available in the
+        # Fusion user interface either. So we just set a single color.
         if adsk.core.ColorProperty.classType() == prop.classType():
-            if prop.isReadOnly:
-                continue
-            if not filament.color_hexes:
+            if not prop.isReadOnly:
                 prop.value = fusion_color_from_hex(filament)
                 break
-            else:
-                prop.values = [fusion_color_from_hex(hex) for hex in filament.color_hexes]
 
 def get_or_create_appearance(design, filament):
     """Return an existing or newly created design appearance for a filament."""
