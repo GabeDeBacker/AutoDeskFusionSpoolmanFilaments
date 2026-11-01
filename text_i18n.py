@@ -52,7 +52,9 @@ I18N = {
         'creating_indexes_for_filaments_table': 'Creating indexes for filaments table.',
         'setting_catalog_metadata': 'Setting catalog metadata.',
         'catalog_outdated_importing_catalog': 'Catalog outdated, importing catalog.',
-        'catalog_metadata_missing_importing_catalog': 'Catalog metadata missing, importing catalog.',        
+        'catalog_metadata_missing_importing_catalog': 'Catalog metadata missing, importing catalog.',
+        'finished_importing_filaments': 'Finished importing filaments.',
+        'material_or_appearance_missing': 'Material or appearance is missing.',
     },
     'fr': {
         'select_prompt': 'Sélectionnez d’abord une face ou un corps.',
@@ -109,6 +111,8 @@ I18N = {
         'setting_catalog_metadata': 'Définition des métadonnées du catalogue.',
         'catalog_outdated_importing_catalog': 'Catalogue obsolète, import du catalogue en cours.',
         'catalog_metadata_missing_importing_catalog': 'Métadonnées du catalogue manquantes, import du catalogue en cours.',
+        'finished_importing_filaments': 'Import des filaments terminé.',
+        'material_or_appearance_missing': 'Le matériau ou l’apparence est manquant.'
     }
 }
 

@@ -42,7 +42,9 @@ class CatalogPalette(PaletteBase):
     def handle_apply(self, data):
         """Handle the request to apply the current filament."""
         sel = get_user_interface().activeSelections.all
-        status_message = apply_selection(data, load_ui_state().get('scope', 'body'), sel, get_i18n_text)
+        # Fusion has issues with the appearance palette as far as updating the actual colors
+        # when applying materials (sadness)
+        status_message = apply_selection(data, load_ui_state().get('scope', 'body'), sel, get_i18n_text, apply_material=True)
         self.send_to_palette('status', {'status': status_message})
         get_user_interface().activeSelections.all = sel
 

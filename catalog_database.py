@@ -297,6 +297,9 @@ class CatalogDatabase:
 
         self.set_metadata(con, metadata)
 
+        if status:
+            status('finished_importing_filaments')
+
     def query_filaments(self, q):
         """Query filaments from the database based on the given filters.
 

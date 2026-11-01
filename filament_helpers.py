@@ -3,7 +3,6 @@ import adsk.core
 from app_helpers import get_application
 from common import FUSION_API_ERRORS
 
-
 def get_filament_color(filament):
     """Return the primary color hex of the filament."""
     if hasattr(filament, 'color_hex') and filament.color_hex:
@@ -24,7 +23,7 @@ def fusion_color_from_hex(filament):
         alpha = 0x7f
     return adsk.core.Color.create(int(h[:2], 16), int(h[2:4], 16), int(h[4:6], 16), alpha)
 
-def find_native_base(translucent=False):
+def find_native_base(filament):
     """Find a suitable native Autodesk base appearance for copy/recolor."""
     app = get_application()
     libs = app.materialLibraries
@@ -41,7 +40,7 @@ def find_native_base(translucent=False):
                     if not props:
                         continue
 
-                    if translucent:
+                    if filament.translucent:
                         if props.itemById('transparent_color'):
                             name = (appearance.name or '').lower()
                             name_score = (
@@ -84,7 +83,6 @@ def find_native_base(translucent=False):
 
 def set_native_copied_color(appearance, filament):
     """Apply filament color/roughness/transparency onto a copied appearance."""
-    color = fusion_color_from_hex(filament)
     props = appearance.appearanceProperties
 
     for pid in ('opaque_albedo', 'transparent_color', 'generic_diffuse'):
@@ -93,24 +91,16 @@ def set_native_copied_color(appearance, filament):
             continue
         if prop.hasConnectedTexture:
             prop.hasConnectedTexture = False
-        if not prop.isReadOnly:
-            prop.value = color
 
-    appearance.color = color
-
-    if hasattr(filament, 'roughness'):
-        roughness = float(getattr(filament, 'roughness', 0.44))
-        for rid in ('surface_roughness', 'opaque_roughness', 'generic_roughness'):
-            rough_prop = props.itemById(rid)
-            if rough_prop and not rough_prop.isReadOnly:
-                rough_prop.value = roughness
+    for prop in props:
+        if adsk.core.ColorProperty.classType() == prop.classType():
+            if prop.isReadOnly:
+                continue
+            if not filament.color_hexes:
+                prop.value = fusion_color_from_hex(filament)
                 break
-
-    if color.opacity is not None:
-        for pid in ('transparency', 'generic_transparency', 'transparent_transparency'):
-            prop = props.itemById(pid)
-            if prop and not prop.isReadOnly:
-                prop.value = max(0.0, min(1.0, 1.0 - color.opacity))
+            else:
+                prop.values = [fusion_color_from_hex(hex) for hex in filament.color_hexes]
 
 def get_or_create_appearance(design, filament):
     """Return an existing or newly created design appearance for a filament."""
@@ -119,13 +109,10 @@ def get_or_create_appearance(design, filament):
     if existing:
         return existing
 
-    base = find_native_base(bool(filament.translucent))
-    if not base:
-        return None
+    new_appearance = design.appearances.add(name)
+    set_native_copied_color(new_appearance, filament)
 
-    copied = design.appearances.addByCopy(base, name)
-    set_native_copied_color(copied, filament)
-    return copied
+    return new_appearance
 
 def get_appearance_name(filament):
     """Generate a unique appearance name for a filament."""
@@ -142,21 +129,29 @@ def get_appearance_name(filament):
             f"{filament.name} | {filament_color}"
         )
 
-def get_or_create_material(design, filament):
+def get_or_create_material(design, filament, create_material = False):
     """Return an existing or newly created design material for a filament."""
     design = adsk.fusion.Design.cast(get_application().activeProduct)
     appearance = get_or_create_appearance(design, filament)
+
+    if not create_material:
+        return None, appearance
+
     material_libraries = get_application().materialLibraries
+    fusion_library = material_libraries.itemById('C1EEA57C-3F56-45FC-B8CB-A9EC46A9994C')
+    if not fusion_library:
+        return None, appearance
+
     filament_material_name = f"Plastic/{filament.material}/{filament.name}"
     three_d_printing_material = design.materials.itemByName(filament_material_name)
-    if not three_d_printing_material:
-        fusion_library = material_libraries.itemById('C1EEA57C-3F56-45FC-B8CB-A9EC46A9994C')
-        if fusion_library:
-            # General Plastic
-            plastic = fusion_library.materials.itemById('PrismMaterial-012')
-            three_d_printing_material = design.materials.addByCopy(
-            plastic,
-            filament_material_name)
+    if three_d_printing_material:
+        return three_d_printing_material, appearance
 
+    # General Plastic
+    plastic = fusion_library.materials.itemById('PrismMaterial-012')
+    if not plastic:
+        return None, appearance
+
+    three_d_printing_material = design.materials.addByCopy(plastic, filament_material_name)
     three_d_printing_material.appearance.color = appearance.color
     return three_d_printing_material, appearance
