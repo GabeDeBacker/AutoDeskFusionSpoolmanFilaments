@@ -1,5 +1,6 @@
 """Helper functions for managing filament appearances in Fusion 360."""
 import adsk.core
+import adsk.fusion
 from app_helpers import get_application
 from common import FUSION_API_ERRORS
 

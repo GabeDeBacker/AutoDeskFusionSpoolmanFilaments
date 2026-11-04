@@ -87,8 +87,7 @@ class PaletteBase:
     def ensure_palette(self, force_refresh=False):
         """Return existing palette  or create/configure it with HTML event handler."""
         if not self.palette:
-            file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), self.html_file)
-            palette_path = make_file_url(file_path)
+            palette_path = make_file_url(self.html_file)
 
             self.palette = get_user_interface().palettes.itemById(self.palette_id)
             if self.palette:

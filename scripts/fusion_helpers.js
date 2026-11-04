@@ -15,7 +15,7 @@ function sendToFusion(action, data) {
         }
         return adsk.fusionSendData(action, JSON.stringify({}));
     } else {
-        console.error("adsk is not ready");
+        throw new Error("adsk is not ready");
     }
 }
 

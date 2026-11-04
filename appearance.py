@@ -1,9 +1,13 @@
 """Fusion appearance creation and scope-based application helpers."""
 # adsk.fusion only available when Fusion is running
 # pylint: disable-next=import-error
+import traceback
+import adsk.core
 import adsk.fusion
 from app_helpers import get_design, get_user_interface
 from filament_helpers import find_native_base, get_or_create_material, set_native_copied_color
+from log import log
+
 FUSION_API_ERRORS = (RuntimeError, AttributeError, TypeError, ValueError, IndexError)
 
 def apply_selection(filament, scope, selection, get_text, apply_material):
@@ -55,7 +59,7 @@ def apply_selection(filament, scope, selection, get_text, apply_material):
                         prop.value = base_appearance.appearanceProperties.itemById(prop.id).value
 
                 except FUSION_API_ERRORS:
-                    pass
+                    log.writeError(f"Failed to set property {prop.id} from base appearance. {traceback.format_exc()}")
 
     set_native_copied_color(appearance, filament)
 

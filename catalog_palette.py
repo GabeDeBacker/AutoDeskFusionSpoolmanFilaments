@@ -64,3 +64,10 @@ class CatalogPalette(PaletteBase):
         """Handle the request to get the filter lists."""
         results = self.database.get_filter_lists(data)
         self.send_to_palette('filter_lists_results', results)
+
+    def close_palette(self):
+        """Handle the request to close the catalog palette."""
+        if self.settings_palette is not None:
+             self.settings_palette.close_palette()
+             self.settings_palette = None
+        super().close_palette()
