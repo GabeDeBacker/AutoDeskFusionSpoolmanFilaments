@@ -31,8 +31,6 @@ def apply_selection(filament, scope, selection, get_text, apply_material):
             continue
 
         if active_scope == 'face' and isinstance(entity, adsk.fusion.BRepFace):
-            if apply_material and three_d_printing_material is not None:
-                entity.material = three_d_printing_material
             if appearance is not None:
                 entity.appearance = appearance
             count += 1

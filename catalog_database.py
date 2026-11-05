@@ -579,13 +579,13 @@ class CatalogDatabase:
             "source": row[4]
         }
 
-    def refresh_if_needed(self, status: Callable[..., None] = None, force = False):
+    def refresh_if_needed(self, status: Callable[..., None] = None, complete: Callable[...,None] = None, force = False):
         """Start a background thread to refresh the catalog if needed."""
-        thread = threading.Thread(target=self.refresh_if_needed_thread, args=(status, force))
+        thread = threading.Thread(target=self.refresh_if_needed_thread, args=(status, force, complete))
         thread.start()
         return thread
     
-    def refresh_if_needed_thread(self, status: Callable[..., None] = None, force = False):
+    def refresh_if_needed_thread(self, status: Callable[..., None] = None, complete: Callable[...,None] = None, force = False):
         """Refresh the catalog if it is outdated."""
         con = self.create_connection()
         try:
@@ -610,6 +610,9 @@ class CatalogDatabase:
                     self.import_spoolman(con, status)
         finally:
             con.close()
+            if complete:
+                complete()
+
 
     def is_catalog_outdated(self, last_refresh: int) -> bool:
         """Check if the catalog is outdated based on the last refresh timestamp."""

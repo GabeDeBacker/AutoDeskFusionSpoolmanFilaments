@@ -51,13 +51,17 @@ class PaletteBase:
 
     def handle_refresh_catalog(self, data ):
         """Handle the request to refresh the catalog."""
-        self.database.refresh_if_needed(self.handle_status, force=data.force)
+        self.database.refresh_if_needed(self.handle_status, self.handle_refresh_catalog_complete, force=data.force)
         self.send_to_all_palettes('refresh_catalog_complete')
 
     def handle_status(self, status: str, *args, **kwargs):
         """Handle the request to get the current status."""
         i18n_status = get_i18n_text(status, *args, **kwargs)
         self.send_to_all_palettes('status', {'status': i18n_status})
+
+    def handle_refresh_catalog_complete(self):
+        """Handle the completion of the catalog refresh."""
+        self.send_to_all_palettes('refresh_catalog_complete')
 
     def open_palette(self, toggle = False, visible = False):
         """Open the palette, optionally toggling its visibility."""
@@ -112,7 +116,7 @@ class PaletteBase:
             self.palette.incomingFromHTML.add(self.html_event_handler)
 
             # Go ahead and give the language to the palette.
-            self.palette.sendInfoToHTML('setLang', ensure_lang())
+            self.palette.sendInfoToHTML('setLang', json_text({ 'lang': ensure_lang() }))
 
             kept_handlers.append(self.html_event_handler)
         return self.palette

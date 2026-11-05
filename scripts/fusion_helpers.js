@@ -24,17 +24,19 @@ function setHandlers(handlers) {
       handle: function (action, data) {
         try {
           if (action === 'response') {
-            return;
+            return 'OK';
           }
 
           const jsonData = JSON.parse(data || '{}');
           const handler = handlers[action];
           if (handler) {
-            return handler(jsonData);
+            return handler(jsonData) || 'OK';
           }
           console.log(`No handler found for action: ${action}`, jsonData);
+          return 'Error';
         } catch (error) {
           console.log(`Error handling action: ${action}`, error);
+          return 'Error';
         }
       }
     };
