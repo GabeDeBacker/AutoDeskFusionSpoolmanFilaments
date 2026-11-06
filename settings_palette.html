@@ -1,159 +1,26 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="palette.css"><script src="palette-i18n.js"></script></head><body>
-<header><h1 id="title">Paramètres des filaments</h1></header>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="palette.css">
+    <script src="scripts/palette-i18n.js"></script>
+    <script src="scripts/fusion_helpers.js"></script>
+  </head>
+  <body>
+<header><h1 id="title"></h1></header>
 <section class="settings-section">
-  <h2 id="catalogSectionTitle" class="settings-section-title">Catalog</h2>
-  <div class="settings-kv">
-    <span id="catalogRefsLabel" class="count">References</span>
-    <strong id="catalogRefsValue">-</strong>
-  </div>
-  <div class="settings-kv">
-    <span id="catalogManufacturersLabel" class="count">Manufacturers</span>
-    <strong id="catalogManufacturersValue">-</strong>
-  </div>
-  <div class="settings-kv">
-    <span id="catalogLinesLabel" class="count">Product lines</span>
-    <strong id="catalogLinesValue">-</strong>
-  </div>
+  <h2 id="catalogSectionTitle" class="settings-section-title"></h2>
   <div id="catalogAttribution" class="count"></div>
   <div id="catalogVersion" class="count"></div>
+  <div class="settings-kv">
+    <span id="catalogLinesLabel" class="count"></span>
+    <strong id="catalogLinesValue">-</strong>
+  </div>
   <div id="status"></div>
   <div class="parentbar settings-actions">
     <button id="refreshCatalog" class="parentbtn wide" onclick="refreshCatalog()"></button>
   </div>
 </section>
-<script>
-let currentLang='en';
-const CATALOG_CREDIT_URL='https://donkie.github.io/SpoolmanDB/';
-let catalogMeta={version:'-',source:'none',entryCount:0};
-let catalogLoaded = false;
-
-function sourceCreditLabel(source){
-  const t=I18N[currentLang]||I18N.en;
-  const src=(source||'').toLowerCase();
-  if(src==='spoolman-db') return t.dataSourceSpoolman;
-  if(src.includes('spoolman') || src.includes('cache') || src.includes('stale')) return t.dataSourceCache;
-  return t.dataSourceUnknown;
-}
-
-function setCatalogSummary(entries,meta){
-  const list=Array.isArray(entries)?entries:[];
-  const nextMeta=(meta && typeof meta==='object')?meta:{};
-  const refs=Number.isFinite(Number(nextMeta.entryCount))?Number(nextMeta.entryCount):list.length;
-  const manufacturers=new Set(list.map((e)=>String((e&&e.manufacturer)||'').trim()).filter(Boolean)).size;
-  const lines=new Set(list.map((e)=>String((e&&e.material)||'').trim()).filter(Boolean)).size;
-  document.getElementById('catalogRefsValue').textContent=String(refs);
-  document.getElementById('catalogManufacturersValue').textContent=String(manufacturers);
-  document.getElementById('catalogLinesValue').textContent=String(lines);
-}
-
-function extractCatalogPayload(rawPayload){
-  const payload=(rawPayload && typeof rawPayload==='object')?rawPayload:{};
-  const entries=Array.isArray(payload.entries)?payload.entries:(Array.isArray(payload)?payload:[]);
-  const payloadMeta=(payload.meta && typeof payload.meta==='object')?payload.meta:{};
-  const source=String(payloadMeta.source||payload.source||'unknown');
-  const version=String(payloadMeta.version||payload.catalog_version||payload.version||'unknown');
-  const entryCount=(Number.isFinite(Number(payloadMeta.entryCount))?Number(payloadMeta.entryCount):entries.length);
-  return {entries,meta:{source,version,entryCount}};
-}
-
-function updateCatalogAttribution(){
-  const t=I18N[currentLang]||I18N.en;
-  const el=document.getElementById('catalogAttribution');
-  const label=sourceCreditLabel(catalogMeta.source);
-  el.innerHTML=`${t.dataSourceLabel}: <a href="${CATALOG_CREDIT_URL}" target="_blank" rel="noopener noreferrer">${label}</a>`;
-  document.getElementById('catalogVersion').textContent=`${t.dataVersionLabel}: ${String(catalogMeta.version||'unknown')}`;
-}
-
-function applyCatalogPayload(rawPayload){
-  const extracted=extractCatalogPayload(rawPayload);
-  catalogMeta=extracted.meta;
-  setCatalogSummary(extracted.entries,extracted.meta);
-  updateCatalogAttribution();
-  catalogLoaded = extracted.entries.length > 0;
-}
-
-function setUiLanguage(lang){
-  currentLang=I18N[lang]?lang:'en';
-  const t=I18N[currentLang];
-  document.documentElement.lang=t.lang;
-  document.getElementById('title').textContent=t.palette_settings_title||'Filament Settings';
-  document.getElementById('catalogSectionTitle').textContent=t.catalogSectionTitle||'Catalog';
-  document.getElementById('catalogRefsLabel').textContent=t.catalogReferencesLabel||'References';
-  document.getElementById('catalogManufacturersLabel').textContent=t.catalogManufacturersLabel||'Manufacturers';
-  document.getElementById('catalogLinesLabel').textContent=t.catalogLinesLabel||'Product lines';
-  document.getElementById('refreshCatalog').textContent=t.refreshCatalog;
-  updateCatalogAttribution();
-}
-
-function requestLanguage(){
-  try{
-    adsk.fusionSendData('request_lang','');
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-
-function requestCatalog(){
-  if (catalogLoaded) {
-    return true;
-  }
-  try{
-    adsk.fusionSendData('request_catalog','{"force":false}');
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-function refreshCatalog(){
-  catalogLoaded = false;
-  const t=I18N[currentLang]||I18N.en;
-  document.getElementById('status').textContent=t.refreshingCatalog;
-  try{
-    adsk.fusionSendData('request_catalog','{"force":true}');
-    return true;
-  }catch(_){
-    document.getElementById('status').textContent=(I18N[currentLang]||I18N.en).catalogUpdateRequestFailed;
-    return false;
-  }
-}
-
-
-window.fusionJavaScriptHandler={
-  handle:function(action,data){
-    if(action==='status') document.getElementById('status').textContent=data;
-    if(action==='setLang'){
-      setUiLanguage((data||'').toLowerCase());
-    }
-    if(action==='catalog'){
-      try{
-        const payload=JSON.parse(data||'{}');
-        applyCatalogPayload(payload);
-      }catch(_){
-        // Ignore malformed payload and keep previous catalog snapshot.
-      }
-    }
-    return 'OK';
-  }
-};
-
-const browserLang=(navigator.language||navigator.userLanguage||'en').toLowerCase();
-setUiLanguage(browserLang.startsWith('fr')?'fr':'en');
-
-function waitForAdsk() {
-    if (typeof adsk !== "undefined") {
-        console.log("adsk ready");
-        fusionReady();
-    } else {
-        setTimeout(waitForAdsk, 50);
-    }
-}
-
-function fusionReady() {
-  requestLanguage();
-  requestCatalog();
-}
-
-waitForAdsk();
-
-</script></body></html>
+<script src="scripts/settings_palette.js"></script>
+</body></html>

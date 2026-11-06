@@ -1,30 +1,66 @@
 """Fusion add-in entrypoint that wires palettes, events, and module services."""
 
 import os
-import sys
 import adsk.core
-
-# Insert module path into the Python search path for imports.
-sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 
 from common import addon_dir
 from app_helpers import get_user_interface
 from text_i18n import get_i18n_text
-from settings_palette import settings_palette
-from catalog_palette import catalog_palette
+from catalog_palette import CatalogPalette
 
 CMD_ID = 'SpoolmanDBFilamentColors'
 handlers = []
 
+def add_command_to_panel(workspace:str, panel:str, command_definition) -> bool:
+    """Add a command to a specified panel in a specified workspace."""
+    # Get the Solid workspace
+    fusion_workspace = get_user_interface().workspaces.itemById(workspace)
+    if not fusion_workspace:
+        return False
+
+    fusion_panel = fusion_workspace.toolbarPanels.itemById(panel)
+    if not fusion_panel:
+        return False
+
+    command_control = fusion_panel.controls.itemById(CMD_ID)
+    if command_control:
+        command_control.deleteMe()
+
+    appearance_control = fusion_panel.controls.itemById('AppearanceCommand')
+    if appearance_control:
+        # Insert after Appearance
+        handlers.append(fusion_panel.controls.addCommand(command_definition, 'AppearanceCommand', False))
+    else:
+        # Fallback: append at end
+        handlers.append(fusion_panel.controls.addCommand(command_definition))
+
+    return True
+
 class ExecuteHandler(adsk.core.CommandEventHandler):
     """Handle execution of the main command by toggling the main palette visibility."""
+    def __init__(self):
+        super().__init__()
+        self.catalog_palette = CatalogPalette()
+
+    def deleteMe(self):
+        """Delete the execute handler and close the associated catalog palette."""
+        self.catalog_palette.close_palette()
+        self.catalog_palette = None
+
     def notify(self, _eventArgs):
         """Handles command execution by toggling the main palette visibility."""
         del _eventArgs
-        catalog_palette.open_palette(toggle=True, visible=False)
+        self.catalog_palette.open_palette(toggle=True, visible=False)
 
 class CommandHandler(adsk.core.CommandCreatedEventHandler):
     """Handle Fusion command invocation by toggling palette visibility."""
+
+    def deleteMe(self):
+        """Delete the command handler."""
+        ui = get_user_interface()
+        command_definition = ui.commandDefinitions.itemById(CMD_ID)
+        if command_definition:
+            command_definition.deleteMe()
 
     def notify(self, _eventArgs):
         """Handles command created event to attach the execute handler to the command."""
@@ -59,38 +95,13 @@ def run(_context):
     command_definition.commandCreated.add(command_handler)
     handlers.append(command_handler)
 
-    # Get the Solid workspace
-    solid_workspace = ui.workspaces.itemById('FusionSolidEnvironment')
-    if not solid_workspace:
-        return
-
-    solid_modify_panel = solid_workspace.toolbarPanels.itemById('SolidModifyPanel')
-    if not solid_modify_panel:
-        return
-
-    solid_modify_controls = solid_modify_panel.controls
-    if not solid_modify_controls:
-        return
-
-    appearance_control = solid_modify_controls.itemById('AppearanceCommand')
-
-    command_control = solid_modify_controls.itemById(CMD_ID)
-    if command_control:
-        command_control.deleteMe()
-
-    if appearance_control:
-        # Insert after Appearance
-        solid_modify_controls.addCommand(command_definition, 'AppearanceCommand', False)
-    else:
-        # Fallback: append at end
-        solid_modify_controls.addCommand(command_definition)
+    add_command_to_panel('FusionSolidEnvironment', 'SolidModifyPanel', command_definition)
+    add_command_to_panel('FusionAssembleEnvironment', 'SolidModifyPanel', command_definition)
 
 def stop(_context):
     """Fusion add-in shutdown hook: remove palettes, controls, and command."""
     del _context
-    ui = get_user_interface()
-    catalog_palette.close_palette()
-    settings_palette.close_palette()
-    d = ui.commandDefinitions.itemById(CMD_ID)
-    if d:
-        d.deleteMe()
+    for handler in handlers:
+        if hasattr(handler, 'deleteMe'):
+            handler.deleteMe()
+    handlers.clear()

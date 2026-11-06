@@ -5,9 +5,8 @@ const I18N = {
     palette_actions_title: 'Filament Export',
     palette_settings_title: 'Filament Settings',
     catalogSectionTitle: 'Catalog',
-    catalogReferencesLabel: 'References',
-    catalogManufacturersLabel: 'Manufacturers',
     catalogLinesLabel: 'Product lines',
+    tolerancesLabel: 'Tolerances',
     searchPlaceholder: 'Search...',
     allFamilies: 'All families',
     allManufacturers: 'All manufacturers',
@@ -33,6 +32,7 @@ const I18N = {
     dataSourceCache: 'Local cache of SpoolmanDB by Donkie',
     dataSourceUnknown: 'Unavailable',
     dataVersionLabel: 'Version',
+    dataVersionUnknown: 'unknown',
     renderHintVirtualized: 'Page {page} / {pages} · {shown} of {total} matching colors.',
     finishLabels: {
       translucent: 'Translucent',
@@ -60,7 +60,9 @@ const I18N = {
     loadedCatalog: 'Catalog loaded.',
     catalogEmpty: 'Catalog is empty. Check JSON schema or file availability.',
     catalogUpdateRequestFailed: 'Catalog update request failed.',
-    applying: 'Applying: '
+    applying: 'Applying: ',
+    translucentLabel: 'Translucent',
+    glowLabel: 'Glow'
   },
   fr: {
     lang: 'fr',
@@ -68,9 +70,8 @@ const I18N = {
     palette_actions_title: 'Export des filaments',
     palette_settings_title: 'Paramètres des filaments',
     catalogSectionTitle: 'Catalogue',
-    catalogReferencesLabel: 'Références',
-    catalogManufacturersLabel: 'Fabricants',
     catalogLinesLabel: 'Gammes',
+    tolerancesLabel: 'Tolérances',
     searchPlaceholder: 'Rechercher...',
     allFamilies: 'Toutes les familles',
     allManufacturers: 'Tous les fabricants',
@@ -96,6 +97,7 @@ const I18N = {
     dataSourceCache: 'Cache local de SpoolmanDB par Donkie',
     dataSourceUnknown: 'Indisponible',
     dataVersionLabel: 'Version',
+    dataVersionUnknown: 'inconnue',
     renderHintVirtualized: 'Page {page} / {pages} · {shown} sur {total} couleurs correspondantes.',
     finishLabels: {
       translucent: 'Translucide',
@@ -123,6 +125,8 @@ const I18N = {
     loadedCatalog: 'Catalogue chargé.',
     catalogEmpty: 'Le catalogue est vide. Vérifiez le schéma JSON et la disponibilité du fichier.',
     catalogUpdateRequestFailed: 'La demande de mise à jour du catalogue a échoué.',
-    applying: 'Application : '
+    applying: 'Application : ',
+    translucentLabel: 'Translucide',
+    glowLabel: 'Lumineux'
   }
 };

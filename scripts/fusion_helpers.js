@@ -1,0 +1,43 @@
+// Wait for Fusion to inject the API
+function waitForAdsk(fusionReady) {
+    if (typeof adsk !== "undefined") {
+        console.log("adsk ready");
+        fusionReady();
+    } else {
+        setTimeout(() =>waitForAdsk(fusionReady), 50);
+    }
+}
+
+function sendToFusion(action, data) {
+    if (typeof adsk !== "undefined") {
+        if (data) {
+            return adsk.fusionSendData(action, JSON.stringify(data));
+        }
+        return adsk.fusionSendData(action, JSON.stringify({}));
+    } else {
+        throw new Error("adsk is not ready");
+    }
+}
+
+function setHandlers(handlers) {
+    window.fusionJavaScriptHandler = {
+      handle: function (action, data) {
+        try {
+          if (action === 'response') {
+            return 'OK';
+          }
+
+          const jsonData = JSON.parse(data || '{}');
+          const handler = handlers[action];
+          if (handler) {
+            return handler(jsonData) || 'OK';
+          }
+          console.log(`No handler found for action: ${action}`, jsonData);
+          return 'Error';
+        } catch (error) {
+          console.log(`Error handling action: ${action}`, error);
+          return 'Error';
+        }
+      }
+    };
+}
