@@ -581,7 +581,7 @@ class CatalogDatabase:
 
     def refresh_if_needed(self, status: Callable[..., None] = None, complete: Callable[...,None] = None, force = False):
         """Start a background thread to refresh the catalog if needed."""
-        thread = threading.Thread(target=self.refresh_if_needed_thread, args=(status, force, complete))
+        thread = threading.Thread(target=self.refresh_if_needed_thread, args=(status, complete, force))
         thread.start()
         return thread
     

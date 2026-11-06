@@ -51,8 +51,10 @@ class PaletteBase:
 
     def handle_refresh_catalog(self, data ):
         """Handle the request to refresh the catalog."""
-        self.database.refresh_if_needed(self.handle_status, self.handle_refresh_catalog_complete, force=data.force)
-        self.send_to_all_palettes('refresh_catalog_complete')
+        self.database.refresh_if_needed(
+            self.handle_status,
+            self.handle_refresh_catalog_complete,
+            getattr(data, 'force', False));
 
     def handle_status(self, status: str, *args, **kwargs):
         """Handle the request to get the current status."""
